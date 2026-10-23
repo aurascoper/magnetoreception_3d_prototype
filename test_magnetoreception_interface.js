@@ -33,7 +33,7 @@ const CHROME_BIN = process.env.CHROME_BIN || (
 );
 
 function verifyFilesAndManifest() {
-  for (const rel of ['evidence_manifest.json', 'index.html', 'README.md', 'test_calculation_provenance_and_invariants.js']) {
+  for (const rel of ['evidence_manifest.json', 'index.html', 'README.md', 'test_calculation_provenance_and_invariants.js', 'ci_verification_receipt.json']) {
     const content = fs.readFileSync(path.join(ROOT, rel), 'utf8');
     assert.strictEqual(content.includes('\u2014'), false, `${rel} contains em-dash`);
     assert.strictEqual(content.includes('\u2013'), false, `${rel} contains en-dash`);
@@ -62,8 +62,10 @@ function verifyFilesAndManifest() {
 
   const cdeg = manifest.cross_domain_epistemic_gates;
   assert.ok(cdeg, 'Missing cross_domain_epistemic_gates in evidence_manifest.json');
-  assert.strictEqual(cdeg.section_version, '1.2.0');
-  assert.strictEqual(cdeg.calculation_source_provenance.julia_source_commit, 'f17892ed08f274ca76ca9f2a31c01acd98f089b4');
+  assert.strictEqual(cdeg.section_version, '1.3.0');
+  assert.strictEqual(cdeg.calculation_source_provenance.julia_source_commit, 'c4048a6c84f98c73118500a6e6bfbbb0c363684b');
+  assert.strictEqual(cdeg.calculation_source_provenance.source_file_sha256, '73360f11e48529a9cb6436b58332a2ea5ede8cf0022132bd9ef219176f2da39e');
+  assert.strictEqual(cdeg.calculation_source_provenance.passing_test_summary, '738 / 738 passed (0 failures, 0 errors)');
   assert.strictEqual(cdeg.calculation_source_provenance.source_file, 'src/track4_mineral_magnetoreception_gates.jl');
   assert.strictEqual(cdeg.calculation_source_provenance.superseded_verification_attempts.length, 3);
   assert.strictEqual(cdeg.modeled_interaction_energy_comparison.evidence_type, 'MODELED');
@@ -80,6 +82,14 @@ function verifyFilesAndManifest() {
   assert.strictEqual(incSens.irradiation_defect_transfer_boundary.is_coercivity_or_remanence_shift_sign_universal, false);
   assert.strictEqual(incSens.irradiation_defect_transfer_boundary.engineering_alloy_to_natural_biotite_transfer_calibrated, false);
   assert.strictEqual(incSens.irradiation_defect_transfer_boundary.empirical_contrasts.length, 2);
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.three_tier_evidential_hierarchy.tier_1_neutron_damage_material_properties.evidential_status, 'DIRECTLY_SUPPORTED');
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.three_tier_evidential_hierarchy.tier_2_shared_physical_ingredients_analogy.evidential_status, 'ANALOGY_ONLY_OPPOSITE_EXPLANATORY_DIRECTION');
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.three_tier_evidential_hierarchy.tier_3_biological_radiotropism_and_magnetoreception.evidential_status, 'SEPARATE_BIOLOGICAL_HYPOTHESIS');
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.specimen_encoding_and_modality_gate.premature_to_connect_to_magnetoreception_without_gate, true);
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.specimen_encoding_and_modality_gate.required_metadata_checks.length, 3);
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.specimen_encoding_and_modality_gate.colour_channel_decision_branches.phases_precipitates_defects_or_rendering_categories.domain_classification, 'MATERIALS_SCIENCE_MICROSTRUCTURE_PROBLEM');
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.specimen_encoding_and_modality_gate.colour_channel_decision_branches.magnetic_domains_or_measured_magnetic_inclusions.domain_classification, 'MINERAL_AND_MAGNETITE_PHYSICS_CONSTRAINT_ONLY');
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.specimen_encoding_and_modality_gate.methods_and_physical_constraints_bridge.is_evidence_for_radiotropism, false);
   assert.ok(incSens.partially_remanent_natural_nrm_blocked_regime.trace_0_01pct_fe3o4 < 0.01);
   assert.ok(incSens.unblocked_superparamagnetic_or_low_field_induced_regime.isotropic_u_mag_over_kBT.minor_1pct_fe3o4 < 0.01);
   assert.strictEqual(cdeg.gates.length, 4, 'Expected 4 cross-domain epistemic gates (EG-1 to EG-4)');
@@ -93,7 +103,7 @@ function verifyFilesAndManifest() {
   }
 
   runProvenanceAndInvariantsSuite();
-  console.log('PASS [1/4]: Manifest v2.2.0, Red-Team Provenance & Invariants Suite, Cross-Domain Epistemic Gates (EG-1..EG-4), Biomagnetic Walk, 5-row/24-cell matrix, and 4-Layer Multiphysics-GLMM verified.');
+  console.log('PASS [1/4]: Manifest v2.2.0, Red-Team Provenance & Invariants Suite, Cross-Domain Epistemic Gates (EG-1..EG-4 v1.3.0), 3-Tier Irradiation Hierarchy, Specimen-Encoding Gate, Biomagnetic Walk, 5-row/24-cell matrix, and 4-Layer Multiphysics-GLMM verified.');
 }
 
 function startStaticServer(preferredPort = 0) {
@@ -196,6 +206,9 @@ async function run() {
           const mechEdgeBadges = document.querySelectorAll('.mech-edge-badge').length;
           const stageEdgePills = document.querySelectorAll('#stageEdgeLegend .stage-edge-pill').length;
           const propCards = document.querySelectorAll('#causalGapGrid .prop-card').length;
+          const cdegGateCards = document.querySelectorAll('#crossDomainGatesGrid .cdeg-gate-card').length;
+          const tierCards = document.querySelectorAll('#threeTierHierarchyGrid .tier-card').length;
+          const triageRows = document.querySelectorAll('#specimenEncodingTriageBody tr').length;
           const selRows = document.querySelectorAll('#selectionAuditBody tr').length;
           const angularRows = document.querySelectorAll('#angularCurveBody tr').length;
           const angularCols = document.querySelectorAll('#angularCurveTable thead th').length;
@@ -221,6 +234,9 @@ async function run() {
             mechEdgeBadges,
             stageEdgePills,
             propCards,
+            cdegGateCards,
+            tierCards,
+            triageRows,
             selRows,
             angularRows,
             angularCols,
@@ -248,6 +264,9 @@ async function run() {
         assert.ok(state3d.stageEdgePills >= 2, `Expected >= 2 per-edge pills in #stageEdgeLegend, got ${state3d.stageEdgePills}`);
         assert.strictEqual(state3d.hasCoarseBadgeInMechList, false, 'Prohibited coarse badge found in #mechList');
         assert.strictEqual(state3d.propCards, 4, 'Expected 4 Main Causal Gap proposition cards (P1-P4)');
+        assert.strictEqual(state3d.cdegGateCards, 4, 'Expected 4 Cross-Domain Epistemic Gate cards (EG-1..EG-4)');
+        assert.strictEqual(state3d.tierCards, 3, 'Expected 3 Irradiation-vs-Magnetoreception Tier cards (Tiers 1-3)');
+        assert.strictEqual(state3d.triageRows, 3, 'Expected 3 Reference Specimen Triage rows in #specimenEncodingTriageBody');
         assert.strictEqual(state3d.selRows, 7, 'Expected 7 species rows in cpm-sp-v1 selection vs. displacement table');
         assert.strictEqual(state3d.angularRows, 4, 'Expected 4 candidate mechanism rows in Preregistered Angular Response Curve table');
         assert.strictEqual(state3d.angularCols, 5, 'Expected 5 columns in Preregistered Angular Response Curve table including 9-angle numerical values');
@@ -273,7 +292,7 @@ async function run() {
         assert.strictEqual(state3d.ferritinVal, '3.3e-5 k_B T');
         assert.strictEqual(state3d.chainTauVal, '5.51 k_B T');
         assert.strictEqual(state3d.larmorVal, '1.40 MHz');
-        console.log(`PASS [2/4]: 3-D WebGL scene (${state3d.glWidth}x${state3d.glHeight}), per-edge evidence badges, 9-angle curve table, 15-vs-24 estimability table, exposure/strain controls, and 4-layer GLMM verified.`);
+        console.log(`PASS [2/4]: 3-D WebGL scene (${state3d.glWidth}x${state3d.glHeight}), per-edge evidence badges, EG-1..EG-4 & 3-tier/specimen-gate cards, 9-angle curve table, 15-vs-24 estimability table, exposure/strain controls, and 4-layer GLMM verified.`);
 
         const factState = await evalJson(`(() => {
           document.getElementById('btnRenderBiomagWalk').click();

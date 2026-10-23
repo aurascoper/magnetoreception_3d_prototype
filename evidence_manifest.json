@@ -929,17 +929,17 @@
     }
   ],
   "cross_domain_epistemic_gates": {
-    "section_version": "1.2.0",
-    "integration_principle": "Preserves the cross-project four-gate epistemic architecture (EG-1 through EG-4) linking geochemical provenance, physical mechanism models, cellular transduction, and evolutionary origin while keeping Oklo and biotite provenance separate, labeling model-based interaction-energy calculations strictly as MODELED, separating idealized saturated blocked inclusion bounds from natural remanence and unblocked superparamagnetic regimes, preserving the anisotropy requirement for uniform-field torque, and documenting the material-dependent non-universality of neutron-irradiation magnetic shifts.",
+    "section_version": "1.3.0",
+    "integration_principle": "Preserves the cross-project four-gate epistemic architecture (EG-1 through EG-4) linking geochemical provenance, physical mechanism models, cellular transduction, and evolutionary origin while keeping Oklo and biotite provenance separate, labeling model-based interaction-energy calculations strictly as MODELED, separating idealized saturated blocked inclusion bounds from natural remanence and unblocked superparamagnetic regimes, preserving the anisotropy requirement for uniform-field torque, and enforcing the three-tier irradiation-vs-magnetoreception evidential hierarchy and the specimen-encoding and modality gate.",
     "calculation_source_provenance": {
       "repository_path": "/Users/aurascoper/.gemini/antigravity/scratch/oklo_stencil_benchmarks",
       "package_name": "OkloStencilBenchmarks",
       "package_version": "0.1.0",
       "source_file": "src/track4_mineral_magnetoreception_gates.jl",
-      "source_file_sha256": "11869306bb00dfc929b441a5b7c0407c184ac4107cc0fe1fb576745ad7587c60",
-      "julia_source_commit": "f17892ed08f274ca76ca9f2a31c01acd98f089b4",
+      "source_file_sha256": "73360f11e48529a9cb6436b58332a2ea5ede8cf0022132bd9ef219176f2da39e",
+      "julia_source_commit": "c4048a6c84f98c73118500a6e6bfbbb0c363684b",
       "verification_command": "julia --startup-file=no --project=/Users/aurascoper/.gemini/antigravity/scratch/oklo_stencil_benchmarks -e 'using Pkg; Pkg.test()'",
-      "passing_test_summary": "712 / 712 passed (0 failures, 0 errors)",
+      "passing_test_summary": "738 / 738 passed (0 failures, 0 errors)",
       "software_evidence_boundary": "Passing the Julia and Python verification suites establishes only that the code implements the declared mathematical formulas, discrete conservation laws, and fail-closed schema/gate rules to the tested tolerances. It does NOT establish biological magnetoreception mechanisms, natural mineral parameters, cellular signal transduction, or evolutionary history.",
       "superseded_verification_attempts": [
         {
@@ -1040,10 +1040,79 @@
               "is_coercivity_or_remanence_shift_sign_universal": false,
               "engineering_alloy_to_natural_biotite_transfer_calibrated": false,
               "empirical_contrasts": [
-                "Park et al. (2004, Key Eng. Mater. 270-273:657, doi:10.4028/www.scientific.net/KEM.270-273.657): In neutron-irradiated A508 reactor pressure-vessel steel, coercivity increased by 16% at highest reported fluence while initial permeability and Barkhausen noise decreased.",
-                "Shong et al. (ASTM STP15114S, doi:10.1520/STP15114S): In neutron-irradiated iron and nickel wires, coercivity and remanence predominantly decreased with irradiation dose."
+                "Park et al. (2004, Key Eng. Mater. 270-273:657, doi:10.4028/www.scientific.net/KEM.270-273.657): In neutron-irradiated A508 reactor pressure-vessel steel, coercivity increased by 16% at highest reported fluence while initial permeability and Barkhausen noise decreased alongside higher hardness and yield strength.",
+                "Shong et al. (ASTM STP15114S, doi:10.1520/STP15114S): In neutron-irradiated iron and nickel wires studied as magnetic indicators of material damage, coercivity and remanence predominantly decreased with irradiation dose."
               ],
-              "transfer_boundary_note": "Engineering-material irradiation studies support the general physical principle that radiation alters magnetic observables (EG-2 context), but do NOT provide calibrated parameters for magnetite inclusions in natural biotite or evidence for biological radiotropism/magnetoreception (EG-3/EG-4)."
+              "three_tier_evidential_hierarchy": {
+                "tier_1_neutron_damage_material_properties": {
+                  "rank": 1,
+                  "evidential_status": "DIRECTLY_SUPPORTED",
+                  "summary": "Neutrons displace atoms, producing vacancies, interstitials, defect clusters, dislocation loops, cavities/voids, and microstructural evolution. In ferromagnetic steels and alloys, these defects impede magnetic-domain-wall motion and change measured Barkhausen noise, initial permeability, coercivity, and remanence.",
+                  "establishes_biological_sensing": false
+                },
+                "tier_2_shared_physical_ingredients_analogy": {
+                  "rank": 2,
+                  "evidential_status": "ANALOGY_ONLY_OPPOSITE_EXPLANATORY_DIRECTION",
+                  "summary": "Both materials irradiation and magnetoreception research can involve magnetic moments, electron spins, magnetic anisotropy, and thermal effects, which is relevant if a specimen contains a magnetic phase whose radiation response is measured.",
+                  "explanatory_direction_contrast": "Materials irradiation research asks how radiation-induced defects and microstructure alter an inorganic sample's physical or magnetic response; biological magnetoreception requires a living system to detect an external magnetic field and transduce it into a functional biological signal.",
+                  "establishes_biological_sensing": false
+                },
+                "tier_3_biological_radiotropism_and_magnetoreception": {
+                  "rank": 3,
+                  "evidential_status": "SEPARATE_BIOLOGICAL_HYPOTHESIS",
+                  "summary": "In biology, radiation can influence redox chemistry, growth, survival, and selection (Null H0-B), whereas radiotropism specifically implies a directional growth response (Null H0-A). Biological magnetoreception becomes relevant only if an organism shows a reproducible, sham-controlled, field-dependent response distinguishable from radiation damage, temperature effects, and survival bias, supported by organism-specific evidence for candidate mechanisms (cryptochrome radical pairs or biogenic magnetite).",
+                  "establishes_biological_sensing": false
+                }
+              },
+              "specimen_encoding_and_modality_gate": {
+                "core_diagnostic_question": "Does the image show neutron-induced defect/phase evolution or cellular morphology, or is it explicitly a magnetic characterization?",
+                "premature_to_connect_to_magnetoreception_without_gate": true,
+                "required_metadata_checks": [
+                  "Identify the specimen material and irradiation conditions (fluence, energy spectrum, irradiation temperature, and mechanical/magnetic history).",
+                  "Identify the visualization or imaging modality (e.g. bright-field TEM, underfocus/overfocus Fresnel-contrast TEM, in-situ tensile TEM with Gatan 672 holder, live-cell DIC optical microscopy, tomography, neutron imaging, phase-field simulation, or Lorentz TEM / electron holography).",
+                  "Identify what visual channels, colours, or annotations encode (chemical phases, precipitates, dislocation loops, nanoscale cavities/voids, cytoplasmic/vacuolar organelles, intracellular magnetosome chains, or measured magnetic domains)."
+                ],
+                "colour_channel_decision_branches": {
+                  "phases_precipitates_defects_or_rendering_categories": {
+                    "channel_meaning": "Purple and green (or other false-colour) regions represent chemical phases, precipitates, defects, particles, or rendering categories in an irradiated alloy",
+                    "domain_classification": "MATERIALS_SCIENCE_MICROSTRUCTURE_PROBLEM",
+                    "relevant_to_mineral_magnetism_eg2": false,
+                    "establishes_biological_sensing_eg3": false
+                  },
+                  "magnetic_domains_or_measured_magnetic_inclusions": {
+                    "channel_meaning": "Purple and green (or other false-colour) regions explicitly represent measured magnetic domains or magnetic inclusions",
+                    "domain_classification": "MINERAL_AND_MAGNETITE_PHYSICS_CONSTRAINT_ONLY",
+                    "relevant_to_mineral_magnetism_eg2": true,
+                    "establishes_biological_sensing_eg3": false
+                  }
+                },
+                "methods_and_physical_constraints_bridge": {
+                  "valid_research_use": "Source of methods and physical constraints for reasoning about which magnetic signatures are physically plausible in inorganic materials under radiation-induced defect, magnetic-domain, and phase evolution vs. which claims require independent biological evidence.",
+                  "is_evidence_for_radiotropism": false,
+                  "is_evidence_for_biological_magnetoreception": false
+                },
+                "reference_image_triage": {
+                  "in_situ_tem_dislocation_loops_and_cavities": {
+                    "modality": "SEM/FIB micro-tensile gauge preparation (~190 nm foil on Gatan 672 straining holder) + bright-field TEM (100 nm) and underfocus/overfocus Fresnel-contrast TEM (50 nm)",
+                    "visual_encoding": "Mechanical loading direction (blue arrows), crystallographic dislocation loops (red arrows, panel e), and nanoscale cavities/voids (red circles in underfocus panel f and overfocus panel g); does NOT encode magnetic domains and does NOT depict biological cells",
+                    "assigned_tier": "TIER_1_INORGANIC_IRRADIATION_MICROSTRUCTURE",
+                    "establishes_magnetoreception_or_radiotropism": false
+                  },
+                  "magnetotactic_bacterium_magnetosome_chain_tem": {
+                    "modality": "Whole-cell TEM (0.5 um scale bar, panel A), isolated magnetosome high-magnification TEM (50 nm scale bar, panel B), and organelle molecular schematic (panel C)",
+                    "visual_encoding": "Intracellular single-domain Fe3O4 magnetosome chain, lipid-bilayer magnetosome membrane vesicles (blue arrows), and magnetosome membrane proteins (Mam/Mms)",
+                    "assigned_tier": "PROKARYOTIC_BIOGENIC_MAGNETORECEPTION_REFERENCE",
+                    "establishes_fungal_radiotropism": false
+                  },
+                  "hyphal_tip_live_dic_timelapse": {
+                    "modality": "Live-cell differential interference contrast (DIC) optical time-lapse microscopy (0 s, 5 s, 10 s, 15 s; panels A-C)",
+                    "visual_encoding": "Apical cytoplasm (Cyt), vacuole (Vac), and rapid 15 s intracellular vesicle/organelle trafficking (dashed ellipses and white/yellow/orange arrowheads); does NOT encode magnetic domains or sham-controlled field-dependent directional tropism",
+                    "assigned_tier": "TIER_3_CELLULAR_MORPHOLOGY_BASELINE_ONLY",
+                    "establishes_magnetoreception_or_radiotropism": false
+                  }
+                }
+              },
+              "transfer_boundary_note": "Engineering-material irradiation studies support the general physical principle that radiation alters magnetic observables (EG-2 Tier 1/2 context), but do NOT provide calibrated parameters for magnetite inclusions in natural biotite or evidence for biological radiotropism/magnetoreception (EG-3/EG-4 Tier 3)."
             }
           }
         },
@@ -1130,11 +1199,14 @@
           "U_mag / (k_B * T) is a model-based interaction-energy scale comparison, NOT a demonstration that a biological receptor detects or transduces a magnetic field.",
           "In a 1 um^3 biotite flake at 50 uT, 0.01% to 1% Fe3O4 inclusions reach U_mag / k_B*T = 0.58 to 57.9 ONLY under the idealized coherently saturated upper bound (M = M_s). Under realistic natural remanence (M_NRM = 0.01 * M_s), U_mag / k_B*T is 5.85e-3 (at 0.01%) to 0.58 (at 1%); under unblocked superparamagnetic or low-field induced response (M_r = 0, quadratic in B), U_mag / k_B*T stays at 7.20e-5 to 1.26e-3 (anisotropic, torque-generating) and 1.32e-4 to 7.26e-3 (isotropic, non-directional). A specimen cannot be assigned to any inclusion regime without rock-magnetic characterization (FORC/Day hysteresis, NRM/IRM, and low-field susceptibility vs. T).",
           "Neutron fluence, spectrum, irradiation temperature, and material history can drive defect and precipitate evolution, altering domain-wall pinning and magnetic observables, but the direction and magnitude of changes in coercivity, remanence, permeability, and Barkhausen noise are material- and condition-dependent (e.g., coercivity +16% in irradiated A508 steel vs. predominant decrease in irradiated Fe/Ni wires) and do NOT provide calibrated values for magnetite inclusions in natural biotite.",
+          "Three-tier evidential boundary: (1) neutron-induced defect and magnetic property changes in inorganic steels/alloys are directly supported; (2) shared physical ingredients (moments, spins, anisotropy, thermal scales) are only an analogy because the explanatory direction is opposite (how irradiation alters a sample vs. how a biological sensor transduces an external field); and (3) biological radiotropism/magnetoreception is a separate hypothesis requiring organism-specific, sham-controlled field-dependent evidence.",
+          "Specimen-encoding and modality gate: an image or visualization cannot be connected to mineral magnetism or magnetoreception without establishing (a) material and irradiation conditions, (b) imaging/simulation modality (e.g. BF/Fresnel TEM, Gatan 672 in-situ tensile TEM, DIC microscopy, phase-field simulation, or Lorentz TEM), and (c) whether visual channels/colours (such as purple and green regions) encode chemical phases/defects/rendering categories (materials science only) vs. measured magnetic domains/inclusions (relevant to mineral/magnetite physics in EG-2, but still not biological sensing in EG-3).",
           "1 / omega_L = 113.6 ns is a field-dependent physical Zeeman precession timescale, NOT a demonstrated minimum biological spin-coherence lifetime.",
           "A 180-degree field-reversal contrast (B -> -B) is a model-specific prediction under explicit tethering/symmetry assumptions, not a universal binary discriminator across all candidate mechanisms."
         ],
         "promotion_criteria": [
           "Requires direct physical characterization of the candidate material (SQUID/VSM magnetometry, IRM acquisition, TEM/EDX for inclusions, or transient absorption / Mary ESR for radical pairs) with documented uncertainty bounds.",
+          "Requires passing the specimen-encoding gate (caption/metadata confirming specimen identity, irradiation conditions, modality, and explicit magnetic-domain vs. chemical-phase/defect encoding) before interpreting any micrograph as magnetic evidence.",
           "Requires full angular response curves across field orientations (0 to 360 deg) and intensities rather than a single 180-degree point contrast."
         ]
       },
@@ -1156,7 +1228,7 @@
         ],
         "limitations": [
           "Shared generic electron-transfer or redox chemistry between radiation protection (melanin) and spin-correlated radical pairs (cryptochrome) does not establish that melanin is a magnetic sensor.",
-          "Endpoint shifts in surviving cell or biomass distributions under a radiation gradient can arise purely from differential mortality (Null H0-B) without active movement (Null H0-A).",
+          "Endpoint shifts in surviving cell or biomass distributions under a radiation gradient can arise purely from differential mortality (Null H0-B) without active movement (Null H0-A); likewise, short-window (0-15 s) DIC microscopy of apical cytoplasmic (Cyt) and vacuolar (Vac) organelle dynamics documents baseline cellular morphology rather than radiotropism or magnetoreception.",
           "Downstream coupling from cryptochrome photo-reduction or superoxide yields to eukaryotic neural or hyphal polarity remains unresolved in vivo."
         ],
         "promotion_criteria": [

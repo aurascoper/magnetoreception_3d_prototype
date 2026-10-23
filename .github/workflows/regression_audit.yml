@@ -1,4 +1,4 @@
-name: Magnetoreception 3D Interface Regression Audit
+name: Magnetoreception 3D Interface & Provenance Audit
 
 on:
   push:
@@ -24,7 +24,11 @@ jobs:
           node -v
           google-chrome --version
 
-      - name: Run Headless Chrome 3-System & Factorial Gates A-D Suite
+      - name: Run Scientific Calculation Provenance & Counterfactual Invariants Suite
+        run: |
+          node test_calculation_provenance_and_invariants.js
+
+      - name: Run Headless Chrome Interface & Regression Audit Suite
         env:
           CHROME_BIN: /usr/bin/google-chrome
         run: |
@@ -34,9 +38,17 @@ jobs:
           commit = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()
           node_v = subprocess.check_output(["node", "-v"]).decode().strip()
           chrome_v = subprocess.check_output(["google-chrome", "--version"]).decode().strip()
-          files = ["index.html", "evidence_manifest.json", "README.md", "test_magnetoreception_interface.js"]
+          files = [
+              "index.html",
+              "evidence_manifest.json",
+              "README.md",
+              "test_calculation_provenance_and_invariants.js",
+              "test_magnetoreception_interface.js"
+          ]
           hashes = {f: {"bytes": len(open(f,"rb").read()), "sha256": hashlib.sha256(open(f,"rb").read()).hexdigest()} for f in files}
           receipt = {
+              "schema": "ci_verification_receipt_v2",
+              "verification_scope_disclaimer": "SOFTWARE & PROVENANCE AUDIT ONLY: Passing CI verifies UI regression assertions, manifest schema, SI calculation provenance, counterfactual trajectory identities, and design-matrix rank/estimability. It does NOT validate biological magnetoreception or fungal radiotropism.",
               "commit_sha": commit,
               "node_version": node_v,
               "chrome_version": chrome_v,
