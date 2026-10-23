@@ -47,7 +47,27 @@ function verifyFilesAndManifest() {
   assert.strictEqual(bw.five_row_factorial_matrix.length, 5, 'Expected Revised 5-Row Planned-Contrast Matrix');
   assert.strictEqual(bw.decision_gates_0_to_4.length, 5, 'Expected 5 Decision Gates (Gate 0 to Gate 4)');
   assert.strictEqual(bw.multiphysics_and_glmm_architecture.layers.length, 4, 'Expected 4 Multiphysics & GLMM Layers (A-D)');
-  console.log('PASS [1/4]: Manifest v2.2.0, Biomagnetic Walk (H0-A/H0-B & 15/16 phase lock), 5-row (15-cell) matrix, and 4-Layer Multiphysics-GLMM verified.');
+
+  const cdeg = manifest.cross_domain_epistemic_gates;
+  assert.ok(cdeg, 'Missing cross_domain_epistemic_gates in evidence_manifest.json');
+  assert.strictEqual(cdeg.calculation_source_provenance.julia_source_commit, '67786024216ca55d1a4afd0ae8f049d8d016478d');
+  assert.strictEqual(cdeg.calculation_source_provenance.source_file, 'src/track4_mineral_magnetoreception_gates.jl');
+  assert.strictEqual(cdeg.calculation_source_provenance.superseded_verification_attempts.length, 3);
+  assert.strictEqual(cdeg.modeled_interaction_energy_comparison.evidence_type, 'MODELED');
+  assert.strictEqual(cdeg.modeled_interaction_energy_comparison.biological_sensing_established_by_calculation, false);
+  assert.strictEqual(cdeg.modeled_interaction_energy_comparison.field_key, 'u_mag_over_kBT');
+  assert.strictEqual(cdeg.modeled_interaction_energy_comparison.models.magnetosome_chain_model.angular_response_model.is_universal_binary_discriminator, false);
+  assert.strictEqual(cdeg.modeled_interaction_energy_comparison.models.cryptochrome_zeeman_timescale.is_demonstrated_biological_coherence_threshold, false);
+  assert.strictEqual(cdeg.gates.length, 4, 'Expected 4 cross-domain epistemic gates (EG-1 to EG-4)');
+  assert.deepStrictEqual(cdeg.gates.map(g => g.gate_id), ['EG-1', 'EG-2', 'EG-3', 'EG-4']);
+  assert.strictEqual(cdeg.gates[0].oklo_reactor_zone_biotite_verified, false);
+  assert.ok(cdeg.gates[0].oklo_documented_minerals.includes('illite') && cdeg.gates[0].oklo_documented_minerals.includes('chlorite'));
+  for (const g of cdeg.gates) {
+    for (const reqKey of ['gate_id', 'title', 'what_promotion_requires', 'status', 'claim', 'evidence_type', 'sources', 'assumptions', 'limitations', 'promotion_criteria']) {
+      assert.ok(g[reqKey] !== undefined, `Gate ${g.gate_id} missing required field ${reqKey}`);
+    }
+  }
+  console.log('PASS [1/4]: Manifest v2.2.0, Cross-Domain Epistemic Gates (EG-1..EG-4), Biomagnetic Walk (H0-A/H0-B & 15/16 phase lock), 5-row matrix, and 4-Layer Multiphysics-GLMM verified.');
 }
 
 function startStaticServer(port) {
