@@ -1,0 +1,90 @@
+{
+  "schema": "ci_verification_receipt_v2",
+  "repository": "aurascoper/magnetoreception_3d_prototype",
+  "branch": "feat/magnetoreception-3d-interface",
+  "base_commit_before_redteam_hardening": "bf297465a68d7bf3613ae581603eec492fac8615",
+  "verification_scope_disclaimer": "SOFTWARE & PROVENANCE AUDIT ONLY: Passing CI verifies UI regression assertions, manifest schema, SI calculation provenance, counterfactual trajectory identities, and design-matrix rank/estimability. It does NOT validate biological magnetoreception or fungal radiotropism.",
+  "node_version": "v26.11.1",
+  "chrome_version": "Google Chrome 155.0.8059.86",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "causal_gap_propositions_verified": [
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+  ],
+  "sequential_experiment_gates_verified": [
+    "EXP_A",
+    "EXP_B",
+    "EXP_C",
+    "EXP_D"
+  ],
+  "red_team_findings_verified": [
+    "1_per_edge_evidence_tags_9_system_edges_8_mechanism_chains",
+    "2_cpm_sp_v1_scoped_as_synthetic_counterexample_with_live_imaging_primary_endpoints",
+    "3_preregistered_9_angle_response_curves_0_to_180_deg_and_rank_5_harmonic_identifiability",
+    "4_mitochondrial_mediation_orthogonal_readouts_2_OH_E_plus_roGFP2_TMRM_and_rescue_controls",
+    "5_15_cell_rank_15_vs_24_cell_rank_24_factorial_estimability_and_aliasing_ledger",
+    "6_3_axis_9_point_field_map_0_5_uT_cm_gradient_0_05_C_thermal_1e_4_g_vibration_and_blinded_exclusion",
+    "7_phase_locking_negative_lesson_and_matched_connectivity_fixed_lineage_graph_control",
+    "8_separated_ui_regression_audit_vs_scientific_calculation_provenance_and_invariants_suite",
+    "9_organism_specific_genetic_validation_gates_GEN_1_to_GEN_5",
+    "10_staged_multiphysics_roadmap_stage_1_layer_D_default_active",
+    "11_three_tier_irradiation_vs_magnetoreception_hierarchy_and_specimen_encoding_gate"
+  ],
+  "biomagnetic_walk_null_explorer_verified": {
+    "scope_tag": "SYNTHETIC_COUNTEREXAMPLE",
+    "null_hypotheses": [
+      "H0_A",
+      "H0_B"
+    ],
+    "cpm_sp_v1_hazard_commitments": "5511 / 10752",
+    "cpm_sp_v1_displacement_cis_span_zero": "7 / 7 species",
+    "cpm_sp_v1_counterfactual_identity_exact": "surv_r_diff == init_surv_r_diff + disp_diff (7 / 7 species within 1e-6)",
+    "phase_locking_growth_off": "0 / 256 seeds (SYNTHETIC_NEGATIVE_LESSON)",
+    "phase_locking_growth_on": "15 / 16 seeds (K = 0.5 synthetic coupling + percolation; 98.2% spread reduction vs K=0)",
+    "matched_connectivity_control": "CTRL_MATCHED_TOPOLOGY_FIXED_LINEAGE verified",
+    "planned_contrast_vs_full_factorial": "15 cells (rank 15, 9 aliased interaction parameters) vs. 24-cell full crossed design (rank 24)",
+    "multiphysics_glmm_layers": [
+      "LAYER_A",
+      "LAYER_B",
+      "LAYER_C",
+      "LAYER_D"
+    ]
+  },
+  "artifact_hashes": {
+    "index.html": {
+      "bytes": 222592,
+      "sha256": "fd46e9459f45bbac656f55591f4894ca514b565ba706fd38996474630b3b8d13"
+    },
+    "evidence_manifest.json": {
+      "bytes": 116876,
+      "sha256": "4f61d995772ee055fd0df378d4884bc8b2a2be235877ffc4b4424fc519f9cacf"
+    },
+    "README.md": {
+      "bytes": 26290,
+      "sha256": "b3e4e7a01560f5741eae990d303ba46de5b0d789978f4b198a2e6b576c789ff7"
+    },
+    "test_calculation_provenance_and_invariants.js": {
+      "bytes": 36013,
+      "sha256": "602c9d2c0bb8d45f006d4c12eb790804490c9e173ecb81944e1087d3fa410dae"
+    },
+    "test_magnetoreception_interface.js": {
+      "bytes": 23531,
+      "sha256": "3d523c193b837f89a81fc8e3cb0217b29a6a66e2f48217fcd64b49ec52169de7"
+    }
+  },
+  "test_output": [
+    "PASS [Provenance 1/6]: First-principles SI biophysical calculations (ferritin 3.3586e-5 k_B T, magnetosome chain 5.6886 k_B T, biotite 5.8943e-8 k_B T, Larmor 1.401248 MHz) verified.",
+    "PASS [Invariants 2/6]: Trajectory counterfactual decomposition (surv_r_diff == init_surv_r_diff + disp_diff) verified across all 7 species and synthetic H0-A/H0-B ensembles.",
+    "PASS [Phase Controls 3/6]: Kuramoto counterfactual controls (Dividing-lineage K=0 replay, fragmented percolation, Matched-Connectivity Fixed-Lineage Control, and Cross-Seed Surrogate) verified.",
+    "PASS [Angular Curves 4/6]: Preregistered 9-angle response curves Y(theta_B), pairwise curve discriminability, rank-5 harmonic identifiability on [0..180 deg], and full-circle [0..330 deg] orthogonality verified.",
+    "PASS [Estimability 5/6]: Linear-model design matrix rank (rank(X_15)=15 vs rank(X_24)=24) and exact aliasing of beta_B, beta_BM, beta_RB, beta_RBM verified.",
+    "PASS [Red-Team Policies 6/6]: Per-edge evidence tags (9 system edges, 8 mechanism edge-chains), HTML/JSON manifest parity, 3-tier irradiation/magnetoreception hierarchy, specimen-encoding gate, orthogonal ROS readouts, exposure tolerances, strain gates (GEN_1..5), and staged parsimony verified.",
+    "ALL SCIENTIFIC PROVENANCE, TRAJECTORY COUNTERFACTUAL, AND ESTIMABILITY TESTS PASSED.",
+    "PASS [1/4]: Manifest v2.2.0, Red-Team Provenance & Invariants Suite, Cross-Domain Epistemic Gates (EG-1..EG-4 v1.3.0), 3-Tier Irradiation Hierarchy, Specimen-Encoding Gate, Biomagnetic Walk, 5-row/24-cell matrix, and 4-Layer Multiphysics-GLMM verified.",
+    "PASS [2/4]: 3-D WebGL scene (745x448), per-edge evidence badges, EG-1..EG-4 & 3-tier/specimen-gate cards, 9-angle curve table, 15-vs-24 estimability table, exposure/strain controls, and 4-layer GLMM verified.",
+    "PASS [3/4]: Biomagnetic Walk Null Explorer canvas & Revised 5-Row / 24-Cell Factorial Simulator (including 180 deg reversal within full angular curve) verified.",
+    "PASS [4/4]: Disabled-WebGL 2-D fallback verified (745x448)."
+  ]
+}
