@@ -156,34 +156,43 @@
     "preregistered_angular_response_curves": {
       "rationale": "A 180 deg field reversal alone does NOT universally separate magnetite from radical-pair sensing: superparamagnetic/induced-dipole oxides are 180 deg-invariant (proportional to B^2 sin(2*theta)), while a radical-pair response depends on molecular orientation, reaction-yield anisotropy, and the organism's downstream mapping into growth polarity. Each candidate mechanism's full angular response curve Y(theta_B) across [0 deg, 180 deg] must be preregistered and compared against the full measured curve.",
       "sampled_angles_deg": [0, 30, 45, 60, 90, 120, 135, 150, 180],
+      "full_circle_extension_angles_deg": [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330],
       "candidate_curve_models": [
         {
           "model_id": "M_C1_POLAR_MAGNETITE_TORQUE",
           "mechanism_class": "Single-domain permanent dipole torque (tau = m x B)",
-          "functional_form": "Y(theta) = A_1 * cos(theta - theta_0) [First spherical harmonic P_1; sign-inverting under 180 deg reversal: Y(180 deg) = -Y(0 deg)]",
-          "sign_at_0_vs_180": "Inverts sign (+A_1 at 0 deg -> -A_1 at 180 deg)",
+          "harmonic_basis": "cos(theta_B)",
+          "functional_form": "Y(theta) = A_1 * cos(theta - theta_0) [First harmonic L=1; sign-inverting under 180 deg reversal: Y(180 deg) = -Y(0 deg)]",
+          "predicted_curve_values": [1.000, 0.866, 0.707, 0.500, 0.000, -0.500, -0.707, -0.866, -1.000],
+          "sign_at_0_vs_180": "Inverts sign (+1.000 at 0 deg -> -1.000 at 180 deg)",
           "discriminating_curve_feature": "Dominant L=1 odd harmonic (cos theta); zero crossing near 90 deg relative to tether axis."
         },
         {
           "model_id": "M_B1_AXIAL_RADICAL_PAIR",
           "mechanism_class": "Centrosymmetric axial radical-pair inclination compass (e.g. canonical Trp-triad / FAD hyperfine tensor)",
-          "functional_form": "Y(theta) = A_2 * 0.5 * (3 * cos^2(theta - theta_0) - 1) [Second harmonic P_2; symmetric under 180 deg inversion: Y(180 deg) = +Y(0 deg)]",
-          "sign_at_0_vs_180": "Invariant (+A_2 at 0 deg and +A_2 at 180 deg; opposite extremum at 90 deg)",
+          "harmonic_basis": "cos(2*theta_B)",
+          "functional_form": "Y(theta) = A_2 * cos(2 * (theta - theta_0)) [Centered second harmonic L=2; symmetric under 180 deg inversion: Y(180 deg) = +Y(0 deg)]",
+          "predicted_curve_values": [1.000, 0.500, 0.000, -0.500, -1.000, -0.500, 0.000, 0.500, 1.000],
+          "sign_at_0_vs_180": "Invariant (+1.000 at 0 deg and +1.000 at 180 deg; opposite extremum -1.000 at 90 deg)",
           "discriminating_curve_feature": "Dominant L=2 even harmonic (cos 2*theta) with period 180 deg and extrema separated by 90 deg."
         },
         {
           "model_id": "M_B2_ANISOTROPIC_RADICAL_PAIR_MAPPED",
           "mechanism_class": "Orientation-selective radical pair coupled to asymmetric cell-wall/membrane receptor & nonlinear polarity readout",
-          "functional_form": "Y(theta) = G_polarity( sum_{L=2,4} c_{L,m} Y_{L,m}(theta, phi) + grad_I_gamma_cross_term )",
-          "sign_at_0_vs_180": "Depends on receptor alignment relative to fixed radiation gradient grad I_gamma and downstream thresholding",
+          "harmonic_basis": "0.7*cos(2*theta_B) - 0.3*sin(2*theta_B)",
+          "functional_form": "Y(theta) = G_polarity( sum_{L=2,4} c_{L,m} Y_{L,m}(theta, phi) + grad_I_gamma_cross_term ) [Reference profile: 0.7*cos(2*theta) - 0.3*sin(2*theta)]",
+          "predicted_curve_values": [0.700, 0.090, -0.300, -0.610, -0.700, -0.090, 0.300, 0.610, 0.700],
+          "sign_at_0_vs_180": "Phase-shifted even profile (+0.700 at 0/180 deg, asymmetric at 30/60 vs 120/150 deg; depends on receptor alignment to grad I_gamma)",
           "discriminating_curve_feature": "Asymmetric multi-harmonic angular profile across 30/45/60/120/135/150 deg; requires full 9-angle curve fit rather than 2-point 0/180 deg sign check."
         },
         {
           "model_id": "M_C2_SUPERPARAMAGNETIC_INDUCED",
           "mechanism_class": "Superparamagnetic / induced-dipole torque or gradient force",
-          "functional_form": "Y(theta) = A_sp * B^2 * sin(2 * (theta - theta_0))",
-          "sign_at_0_vs_180": "Invariant under 180 deg reversal (+B -> -B) despite being an iron-oxide particle mechanism",
-          "discriminating_curve_feature": "Demonstrates why 180 deg invariance alone cannot rule out iron-oxide mechanics; separated from radical pairs by quadratic B^2 field-strength scaling and Larmor RF diagnostic."
+          "harmonic_basis": "sin(2*theta_B)",
+          "functional_form": "Y(theta) = A_sp * B^2 * sin(2 * (theta - theta_0)) [Quadratic B^2 L=2 odd-sine harmonic; 180 deg-periodic]",
+          "predicted_curve_values": [0.000, 0.866, 1.000, 0.866, 0.000, -0.866, -1.000, -0.866, 0.000],
+          "sign_at_0_vs_180": "Invariant under 180 deg reversal (Y(theta + 180 deg) = +Y(theta); 0.000 at 0/90/180 deg, +/-1.000 at 45/135 deg) despite being an iron-oxide particle mechanism",
+          "discriminating_curve_feature": "Demonstrates why 180 deg invariance alone cannot rule out iron-oxide mechanics; separated from radical pairs by sin(2*theta) 45/135 deg extrema, quadratic B^2 field-strength scaling, and Larmor RF diagnostic."
         }
       ]
     },
@@ -589,22 +598,22 @@
           "edge_id": "E2_A",
           "from": "s2_route_a_melanin_spin",
           "to": "s1_mitochondrial_etc",
-          "claim": "Edge 2.1 -> 1.3 (Route A): Weak B-field modulates melanin radical recombination -> alters fungal mitochondrial redox",
-          "evidence_tag": "HYPOTHESIZED -> UNRESOLVED_TRANSDUCTION"
+          "claim": "Edge 2.1 -> 1.3 (Route A): Hypothesized melanin radical-pair spin shift transduces into fungal mitochondrial redox signaling",
+          "evidence_tag": "UNRESOLVED_TRANSDUCTION"
         },
         {
           "edge_id": "E2_B1",
-          "from": "s2_route_b_flavin_superoxide",
+          "from": "photon_blue_excitation",
           "to": "s2_route_b_flavin_superoxide",
-          "claim": "Edge 2.2a (Route B1): Photoinduced [FAD*- ... TrpH*+] singlet-triplet mixing in purified Cryptochrome in vitro",
+          "claim": "Edge 2.2a (Route B1): Photoinduced [FAD*- ... TrpH*+] singlet-triplet mixing in purified Cryptochrome 4 in vitro (Xu et al. 2021; Maeda et al. 2012)",
           "evidence_tag": "OBSERVED_IN_VITRO"
         },
         {
           "edge_id": "E2_B2",
           "from": "s2_route_b_flavin_superoxide",
-          "to": "s1_mitochondrial_etc",
-          "claim": "Edge 2.2b -> 1.3 (Route B2): [FAD*- ... O2*-] spin-pair modulation -> cellular ROS amplification -> fungal mitochondrial signaling",
-          "evidence_tag": "MODELED -> UNRESOLVED_TRANSDUCTION"
+          "to": "s1_redox_intermediary",
+          "claim": "Edge 2.2b (Route B2): Flavin-superoxide [FAD*- ... O2*-] spin-pair modulation & planarian ROS model (Rishabh et al. 2023, arXiv:2312.06597; fungal transduction unresolved)",
+          "evidence_tag": "MODELED"
         },
         {
           "edge_id": "E2_C",
@@ -725,10 +734,10 @@
       "title": "System 2 (Route C): Biogenic Magnetite (Fe3O4) Chain Torque Transduction",
       "status": "ESTABLISHED_IN_MAGNETOTACTIC_BACTERIA | EUKARYOTIC_AND_FUNGAL_TRANSDUCTION_UNRESOLVED",
       "equation": "tau = N_crystals * M_s * V_crystal * B * sin(theta); thermal_gate = tau / (k_B * T) > 1",
-      "typical_regime": "B = 25 to 65 uT (DC geomagnetic), single-domain Fe3O4 crystals (r ~ 25 nm, chain N = 10 to 20)",
+      "typical_regime": "B = 25 to 65 uT (DC geomagnetic), single-domain Fe3O4 crystals (r ~ 25 nm, chain N = 15)",
       "edge_claims": [
         {"edge": "Single-domain Fe3O4 magnetosome chain torque > k_B T in magnetotactic bacteria", "tag": "OBSERVED"},
-        {"edge": "Biogenic Fe3O4 torque model at 50 uT (tau / k_B T = 3.84)", "tag": "MODELED"},
+        {"edge": "Biogenic Fe3O4 chain (15x 25nm) torque model at 50 uT (U_mag / k_B T = 5.69 at 300 K; 5.51 at 310 K)", "tag": "MODELED"},
         {"edge": "Intracellular magnetite mechanoreceptor tether driving fungal hyphal steering", "tag": "UNRESOLVED_TRANSDUCTION"}
       ],
       "sources": [
@@ -920,17 +929,17 @@
     }
   ],
   "cross_domain_epistemic_gates": {
-    "section_version": "1.0.0",
-    "integration_principle": "Preserves the cross-project four-gate epistemic architecture (EG-1 through EG-4) linking geochemical provenance, physical mechanism models, cellular transduction, and evolutionary origin while keeping Oklo and biotite provenance separate and labeling model-based interaction-energy calculations strictly as MODELED.",
+    "section_version": "1.1.0",
+    "integration_principle": "Preserves the cross-project four-gate epistemic architecture (EG-1 through EG-4) linking geochemical provenance, physical mechanism models, cellular transduction, and evolutionary origin while keeping Oklo and biotite provenance separate, labeling model-based interaction-energy calculations strictly as MODELED, and separating idealized saturated blocked inclusion bounds from natural remanence and unblocked superparamagnetic regimes.",
     "calculation_source_provenance": {
       "repository_path": "/Users/aurascoper/.gemini/antigravity/scratch/oklo_stencil_benchmarks",
       "package_name": "OkloStencilBenchmarks",
       "package_version": "0.1.0",
       "source_file": "src/track4_mineral_magnetoreception_gates.jl",
-      "source_file_sha256": "086180dc0b23c3f3cd75be9c7ca7817ce543a4e2963a72b491bfdc4b9d013e0d",
-      "julia_source_commit": "67786024216ca55d1a4afd0ae8f049d8d016478d",
+      "source_file_sha256": "c46d25638d03a6ff9a82f2a88753b507bd19beac4dd15c24b7488c5504c070a0",
+      "julia_source_commit": "13422b1a5fe070d5ba3e7f376768f08b3a003ddf",
       "verification_command": "julia --startup-file=no --project=/Users/aurascoper/.gemini/antigravity/scratch/oklo_stencil_benchmarks -e 'using Pkg; Pkg.test()'",
-      "passing_test_summary": "695 / 695 passed (0 failures, 0 errors)",
+      "passing_test_summary": "707 / 707 passed (0 failures, 0 errors)",
       "software_evidence_boundary": "Passing the Julia and Python verification suites establishes only that the code implements the declared mathematical formulas, discrete conservation laws, and fail-closed schema/gate rules to the tested tolerances. It does NOT establish biological magnetoreception mechanisms, natural mineral parameters, cellular signal transduction, or evolutionary history.",
       "superseded_verification_attempts": [
         {
@@ -991,10 +1000,38 @@
           "magnetosome_to_biotite_u_mag_ratio": 9.650973e7,
           "sensitivity_range_delta_chi_2e5_to_1_5e3_si": [4.715475e-9, 3.536606e-7],
           "natural_1um3_flake_magnetite_inclusion_sensitivity": {
-            "inclusion_free_0pct_fe3o4": 6.003953e-5,
-            "trace_0_01pct_fe3o4": 0.579497,
-            "minor_1pct_fe3o4": 57.943805,
-            "caveat": "Natural biotite crystals frequently contain sub-micron ferrimagnetic magnetite (Fe3O4) inclusions along cleavage planes that can dominate bulk remanence and torque, requiring IRM and Mossbauer screening."
+            "magnetic_state_requirement": "A natural biotite specimen cannot be assigned to any inclusion regime without rock-magnetic characterization (FORC/Day hysteresis, NRM/IRM demagnetization, and low-field susceptibility vs. temperature; Dunlop & Ozdemir 1997). Saturation magnetization M_s requires fields (~0.3-1 T) vastly stronger than Earth's 50 uT field.",
+            "idealized_saturated_coherently_blocked_upper_bound": {
+              "is_realistic_natural_default": false,
+              "assumption": "100% single-domain blocked Fe3O4 carrying full saturation magnetization M_s = 4.8e5 A/m with all inclusion moments coherently aligned.",
+              "inclusion_free_0pct_fe3o4": 6.003953e-5,
+              "trace_0_01pct_fe3o4": 0.579497,
+              "minor_1pct_fe3o4": 57.943805
+            },
+            "partially_remanent_natural_nrm_blocked_regime": {
+              "is_realistic_natural_default": false,
+              "nrm_to_saturation_ratio": 0.01,
+              "assumption": "Blocked Fe3O4 inclusions carrying typical natural remanent magnetization M_NRM = 0.01 * M_s acquired in weak geomagnetic fields without artificial saturation.",
+              "inclusion_free_0pct_fe3o4": 6.003953e-5,
+              "trace_0_01pct_fe3o4": 5.854412e-3,
+              "minor_1pct_fe3o4": 0.579497
+            },
+            "unblocked_superparamagnetic_or_low_field_induced_regime": {
+              "is_realistic_natural_default": false,
+              "chi_eff_si": 3.0,
+              "delta_chi_eff_si": 0.5,
+              "assumption": "Unblocked superparamagnetic (r < 10-15 nm, M_r = 0) or multi-domain demagnetized Fe3O4 inclusions responding only via low-field susceptibility (quadratic in B at 50 uT).",
+              "anisotropic_u_mag_over_kBT": {
+                "inclusion_free_0pct_fe3o4": 6.003953e-5,
+                "trace_0_01pct_fe3o4": 7.204143e-5,
+                "minor_1pct_fe3o4": 1.260230e-3
+              },
+              "isotropic_u_mag_over_kBT": {
+                "inclusion_free_0pct_fe3o4": 6.003953e-5,
+                "trace_0_01pct_fe3o4": 1.320809e-4,
+                "minor_1pct_fe3o4": 7.264183e-3
+              }
+            }
           }
         },
         "ferritin_core_model": {
@@ -1063,6 +1100,7 @@
         "sources": [
           "Kirschvink & Gould (1981) Biosystems 13:181-201 (doi:10.1016/0303-2647(81)90060-5) - Biogenic magnetite as a basis for magnetic field sensitivity in animals",
           "Martin-Hernandez & Hirt (2003) Tectonophysics 367:13-28 - Paramagnetic susceptibility and anisotropy of single-crystal biotite, muscovite, and chlorite as a function of Fe content",
+          "Dunlop & Ozdemir (1997) Rock Magnetism: Fundamentals and Frontiers (Cambridge Univ. Press) - Domain state, superparamagnetic blocking, natural remanent magnetization (NRM << M_s), and low-field susceptibility of magnetite inclusions",
           "Meister (2016) eLife 5:e17210 - Physical limits to magnetogenetics (endogenous ferritin core U_mag / k_B*T ~ 3.36e-5 at 50 uT)",
           "Maeda et al. (2012) PNAS 109:4774-4779 & Xu et al. (2021) Nature 594:535-540 - In vitro magnetic sensitivity of photoinduced cryptochrome flavin-tryptophan radical pairs",
           "Dadachova et al. (2007) PLoS ONE 2:e457 - Ionizing radiation changes melanin ESR signal and increases NADH ferricyanide reduction ~4x in vitro"
@@ -1070,11 +1108,12 @@
         "assumptions": [
           "Magnetosome model assumes N = 15 colinear single-domain Fe3O4 spheres (r = 25 nm, M_s = 4.8e5 A/m) acting as a rigid dipole.",
           "Biotite model assumes an inclusion-free paramagnetic single crystal (chi_v = 1.0e-3 SI, Delta_chi = 2.5e-4 SI) matched to the magnetosome chain volume (9.82e-22 m^3).",
+          "Magnetite-inclusion sensitivity in a 1 um^3 biotite flake explicitly separates three magnetic-state regimes: (A) an idealized upper bound where 100% of inclusion volume is coherently aligned, blocked single-domain Fe3O4 carrying full saturation magnetization M_s = 4.8e5 A/m (which requires prior saturating fields ~0.3-1 T >> 50 uT and is NOT a realistic natural default); (B) blocked inclusions carrying a typical natural remanent magnetization fraction (eta_NRM = M_NRM / M_s = 0.01); and (C) unblocked superparamagnetic (r < 10-15 nm, M_r = 0) or demagnetized multi-domain inclusions responding only via low-field susceptibility (chi_eff = 3.0 SI, Delta_chi_eff = 0.5 SI, scaling as B^2 / 2*mu_0).",
           "Radical-pair Larmor frequency assumes free-electron g = 2.00232 at B = 50 uT."
         ],
         "limitations": [
           "U_mag / (k_B * T) is a model-based interaction-energy scale comparison, NOT a demonstration that a biological receptor detects or transduces a magnetic field.",
-          "Natural biotite specimens vary in Fe/(Fe+Mg) stoichiometry and frequently host sub-micron ferrimagnetic magnetite inclusions (0.01% to 1% Fe3O4 inclusions in a 1 um^3 flake raise U_mag / k_B*T from 6.0e-5 to 0.58-57.9), requiring IRM and Mossbauer screening.",
+          "In a 1 um^3 biotite flake at 50 uT, 0.01% to 1% Fe3O4 inclusions reach U_mag / k_B*T = 0.58 to 57.9 ONLY under the idealized coherently saturated upper bound (M = M_s). Under realistic natural remanence (M_NRM = 0.01 * M_s), U_mag / k_B*T is 5.85e-3 (at 0.01%) to 0.58 (at 1%); under unblocked superparamagnetic or low-field induced response (M_r = 0, quadratic in B), U_mag / k_B*T stays at 7.20e-5 to 1.26e-3 (anisotropic) and 1.32e-4 to 7.26e-3 (isotropic). A specimen cannot be assigned to any inclusion regime without rock-magnetic characterization (FORC/Day hysteresis, NRM/IRM, and low-field susceptibility vs. T).",
           "1 / omega_L = 113.6 ns is a field-dependent physical Zeeman precession timescale, NOT a demonstrated minimum biological spin-coherence lifetime.",
           "A 180-degree field-reversal contrast (B -> -B) is a model-specific prediction under explicit tethering/symmetry assumptions, not a universal binary discriminator across all candidate mechanisms."
         ],
