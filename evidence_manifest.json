@@ -929,17 +929,17 @@
     }
   ],
   "cross_domain_epistemic_gates": {
-    "section_version": "1.1.0",
-    "integration_principle": "Preserves the cross-project four-gate epistemic architecture (EG-1 through EG-4) linking geochemical provenance, physical mechanism models, cellular transduction, and evolutionary origin while keeping Oklo and biotite provenance separate, labeling model-based interaction-energy calculations strictly as MODELED, and separating idealized saturated blocked inclusion bounds from natural remanence and unblocked superparamagnetic regimes.",
+    "section_version": "1.2.0",
+    "integration_principle": "Preserves the cross-project four-gate epistemic architecture (EG-1 through EG-4) linking geochemical provenance, physical mechanism models, cellular transduction, and evolutionary origin while keeping Oklo and biotite provenance separate, labeling model-based interaction-energy calculations strictly as MODELED, separating idealized saturated blocked inclusion bounds from natural remanence and unblocked superparamagnetic regimes, preserving the anisotropy requirement for uniform-field torque, and documenting the material-dependent non-universality of neutron-irradiation magnetic shifts.",
     "calculation_source_provenance": {
       "repository_path": "/Users/aurascoper/.gemini/antigravity/scratch/oklo_stencil_benchmarks",
       "package_name": "OkloStencilBenchmarks",
       "package_version": "0.1.0",
       "source_file": "src/track4_mineral_magnetoreception_gates.jl",
-      "source_file_sha256": "c46d25638d03a6ff9a82f2a88753b507bd19beac4dd15c24b7488c5504c070a0",
-      "julia_source_commit": "13422b1a5fe070d5ba3e7f376768f08b3a003ddf",
+      "source_file_sha256": "11869306bb00dfc929b441a5b7c0407c184ac4107cc0fe1fb576745ad7587c60",
+      "julia_source_commit": "f17892ed08f274ca76ca9f2a31c01acd98f089b4",
       "verification_command": "julia --startup-file=no --project=/Users/aurascoper/.gemini/antigravity/scratch/oklo_stencil_benchmarks -e 'using Pkg; Pkg.test()'",
-      "passing_test_summary": "707 / 707 passed (0 failures, 0 errors)",
+      "passing_test_summary": "712 / 712 passed (0 failures, 0 errors)",
       "software_evidence_boundary": "Passing the Julia and Python verification suites establishes only that the code implements the declared mathematical formulas, discrete conservation laws, and fail-closed schema/gate rules to the tested tolerances. It does NOT establish biological magnetoreception mechanisms, natural mineral parameters, cellular signal transduction, or evolutionary history.",
       "superseded_verification_attempts": [
         {
@@ -1020,6 +1020,9 @@
               "is_realistic_natural_default": false,
               "chi_eff_si": 3.0,
               "delta_chi_eff_si": 0.5,
+              "directional_torque_requires_anisotropy": true,
+              "isotropic_b2_energy_generates_uniform_field_torque": false,
+              "anisotropy_requirement_note": "A B^2-dependent induced magnetic energy does not automatically imply directional sensing: an orientation-dependent torque in a uniform field requires magnetic anisotropy (Delta_chi_eff != 0) or another source of directional coupling; an isotropic induced response (chi_eff) depends only on |B|^2 and generates zero restoring torque (dU/dtheta = 0).",
               "assumption": "Unblocked superparamagnetic (r < 10-15 nm, M_r = 0) or multi-domain demagnetized Fe3O4 inclusions responding only via low-field susceptibility (quadratic in B at 50 uT).",
               "anisotropic_u_mag_over_kBT": {
                 "inclusion_free_0pct_fe3o4": 6.003953e-5,
@@ -1031,6 +1034,16 @@
                 "trace_0_01pct_fe3o4": 1.320809e-4,
                 "minor_1pct_fe3o4": 7.264183e-3
               }
+            },
+            "irradiation_defect_transfer_boundary": {
+              "causal_summary": "Neutron fluence, spectrum, irradiation temperature, and material history can drive defect and precipitate evolution, altering magnetic-domain-wall pinning and measured magnetic properties. The direction and magnitude of changes in coercivity, remanence, permeability, and Barkhausen noise are material- and condition-dependent.",
+              "is_coercivity_or_remanence_shift_sign_universal": false,
+              "engineering_alloy_to_natural_biotite_transfer_calibrated": false,
+              "empirical_contrasts": [
+                "Park et al. (2004, Key Eng. Mater. 270-273:657, doi:10.4028/www.scientific.net/KEM.270-273.657): In neutron-irradiated A508 reactor pressure-vessel steel, coercivity increased by 16% at highest reported fluence while initial permeability and Barkhausen noise decreased.",
+                "Shong et al. (ASTM STP15114S, doi:10.1520/STP15114S): In neutron-irradiated iron and nickel wires, coercivity and remanence predominantly decreased with irradiation dose."
+              ],
+              "transfer_boundary_note": "Engineering-material irradiation studies support the general physical principle that radiation alters magnetic observables (EG-2 context), but do NOT provide calibrated parameters for magnetite inclusions in natural biotite or evidence for biological radiotropism/magnetoreception (EG-3/EG-4)."
             }
           }
         },
@@ -1101,6 +1114,7 @@
           "Kirschvink & Gould (1981) Biosystems 13:181-201 (doi:10.1016/0303-2647(81)90060-5) - Biogenic magnetite as a basis for magnetic field sensitivity in animals",
           "Martin-Hernandez & Hirt (2003) Tectonophysics 367:13-28 - Paramagnetic susceptibility and anisotropy of single-crystal biotite, muscovite, and chlorite as a function of Fe content",
           "Dunlop & Ozdemir (1997) Rock Magnetism: Fundamentals and Frontiers (Cambridge Univ. Press) - Domain state, superparamagnetic blocking, natural remanent magnetization (NRM << M_s), and low-field susceptibility of magnetite inclusions",
+          "Park et al. (2004) Key Eng. Mater. 270-273:657 (doi:10.4028/www.scientific.net/KEM.270-273.657) & Shong et al. (ASTM STP15114S, doi:10.1520/STP15114S) - Material- and condition-dependent neutron-irradiation shifts in coercivity (+16% in A508 steel vs. predominant decrease in Fe/Ni wires), remanence, permeability, and Barkhausen noise",
           "Meister (2016) eLife 5:e17210 - Physical limits to magnetogenetics (endogenous ferritin core U_mag / k_B*T ~ 3.36e-5 at 50 uT)",
           "Maeda et al. (2012) PNAS 109:4774-4779 & Xu et al. (2021) Nature 594:535-540 - In vitro magnetic sensitivity of photoinduced cryptochrome flavin-tryptophan radical pairs",
           "Dadachova et al. (2007) PLoS ONE 2:e457 - Ionizing radiation changes melanin ESR signal and increases NADH ferricyanide reduction ~4x in vitro"
@@ -1109,11 +1123,13 @@
           "Magnetosome model assumes N = 15 colinear single-domain Fe3O4 spheres (r = 25 nm, M_s = 4.8e5 A/m) acting as a rigid dipole.",
           "Biotite model assumes an inclusion-free paramagnetic single crystal (chi_v = 1.0e-3 SI, Delta_chi = 2.5e-4 SI) matched to the magnetosome chain volume (9.82e-22 m^3).",
           "Magnetite-inclusion sensitivity in a 1 um^3 biotite flake explicitly separates three magnetic-state regimes: (A) an idealized upper bound where 100% of inclusion volume is coherently aligned, blocked single-domain Fe3O4 carrying full saturation magnetization M_s = 4.8e5 A/m (which requires prior saturating fields ~0.3-1 T >> 50 uT and is NOT a realistic natural default); (B) blocked inclusions carrying a typical natural remanent magnetization fraction (eta_NRM = M_NRM / M_s = 0.01); and (C) unblocked superparamagnetic (r < 10-15 nm, M_r = 0) or demagnetized multi-domain inclusions responding only via low-field susceptibility (chi_eff = 3.0 SI, Delta_chi_eff = 0.5 SI, scaling as B^2 / 2*mu_0).",
+          "In Scenario C and paramagnetic minerals, an orientation-dependent torque in a uniform field requires magnetic anisotropy (Delta_chi_eff != 0); an isotropic B^2-dependent induced energy depends only on |B|^2 and generates zero restoring torque (dU/dtheta = 0).",
           "Radical-pair Larmor frequency assumes free-electron g = 2.00232 at B = 50 uT."
         ],
         "limitations": [
           "U_mag / (k_B * T) is a model-based interaction-energy scale comparison, NOT a demonstration that a biological receptor detects or transduces a magnetic field.",
-          "In a 1 um^3 biotite flake at 50 uT, 0.01% to 1% Fe3O4 inclusions reach U_mag / k_B*T = 0.58 to 57.9 ONLY under the idealized coherently saturated upper bound (M = M_s). Under realistic natural remanence (M_NRM = 0.01 * M_s), U_mag / k_B*T is 5.85e-3 (at 0.01%) to 0.58 (at 1%); under unblocked superparamagnetic or low-field induced response (M_r = 0, quadratic in B), U_mag / k_B*T stays at 7.20e-5 to 1.26e-3 (anisotropic) and 1.32e-4 to 7.26e-3 (isotropic). A specimen cannot be assigned to any inclusion regime without rock-magnetic characterization (FORC/Day hysteresis, NRM/IRM, and low-field susceptibility vs. T).",
+          "In a 1 um^3 biotite flake at 50 uT, 0.01% to 1% Fe3O4 inclusions reach U_mag / k_B*T = 0.58 to 57.9 ONLY under the idealized coherently saturated upper bound (M = M_s). Under realistic natural remanence (M_NRM = 0.01 * M_s), U_mag / k_B*T is 5.85e-3 (at 0.01%) to 0.58 (at 1%); under unblocked superparamagnetic or low-field induced response (M_r = 0, quadratic in B), U_mag / k_B*T stays at 7.20e-5 to 1.26e-3 (anisotropic, torque-generating) and 1.32e-4 to 7.26e-3 (isotropic, non-directional). A specimen cannot be assigned to any inclusion regime without rock-magnetic characterization (FORC/Day hysteresis, NRM/IRM, and low-field susceptibility vs. T).",
+          "Neutron fluence, spectrum, irradiation temperature, and material history can drive defect and precipitate evolution, altering domain-wall pinning and magnetic observables, but the direction and magnitude of changes in coercivity, remanence, permeability, and Barkhausen noise are material- and condition-dependent (e.g., coercivity +16% in irradiated A508 steel vs. predominant decrease in irradiated Fe/Ni wires) and do NOT provide calibrated values for magnetite inclusions in natural biotite.",
           "1 / omega_L = 113.6 ns is a field-dependent physical Zeeman precession timescale, NOT a demonstrated minimum biological spin-coherence lifetime.",
           "A 180-degree field-reversal contrast (B -> -B) is a model-specific prediction under explicit tethering/symmetry assumptions, not a universal binary discriminator across all candidate mechanisms."
         ],

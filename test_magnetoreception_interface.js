@@ -62,8 +62,8 @@ function verifyFilesAndManifest() {
 
   const cdeg = manifest.cross_domain_epistemic_gates;
   assert.ok(cdeg, 'Missing cross_domain_epistemic_gates in evidence_manifest.json');
-  assert.strictEqual(cdeg.section_version, '1.1.0');
-  assert.strictEqual(cdeg.calculation_source_provenance.julia_source_commit, '13422b1a5fe070d5ba3e7f376768f08b3a003ddf');
+  assert.strictEqual(cdeg.section_version, '1.2.0');
+  assert.strictEqual(cdeg.calculation_source_provenance.julia_source_commit, 'f17892ed08f274ca76ca9f2a31c01acd98f089b4');
   assert.strictEqual(cdeg.calculation_source_provenance.source_file, 'src/track4_mineral_magnetoreception_gates.jl');
   assert.strictEqual(cdeg.calculation_source_provenance.superseded_verification_attempts.length, 3);
   assert.strictEqual(cdeg.modeled_interaction_energy_comparison.evidence_type, 'MODELED');
@@ -75,6 +75,11 @@ function verifyFilesAndManifest() {
   assert.strictEqual(incSens.idealized_saturated_coherently_blocked_upper_bound.is_realistic_natural_default, false);
   assert.strictEqual(incSens.partially_remanent_natural_nrm_blocked_regime.is_realistic_natural_default, false);
   assert.strictEqual(incSens.unblocked_superparamagnetic_or_low_field_induced_regime.is_realistic_natural_default, false);
+  assert.strictEqual(incSens.unblocked_superparamagnetic_or_low_field_induced_regime.directional_torque_requires_anisotropy, true);
+  assert.strictEqual(incSens.unblocked_superparamagnetic_or_low_field_induced_regime.isotropic_b2_energy_generates_uniform_field_torque, false);
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.is_coercivity_or_remanence_shift_sign_universal, false);
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.engineering_alloy_to_natural_biotite_transfer_calibrated, false);
+  assert.strictEqual(incSens.irradiation_defect_transfer_boundary.empirical_contrasts.length, 2);
   assert.ok(incSens.partially_remanent_natural_nrm_blocked_regime.trace_0_01pct_fe3o4 < 0.01);
   assert.ok(incSens.unblocked_superparamagnetic_or_low_field_induced_regime.isotropic_u_mag_over_kBT.minor_1pct_fe3o4 < 0.01);
   assert.strictEqual(cdeg.gates.length, 4, 'Expected 4 cross-domain epistemic gates (EG-1 to EG-4)');
@@ -189,9 +194,11 @@ async function run() {
           const sysNodes = document.querySelectorAll('#threeSystemsGrid .sys-node').length;
           const sysEdges = document.querySelectorAll('#threeSystemsGrid .sys-edge').length;
           const mechEdgeBadges = document.querySelectorAll('.mech-edge-badge').length;
+          const stageEdgePills = document.querySelectorAll('#stageEdgeLegend .stage-edge-pill').length;
           const propCards = document.querySelectorAll('#causalGapGrid .prop-card').length;
           const selRows = document.querySelectorAll('#selectionAuditBody tr').length;
           const angularRows = document.querySelectorAll('#angularCurveBody tr').length;
+          const angularCols = document.querySelectorAll('#angularCurveTable thead th').length;
           const estimabilityRows = document.querySelectorAll('#estimabilityBody tr').length;
           const fiveRows = document.querySelectorAll('#fiveRowMatrixBody tr').length;
           const exposureBoxes = document.querySelectorAll('#exposureControlsGrid .ctrl-box').length;
@@ -212,9 +219,11 @@ async function run() {
             sysNodes,
             sysEdges,
             mechEdgeBadges,
+            stageEdgePills,
             propCards,
             selRows,
             angularRows,
+            angularCols,
             estimabilityRows,
             fiveRows,
             exposureBoxes,
@@ -225,6 +234,7 @@ async function run() {
             biophys,
             hasCoarseBadgeInMechList,
             ferritinVal: document.getElementById('kpiFerritin').textContent,
+            chainTauVal: document.getElementById('kpiChainTau').textContent,
             larmorVal: document.getElementById('kpiCryFreq').textContent
           });
         })()`);
@@ -235,10 +245,12 @@ async function run() {
         assert.strictEqual(state3d.sysNodes, 10, 'Expected 10 causal nodes across the 3 systems');
         assert.strictEqual(state3d.sysEdges, 9, 'Expected 9 per-edge evidence items across the 3 systems');
         assert.ok(state3d.mechEdgeBadges >= 16, `Expected >= 16 per-edge badges in mechanism list, got ${state3d.mechEdgeBadges}`);
+        assert.ok(state3d.stageEdgePills >= 2, `Expected >= 2 per-edge pills in #stageEdgeLegend, got ${state3d.stageEdgePills}`);
         assert.strictEqual(state3d.hasCoarseBadgeInMechList, false, 'Prohibited coarse badge found in #mechList');
         assert.strictEqual(state3d.propCards, 4, 'Expected 4 Main Causal Gap proposition cards (P1-P4)');
         assert.strictEqual(state3d.selRows, 7, 'Expected 7 species rows in cpm-sp-v1 selection vs. displacement table');
         assert.strictEqual(state3d.angularRows, 4, 'Expected 4 candidate mechanism rows in Preregistered Angular Response Curve table');
+        assert.strictEqual(state3d.angularCols, 5, 'Expected 5 columns in Preregistered Angular Response Curve table including 9-angle numerical values');
         assert.strictEqual(state3d.estimabilityRows, 4, 'Expected 4 rows in 15-cell vs. 24-cell Estimability & Aliasing table');
         assert.strictEqual(state3d.fiveRows, 5, 'Expected 5 rows in Revised Planned-Contrast Matrix');
         assert.strictEqual(state3d.exposureBoxes, 6, 'Expected 6 exposure & environmental control cards');
@@ -256,8 +268,10 @@ async function run() {
         assert.strictEqual(state3d.integrity.strain_validation_gates, 5);
         assert.strictEqual(state3d.integrity.total_system_edges, 9);
         assert.ok(state3d.biophys.ratioFerritin < 1e-4, `Expected ratioFerritin < 1e-4, got ${state3d.biophys.ratioFerritin}`);
+        assert.ok(Math.abs(state3d.biophys.ratioChain - 5.505127) < 1e-3, `Expected ratioChain ~ 5.505127 at 310 K, got ${state3d.biophys.ratioChain}`);
         assert.ok(Math.abs(state3d.biophys.fLarmor_MHz - 1.40) < 1e-2, `Expected fLarmor_MHz ~ 1.40, got ${state3d.biophys.fLarmor_MHz}`);
         assert.strictEqual(state3d.ferritinVal, '3.3e-5 k_B T');
+        assert.strictEqual(state3d.chainTauVal, '5.51 k_B T');
         assert.strictEqual(state3d.larmorVal, '1.40 MHz');
         console.log(`PASS [2/4]: 3-D WebGL scene (${state3d.glWidth}x${state3d.glHeight}), per-edge evidence badges, 9-angle curve table, 15-vs-24 estimability table, exposure/strain controls, and 4-layer GLMM verified.`);
 
