@@ -17,28 +17,45 @@
     "EXP_C",
     "EXP_D"
   ],
+  "biomagnetic_walk_null_explorer_verified": {
+    "null_hypotheses": [
+      "H0_A",
+      "H0_B"
+    ],
+    "cpm_sp_v1_hazard_commitments": "5511 / 10752",
+    "cpm_sp_v1_displacement_cis_span_zero": "7 / 7 species",
+    "phase_locking_growth_off": "0 / 256 seeds",
+    "phase_locking_growth_on": "15 / 16 seeds (K = 0.5 synthetic coupling; 98.2% spread reduction vs K=0)",
+    "planned_contrast_vs_full_factorial": "15 cells (5 rows x 3 genotypes) vs. 24-cell full crossed design",
+    "multiphysics_glmm_layers": [
+      "LAYER_A",
+      "LAYER_B",
+      "LAYER_C",
+      "LAYER_D"
+    ]
+  },
   "artifact_hashes": {
     "index.html": {
-      "bytes": 82419,
-      "sha256": "2a16eb11a6b4c3f2b18b792cd62739248e6f096bff5d4630fdaa9086d3372f26"
+      "bytes": 124213,
+      "sha256": "d52646c3799c363f58994ee9ff6e6d7e82b356536e6320bb3d36c98656ae63fe"
     },
     "evidence_manifest.json": {
-      "bytes": 29015,
-      "sha256": "7167feb2539ffa2512ead47f5383c57ca9ef956d13d8815e0801a598b1a1dfdd"
+      "bytes": 51624,
+      "sha256": "b78f777668ee2f32388859838177a2381a9713c1f0d50a0823bedbfadc9f72b1"
     },
     "README.md": {
-      "bytes": 5428,
-      "sha256": "7d3f857ef5fdfc5b4d24d1e43512ab00007a197872865f79fa48dd5517da2f19"
+      "bytes": 7429,
+      "sha256": "5ec57aed95d2c092877f0e26038b2bb53490414776b73b2beaa8d1e8f14a20e2"
     },
     "test_magnetoreception_interface.js": {
-      "bytes": 9419,
-      "sha256": "f70a4e57df627833180a771c6c59c11241938cb3efd437e9a417aa598340c9bc"
+      "bytes": 12712,
+      "sha256": "5190f67c5d9979a1ae4b5b98e65d530c9c4f0cb07ca30edb52c20be44b9e3db3"
     }
   },
   "test_output": [
-    "PASS [1/4]: Manifest schema, 3-system causal map, P1-P4 causal gap, and preregistered Gates A-D verified.",
-    "PASS [2/4]: 3-D WebGL scene (745x448) and 3-System 10-node causal map verified.",
-    "PASS [3/4]: Interactive Factorial Experiment Decision Sequence (Experiments A -> B -> C -> D) verified.",
+    "PASS [1/4]: Manifest v2.2.0, Biomagnetic Walk (H0-A/H0-B & 15/16 phase lock), 5-row (15-cell) matrix, and 4-Layer Multiphysics-GLMM verified.",
+    "PASS [2/4]: 3-D WebGL scene (745x448), 7-species selection table, 5-row matrix, and 4-layer GLMM table verified.",
+    "PASS [3/4]: Biomagnetic Walk Null Explorer canvas & Revised 5-Row Factorial Simulator (including 180 deg reversal) verified.",
     "PASS [4/4]: Disabled-WebGL 2-D fallback verified (745x448)."
   ]
 }

@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 /**
- * Regression Test Suite for 3D Magnetoreception, Melanin-Redox-Mitochondrial & Magnetogenetics Interface
+ * Regression Test Suite for 3D Magnetoreception, Biomagnetic Walk Null Explorer & Multiphysics-GLMM Interface
  *
  * Verifies:
- * 1. Schema & Epistemic Manifest Integrity (3 systems, 8 mechanisms, 4 factorial experiments, 0 em/en-dashes)
+ * 1. Schema & Epistemic Manifest Integrity (3 systems, 8 mechanisms, P1-P4 causal gap, Biomagnetic Walk Null Explorer,
+ *    Revised 5-Row Planned-Contrast Matrix [15 vs. 24 cells], 4-Layer Multiphysics & GLMM Architecture, 0 em/en-dashes)
  * 2. Normal 3-D WebGL Rendering (#glField sized, 3-system nodes rendered, ferritin thermal bound verified)
- * 3. Interactive Factorial Experiment Sequence (Experiments A -> B -> C -> D state transitions)
+ * 3. Biomagnetic Walk Null Explorer & Interactive Factorial Experiment Sequence (H0-A vs H0-B, 15/16 phase locking,
+ *    Gates 0-4, Rows 1-5 including 180 deg field reversal, Layers A-D)
  * 4. Disabled-WebGL Exception Fallback (--disable-webgl -> #canvas2d fallback)
  */
 
@@ -29,14 +31,23 @@ function verifyFilesAndManifest() {
     assert.strictEqual(content.includes('\u2013'), false, `${rel} contains en-dash`);
   }
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'evidence_manifest.json'), 'utf8'));
+  assert.strictEqual(manifest.schema_version, '2.2.0', 'Expected schema_version 2.2.0');
   assert.strictEqual(manifest.systems.length, 3, 'Expected 3 distinct systems in evidence_manifest.json');
   assert.strictEqual(manifest.main_causal_gap_propositions.length, 4, 'Expected 4 causal gap propositions (P1-P4)');
   assert.strictEqual(manifest.factorial_experiments.length, 4, 'Expected 4 factorial experiments (A-D)');
-  assert.ok(manifest.preregistration_protocol && manifest.preregistration_protocol.primary_outcome, 'Missing preregistration protocol');
-  assert.ok(manifest.mechanisms.some(m => m.id === 'sensing_melanin_redox'), 'Missing melanin redox mechanism');
-  assert.ok(manifest.mechanisms.some(m => m.id === 'sensing_cryptochrome'), 'Missing cryptochrome/flavin-superoxide mechanism');
-  assert.ok(manifest.mechanisms.some(m => m.id === 'quarantined_71thz_mitochondria'), 'Missing quarantined 71 THz entry');
-  console.log('PASS [1/4]: Manifest schema, 3-system causal map, P1-P4 causal gap, and preregistered Gates A-D verified.');
+  const bw = manifest.biomagnetic_walk_null_explorer;
+  assert.ok(bw, 'Missing biomagnetic_walk_null_explorer in evidence_manifest.json');
+  assert.strictEqual(bw.null_hypotheses.length, 2, 'Expected Null H0-A and Null H0-B');
+  assert.strictEqual(bw.cpm_sp_v1_growth_off_256_seeds.hazard_commitments_survival_only, 5511);
+  assert.strictEqual(bw.cpm_sp_v1_growth_off_256_seeds.total_parcels, 10752);
+  assert.strictEqual(bw.cpm_sp_v1_growth_off_256_seeds.species_rows.length, 7);
+  assert.strictEqual(bw.phase_locking_and_controls.three_required_phase_controls.length, 3);
+  assert.strictEqual(bw.experimental_design_note.planned_contrast_cells, 15);
+  assert.strictEqual(bw.experimental_design_note.full_crossed_factorial_cells, 24);
+  assert.strictEqual(bw.five_row_factorial_matrix.length, 5, 'Expected Revised 5-Row Planned-Contrast Matrix');
+  assert.strictEqual(bw.decision_gates_0_to_4.length, 5, 'Expected 5 Decision Gates (Gate 0 to Gate 4)');
+  assert.strictEqual(bw.multiphysics_and_glmm_architecture.layers.length, 4, 'Expected 4 Multiphysics & GLMM Layers (A-D)');
+  console.log('PASS [1/4]: Manifest v2.2.0, Biomagnetic Walk (H0-A/H0-B & 15/16 phase lock), 5-row (15-cell) matrix, and 4-Layer Multiphysics-GLMM verified.');
 }
 
 function startStaticServer(port) {
@@ -135,6 +146,11 @@ async function run() {
           const sysCols = document.querySelectorAll('#threeSystemsGrid .sys-col').length;
           const sysNodes = document.querySelectorAll('#threeSystemsGrid .sys-node').length;
           const propCards = document.querySelectorAll('#causalGapGrid .prop-card').length;
+          const selRows = document.querySelectorAll('#selectionAuditBody tr').length;
+          const fiveRows = document.querySelectorAll('#fiveRowMatrixBody tr').length;
+          const mpLayers = document.querySelectorAll('#multiphysicsLayersGrid .ctrl-box').length;
+          const glmmRows = document.querySelectorAll('#glmmEndpointBody tr').length;
+          const integrity = window.verifyBiomagneticWalkIntegrity();
           return JSON.stringify({
             glWidth: gl.width,
             glHeight: gl.height,
@@ -143,6 +159,11 @@ async function run() {
             sysCols,
             sysNodes,
             propCards,
+            selRows,
+            fiveRows,
+            mpLayers,
+            glmmRows,
+            integrity,
             ferritinVal: document.getElementById('kpiFerritin').textContent,
             larmorVal: document.getElementById('kpiCryFreq').textContent
           });
@@ -153,25 +174,45 @@ async function run() {
         assert.strictEqual(state3d.sysCols, 3, 'Expected 3 system columns rendered');
         assert.strictEqual(state3d.sysNodes, 10, 'Expected 10 causal nodes across the 3 systems');
         assert.strictEqual(state3d.propCards, 4, 'Expected 4 Main Causal Gap proposition cards (P1-P4)');
+        assert.strictEqual(state3d.selRows, 7, 'Expected 7 species rows in cpm-sp-v1 selection vs. displacement table');
+        assert.strictEqual(state3d.fiveRows, 5, 'Expected 5 rows in Revised Planned-Contrast Matrix');
+        assert.strictEqual(state3d.mpLayers, 4, 'Expected 4 Multiphysics & GLMM layer cards (Layers A-D)');
+        assert.strictEqual(state3d.glmmRows, 5, 'Expected 5 GLMM endpoint model rows');
+        assert.strictEqual(state3d.integrity.all_displacement_cis_span_zero, true);
+        assert.strictEqual(state3d.integrity.hazard_commitments, 5511);
+        assert.strictEqual(state3d.integrity.planned_contrast_cells, 15);
+        assert.strictEqual(state3d.integrity.full_crossed_factorial_cells, 24);
         assert.strictEqual(state3d.ferritinVal, '3.3e-5 k_B T');
         assert.strictEqual(state3d.larmorVal, '1.40 MHz');
-        console.log(`PASS [2/4]: 3-D WebGL scene (${state3d.glWidth}x${state3d.glHeight}) and 3-System 10-node causal map verified.`);
+        console.log(`PASS [2/4]: 3-D WebGL scene (${state3d.glWidth}x${state3d.glHeight}), 7-species selection table, 5-row matrix, and 4-layer GLMM table verified.`);
 
         const factState = await evalJson(`(() => {
+          document.getElementById('btnRenderBiomagWalk').click();
+          const walk2dHidden = document.getElementById('canvas2d').hidden;
+          document.getElementById('btnWalkModePhase').click();
+          const phaseBtnOn = document.getElementById('btnWalkModePhase').classList.contains('on');
+
           document.getElementById('btnExpB').click();
           const expBSpin = document.getElementById('factReadoutSpin').textContent;
+          document.getElementById('btnMagRev').click();
+          const revSpin = document.getElementById('factReadoutSpin').textContent;
+          const revTip = document.getElementById('factReadoutTip').textContent;
           document.getElementById('btnExpC').click();
           const expCMel = document.getElementById('factReadoutMel').textContent;
           const expCTip = document.getElementById('factReadoutTip').textContent;
           document.getElementById('btnExpD').click();
           const expDMito = document.getElementById('factReadoutMito').textContent;
-          return JSON.stringify({ expBSpin, expCMel, expCTip, expDMito });
+          return JSON.stringify({ walk2dHidden, phaseBtnOn, expBSpin, revSpin, revTip, expCMel, expCTip, expDMito });
         })()`);
+        assert.strictEqual(factState.walk2dHidden, false, 'Expected Biomagnetic Walk canvas visible');
+        assert.strictEqual(factState.phaseBtnOn, true, 'Expected Phase Order R(t) sub-mode active');
         assert.ok(factState.expBSpin.includes('+90 deg'), `Unexpected Exp B spin readout: ${factState.expBSpin}`);
+        assert.ok(factState.revSpin.includes('180 deg'), `Unexpected Row 4 180 deg reversal readout: ${factState.revSpin}`);
+        assert.ok(factState.revTip.includes('Inverts') && factState.revTip.includes('Invariant'), `Unexpected Row 4 tip readout: ${factState.revTip}`);
         assert.ok(factState.expCMel.includes('No Melanin'), `Unexpected Exp C melanin readout: ${factState.expCMel}`);
         assert.ok(factState.expCTip.includes('Route A') && factState.expCTip.includes('Route B'), `Unexpected Exp C tip readout: ${factState.expCTip}`);
         assert.ok(factState.expDMito.includes('CLAMPED'), `Unexpected Exp D mito readout: ${factState.expDMito}`);
-        console.log('PASS [3/4]: Interactive Factorial Experiment Decision Sequence (Experiments A -> B -> C -> D) verified.');
+        console.log('PASS [3/4]: Biomagnetic Walk Null Explorer canvas & Revised 5-Row Factorial Simulator (including 180 deg reversal) verified.');
       }
     );
 

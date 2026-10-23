@@ -1,12 +1,253 @@
 {
-  "schema_version": "2.1.0",
+  "schema_version": "2.2.0",
   "project": "magnetoreception_3d_prototype",
+  "framework_title": "Biomagnetic Walk: Transport, Selection, and Phase Null Explorer",
+  "central_question": "Can a proposed field-dependent biological response be distinguished from spatial selection, growth effects, shared forcing, and model-imposed coupling?",
   "branch": "feat/magnetoreception-3d-interface",
-  "architectural_separation": "Independent hypothesis-first research prototype repository separate from aurascoper/oklo_shareable_portal and aurascoper/Biofilms. Organizes the material around three distinct systems (1. Biological Response to Radiation, 2. Candidate Magnetic Sensing Mechanism, 3. Engineered Magnetic Nanoparticle Interface) with explicit evidence tags (OBSERVED, OBSERVED_IN_VITRO, MODELED_COMPUTATIONALLY, HYPOTHESIZED, UNRESOLVED_TRANSDUCTION, ENGINEERED, CONTEXT-DEPENDENT, QUARANTINED), a 4-Proposition Main Causal Gap decomposition, and a sequentially gated, preregistered Factorial Experiment Decision Sequence (Gates A -> B -> C -> D).",
+  "architectural_separation": "Independent hypothesis-first research prototype repository separate from aurascoper/oklo_shareable_portal and aurascoper/Biofilms. Organizes the material around (1) Three Distinct Systems with explicit evidence tags (OBSERVED, OBSERVED_IN_VITRO, MODELED, HYPOTHESIZED, UNRESOLVED_TRANSDUCTION, ENGINEERED, CONTEXT-DEPENDENT, QUARANTINED), (2) the 4-Proposition Main Causal Gap (P1 -> P2 -> P3 -> P4), and (3) the Biomagnetic Walk: Transport, Selection, and Phase Null Explorer testing Null H0-A (no active parcel displacement), Null H0-B (selection-only survivor shift), and Phase Coupling Controls across Gates 0 -> 1 -> 2 -> 3 -> 4.",
   "channel_separation_principle": {
-    "radiation_channel": "Spatial radiation dose gradient (grad I_gamma, keV-MeV ionizing photons/particles) acts as an energy and radiolytic/redox input channel.",
+    "radiation_channel": "Spatial radiation dose gradient (grad I_gamma, keV-MeV ionizing photons/particles) acts as an energy, radiolytic/redox, and position-dependent mortality/selection input channel.",
     "magnetic_channel": "Magnetic flux density vector B (25 to 65 uT geomagnetic or mT engineered) acts as a directional spin-chemistry or mechanical torque information channel.",
-    "inference_gate": "A colony plate image or metabolic shift alone cannot establish radiotropism or magnetoreception; separating grad I_gamma from vector B requires factorial rotation/suppression of B at fixed radiation geometry, sham-coil and sample-plane field verification, genetic melanin knockouts + rescue, and pre-growth mitochondrial/ROS temporal ordering."
+    "selection_vs_movement_principle": "An outward shift in the surviving biomass distribution does not establish outward movement: in cpm-sp-v1 (source 841d052, 256 seeds), dose-dependent mortality removes 5,511 of 10,752 parcels near the axis, shifting survivor mean radius outward by up to +0.0493 r/R while every identified-parcel displacement interval delta_r_i = r_i(t_1) - r_i(t_0) spans zero."
+  },
+  "biomagnetic_walk_null_explorer": {
+    "provenance_source": "aurascoper/Biofilms c766e7b:diagnostics/fitness_phase/PREDICTION.md (execution source 841d052, config hash eb090aa3c0a971776a6e262713eb0cf5c130b53cf2b8d7720ad93dec19f50b01)",
+    "null_hypotheses": [
+      {
+        "null_id": "H0_A",
+        "title": "Null H0-A: No Active Directional Movement (Individual Parcel Trajectory Invariance)",
+        "statement": "The magnetic field or radiation gradient changes parcel survival or growth, but does not alter the movement or directional-growth rule of an individual identifiable parcel.",
+        "statistic": "delta_r_i = r_i(t_1) - r_i(t_0) computed for the same identifiable parcel i across time; parcel disappearances (deaths/commitments) are logged as separate selection events and never silently dropped without reporting evaluable/excluded counts.",
+        "rejection_criterion": "Requires the paired/sham-contrasted distribution of identified-parcel displacements delta_r_i to exclude zero outside the preregistered MEOI bound. A shift in the surviving population's mean radius does NOT reject H0-A."
+      },
+      {
+        "null_id": "H0_B",
+        "title": "Null H0-B: Apparent Spatial Shift Is Explained by Selection Alone",
+        "statement": "The endpoint spatial distribution of biomass is fully explained by position-dependent survival, division, or parcel removal (mortality near the source axis), without any active directional transport.",
+        "statistic": "Contrast between observed survivor mean radius r_surv(t_1) and the initial radius r_surv(t_0) of those same surviving parcels (plus the fixed-position selection counterfactual where movement is disabled).",
+        "rejection_criterion": "Requires a reproducible discrepancy between the observed endpoint distribution and a selection-only counterfactual that preserves initial positions and applies measured position-dependent survival/growth rates."
+      }
+    ],
+    "cpm_sp_v1_growth_off_256_seeds": {
+      "study_id": "cpm-sp-v1",
+      "description": "Growth OFF, 256 seeds (42..297), N=40, 6 parcels/species (10,752 total parcels), MCS 100, synthetic clock 60 s/MCS, axis dose rate 0.01 Gy/s, 95% seed-bootstrap intervals (5,000 samples, seed 9004).",
+      "hazard_commitments_survival_only": 5511,
+      "hazard_commitments_combined": 5511,
+      "hazard_commitments_baseline": 0,
+      "total_parcels": 10752,
+      "species_rows": [
+        {"species_id": 1, "name": "C. neoformans", "short": "CN", "alpha_Gy_inv": 0.01, "alive_diff": -1.74, "alive_ci95": [-1.88, -1.61], "surv_r_diff": 0.0086, "surv_r_ci95": [0.0019, 0.0153], "evaluable_seeds": 256, "excluded_seeds": 0, "init_surv_r_diff": 0.0075, "init_surv_r_ci95": [0.0003, 0.0145], "disp_diff": 0.0011, "disp_ci95": [-0.0025, 0.0047]},
+        {"species_id": 2, "name": "D. radiodurans", "short": "DR", "alpha_Gy_inv": 0.002, "alive_diff": -0.43, "alive_ci95": [-0.51, -0.35], "surv_r_diff": 0.0017, "surv_r_ci95": [-0.0017, 0.0052], "evaluable_seeds": 256, "excluded_seeds": 0, "init_surv_r_diff": 0.0004, "init_surv_r_ci95": [-0.0021, 0.0029], "disp_diff": 0.0013, "disp_ci95": [-0.0010, 0.0036]},
+        {"species_id": 3, "name": "C. sphaerospermum", "short": "CS", "alpha_Gy_inv": 0.015, "alive_diff": -2.62, "alive_ci95": [-2.76, -2.47], "surv_r_diff": 0.0192, "surv_r_ci95": [0.0103, 0.0282], "evaluable_seeds": 255, "excluded_seeds": 1, "init_surv_r_diff": 0.0210, "init_surv_r_ci95": [0.0111, 0.0305], "disp_diff": -0.0018, "disp_ci95": [-0.0061, 0.0026]},
+        {"species_id": 4, "name": "B. subtilis", "short": "BS", "alpha_Gy_inv": 0.04, "alive_diff": -4.48, "alive_ci95": [-4.62, -4.34], "surv_r_diff": 0.0382, "surv_r_ci95": [0.0240, 0.0525], "evaluable_seeds": 207, "excluded_seeds": 49, "init_surv_r_diff": 0.0434, "init_surv_r_ci95": [0.0284, 0.0581], "disp_diff": -0.0052, "disp_ci95": [-0.0112, 0.0005]},
+        {"species_id": 5, "name": "A. niger", "short": "AN", "alpha_Gy_inv": 0.02, "alive_diff": -3.18, "alive_ci95": [-3.32, -3.04], "surv_r_diff": 0.0191, "surv_r_ci95": [0.0095, 0.0290], "evaluable_seeds": 251, "excluded_seeds": 5, "init_surv_r_diff": 0.0212, "init_surv_r_ci95": [0.0102, 0.0320], "disp_diff": -0.0021, "disp_ci95": [-0.0068, 0.0026]},
+        {"species_id": 6, "name": "S. oneidensis", "short": "SO", "alpha_Gy_inv": 0.06, "alive_diff": -5.26, "alive_ci95": [-5.35, -5.16], "surv_r_diff": 0.0493, "surv_r_ci95": [0.0289, 0.0704], "evaluable_seeds": 145, "excluded_seeds": 111, "init_surv_r_diff": 0.0538, "init_surv_r_ci95": [0.0327, 0.0740], "disp_diff": -0.0045, "disp_ci95": [-0.0117, 0.0027]},
+        {"species_id": 7, "name": "O. intermedium AM7", "short": "OI", "alpha_Gy_inv": 0.03, "alive_diff": -3.82, "alive_ci95": [-3.97, -3.67], "surv_r_diff": 0.0356, "surv_r_ci95": [0.0221, 0.0489], "evaluable_seeds": 240, "excluded_seeds": 16, "init_surv_r_diff": 0.0359, "init_surv_r_ci95": [0.0219, 0.0500], "disp_diff": -0.0003, "disp_ci95": [-0.0056, 0.0049]}
+      ],
+      "controls_seeds_7000_7007": [
+        {"case": "fixed_baseline", "alive_range": "42 in every seed", "commitments_range": "0", "max_abs_disp": 0.0, "mean_radius_change": 0.0},
+        {"case": "fixed_survival", "alive_range": "19 to 24", "commitments_range": "18 to 23", "max_abs_disp": 0.0, "mean_radius_change": 0.0},
+        {"case": "moving_tropism_on", "alive_range": "19 to 23", "commitments_range": "19 to 23", "max_abs_disp": 0.155, "mean_radius_change": -0.028},
+        {"case": "moving_tropism_off", "alive_range": "19 to 23", "commitments_range": "19 to 23", "max_abs_disp": 0.159, "mean_radius_change": -0.029}
+      ]
+    },
+    "phase_locking_and_controls": {
+      "order_parameter_equation": "R(t) = |(1/N) * sum_{j=1..N} exp(i * phi_j(t))|",
+      "synthetic_parameters": "Mean period 20 MCS, Normal frequency SD 0.05 rad/MCS, coupling K = 0.5 / MCS; phase never feeds back into nonphase quantities.",
+      "growth_off_v1_summary": {
+        "seeds_evaluable": "256 / 256",
+        "finite_window_locking": "0 / 256 (in both phase_only and combined)",
+        "coupling_supported": "0 / 256",
+        "spread_reduction_vs_zero_K_median": {"phase_only": 0.492, "combined": 0.350},
+        "endpoint_coherence_R": {"phase_only": 0.411, "combined": 0.379},
+        "mean_components": {"phase_only": 11.3, "combined": 9.7},
+        "mean_isolates": {"phase_only": 5.2, "combined": 5.4},
+        "interpretation": "On the fragmented growth-off contact graph (~10-11 components, ~5 isolates), K = 0.5 narrows frequency spread inside components but produces 0 / 256 global locking within 50-100 MCS."
+      },
+      "growth_on_v3_summary": {
+        "study_id": "cpm-sp-growth-v1",
+        "seeds_evaluable": "16 / 16 (seeds 42..57, MCS 200)",
+        "budget_closure_max_residual": 7.2e-9,
+        "finite_window_locking": "15 / 16 (in both phase_only and combined; Seed 44 fails 0.5 rad range bound at 0.755 rad phase_only / 0.848 rad combined)",
+        "coupling_supported": "15 / 16",
+        "spread_reduction_vs_zero_K_median": {"phase_only": 0.982, "combined": 0.982},
+        "endpoint_coherence_R": {"phase_only": 0.994, "combined": 0.994},
+        "mean_components": {"phase_only": 1, "combined": 1},
+        "mean_isolates": {"phase_only": 0, "combined": 0},
+        "interpretation": "With growth, division fills the lattice into a single connected component (1 component, 0 isolates) and explicit coupling K = 0.5 locks 15 of 16 seeds. All parameters are synthetic; this establishes model-coupling robustness, NOT biological synchronization."
+      },
+      "three_required_phase_controls": [
+        {
+          "control_id": "CTRL_UNCOUPLED_ZERO_K",
+          "title": "Control 1: Uncoupled Model Replay (K = 0 Counterfactual)",
+          "design": "Disable inter-parcel phase coupling (K = 0) while holding recorded parcel membership, initial phases, natural frequencies, and daughter phase inheritance identical.",
+          "finding": "In cpm-sp-growth-v1, comparing K = 0.5 against the exact K = 0 replay shows a 98.2% median reduction in effective-frequency spread, proving that the 15/16 phase convergence is driven by the explicit K = 0.5 coupling term on the connected contact graph rather than daughter inheritance alone."
+        },
+        {
+          "control_id": "CTRL_PHASE_SURROGATE",
+          "title": "Control 2: Phase-Randomized & Cross-Seed Surrogate",
+          "design": "Shuffle initial phases or pair phase trajectories across independent seeds to quantify how much apparent phase concentration R(t) arises by finite-sample chance, shared geometry, or common external forcing.",
+          "finding": "High R(t) measures phase concentration, not its physical source; cross-seed surrogates separate shared environmental forcing from direct inter-parcel interaction."
+        },
+        {
+          "control_id": "CTRL_BIOLOGICAL_BENCHMARK",
+          "title": "Control 3: Preregistered Biological Benchmark vs. Independent-Oscillator Null",
+          "design": "Before any biological synchronization claim is permitted, preregister a primary synchronization statistic (e.g., Kuramoto R(t) and locking time distribution) on live-cell reporter time-series and test against an explicit uncoupled-oscillator + lineage-inheritance null model.",
+          "finding": "Currently unexecuted in wet lab; all cpm-sp-growth-v1 phase parameters are synthetic."
+        }
+      ]
+    },
+    "experimental_design_note": {
+      "planned_contrast_cells": 15,
+      "full_crossed_factorial_cells": 24,
+      "genotypes_per_row": [
+        "Wild-Type (WT Melanized)",
+        "Melanin-Deficient (Albino mutant, e.g. pks1Delta / lac1Delta)",
+        "Complemented Rescue"
+      ],
+      "statistical_note": "Crossing the five rows with three genotypes yields 15 condition-by-genotype combinations (a planned-contrast design focused on radiation-coupled magnetic manipulations). A fully crossed 24-cell design (2 Radiation states x 4 Magnetic-field states x 3 Genotypes) additionally tests rotated (+90 deg), reversed (180 deg), and suppressed (<0.1 uT) magnetic fields under sham radiation to separate general magnetic effects from radiation-dependent magnetic effects."
+    },
+    "five_row_factorial_matrix": [
+      {
+        "row_id": "ROW_1",
+        "radiation_condition": "Sham radiation (0 Gy)",
+        "magnetic_condition": "Baseline field (50 uT); sham-coil control",
+        "melanin_status": "WT Melanized, Melanin-Deficient (Albino), Complemented Rescue (3 cells)",
+        "primary_question": "Baseline growth, survival, and directionality across the three genotypes.",
+        "separated_endpoints": "Movement: basal delta_r_i ~ 0 | Selection: 0 hazard deaths | Growth: basal division & viscoelasticity | Mechanism: basal ROS/NAD(P)H"
+      },
+      {
+        "row_id": "ROW_2",
+        "radiation_condition": "Radiation (+grad I_gamma)",
+        "magnetic_condition": "Baseline field (50 uT); matched sham-coil control",
+        "melanin_status": "WT Melanized, Melanin-Deficient (Albino), Complemented Rescue (3 cells)",
+        "primary_question": "Radiation x melanin-genotype response (separating selection H0-B from active movement H0-A).",
+        "separated_endpoints": "Tests H0-A vs. H0-B: separates melanized radioprotection (differential survival near axis) from active radiotropism (tracked delta_r_i)"
+      },
+      {
+        "row_id": "ROW_3",
+        "radiation_condition": "Radiation (+grad I_gamma, Fixed Geometry)",
+        "magnetic_condition": "Rotate field orientation (+90 deg) at fixed magnitude (50 uT)",
+        "melanin_status": "WT Melanized, Melanin-Deficient (Albino), Complemented Rescue (3 cells)",
+        "primary_question": "Orientation-dependent response (anisotropic directional cue orthogonal to fixed radiation gradient).",
+        "separated_endpoints": "Tests whether tracked displacement vector delta_r_i or tip angle theta_tip rotates with B while radiation dose geometry is fixed"
+      },
+      {
+        "row_id": "ROW_4",
+        "radiation_condition": "Radiation (+grad I_gamma, Fixed Geometry)",
+        "magnetic_condition": "Reverse field direction (180 deg, +B -> -B) at fixed magnitude (50 uT)",
+        "melanin_status": "WT Melanized, Melanin-Deficient (Albino), Complemented Rescue (3 cells)",
+        "primary_question": "Polarity-sensitive (magnetite torque tau = m x B) versus polarity-insensitive (radical-pair inclination compass) response.",
+        "separated_endpoints": "Discriminates System 2 Route C (inverts sign under 180 deg reversal) from Radical-Pair Routes A/B (invariant under 180 deg inversion)"
+      },
+      {
+        "row_id": "ROW_5",
+        "radiation_condition": "Radiation (+grad I_gamma, Fixed Geometry)",
+        "magnetic_condition": "Suppress field toward prespecified near-zero target (<0.1 uT); matched sham coils",
+        "melanin_status": "WT Melanized, Melanin-Deficient (Albino), Complemented Rescue (3 cells)",
+        "primary_question": "Field-dependent response versus radiation-only effects under thermal (+/-0.05 C), vibration, and sham-coil controls.",
+        "separated_endpoints": "Tests whether Zeeman spin mixing or magnetic torque is required for the radiation-coupled response"
+      }
+    ],
+    "multiphysics_and_glmm_architecture": {
+      "overview": "Couples four independently testable layers so that physical transport, viscoelastic biofilm mechanics, candidate magnetic/radiation transduction, and hierarchical statistical inference are never conflated.",
+      "layers": [
+        {
+          "layer_id": "LAYER_A",
+          "title": "Layer A: Hydrodynamics & Reactive Transport (Darcy-Brinkman-Stokes)",
+          "equation": "div(u) = 0; rho*(du/dt + (u.grad)u) = -grad(p) + mu*laplacian(u) - (mu/K_perm)*u; dS/dt + div(u*S) = div(D_S*grad(S)) - r_S(S, X_i)",
+          "scope": "Couples Navier-Stokes free flow and Darcy-Brinkman porous biofilm flow with nutrient/oxygen/redox-mediator reactive transport, enforcing mass-conservation and grid-convergence checks (< 1e-6 budget residual).",
+          "sources": [
+            "Kim & Yao (2026) A conservative micro-continuum-cellular automaton method for multispecies biofilm dynamics in complex flows (arXiv:2610.01565)"
+          ]
+        },
+        {
+          "layer_id": "LAYER_B",
+          "title": "Layer B: Microbial Kinetics & Viscoelastic Biofilm Rheology (Oldroyd-B vs. Generalized Newtonian)",
+          "equation": "dX_i/dt + div(u*X_i) = div(D_i*grad(X_i)) + mu_i*X_i - d_i*X_i + a_i - e_i; T + lambda_1*upper_convected_deriv(T) = 2*eta_0*(D + lambda_2*upper_convected_deriv(D))",
+          "scope": "Separates species growth (mu_i), position-dependent mortality (d_i, Null H0-B), attachment (a_i), and detachment (e_i) from viscoelastic EPS stress relaxation (lambda_1), storage/loss moduli (G', G''), and detachment under shear. Requires independent rheometric calibration (rheograms) rather than circular fitting from colony geometry.",
+          "sources": [
+            "Charlton et al. (2019) Viscoelastic biofilm streaming and detachment under shear (PMC6707926)",
+            "Li, Matous & Nerenberg (2022) Comparing generalized Newtonian and viscoelastic constitutive relations for biofilms (Biotechnol. Bioeng., doi:10.1002/bit.28056)"
+          ]
+        },
+        {
+          "layer_id": "LAYER_C",
+          "title": "Layer C: Falsifiable Magnetic & Radiation Hypotheses (Explicit Null Parameter theta_i = 0)",
+          "equation": "mu_i = mu_{i,0}(S, O_2, T) + theta_i * f(B, grad B, I_gamma); v_bias,i = gamma_i * g(B, grad I_gamma); H_0: theta_i = 0, gamma_i = 0",
+          "scope": "Parameterizes any proposed magnetic or radiation modulation of growth (theta_i), mortality (d_i), or active directional transport (gamma_i) as an explicit perturbation around the null model (theta_i = 0, gamma_i = 0), tested across WT, Melanin-Deficient, and Complemented Rescue strains.",
+          "sources": [
+            "Dadachova et al. (2007) PLoS ONE 2(5):e457 (doi:10.1371/journal.pone.0000457)",
+            "Maeda et al. (2012) PNAS 109(13):4774-4779 (doi:10.1073/pnas.1118959109)",
+            "Rishabh, Zadeh-Haghighi & Simon (2023) arXiv:2312.06597",
+            "Gassab et al. (2026) Quantum in Biology, Quantum for Biology, and Biology for Quantum (arXiv:2605.00205)"
+          ]
+        },
+        {
+          "layer_id": "LAYER_D",
+          "title": "Layer D: Hierarchical Generalized Linear Mixed Model (GLMM) Inference",
+          "equation": "g(E[Y_{ijk}(t)]) = beta_0 + beta_R*R + beta_B*B + beta_M*M + beta_RB*(R*B) + beta_BM*(B*M) + beta_RBM*(R*B*M) + b_batch + b_culture + f(t)",
+          "scope": "Models treatment effects for Radiation (R), Magnetic manipulation (B: orientation, reversal, suppression), and Melanin genotype (M: WT, Albino, Rescue) while accounting for batch/run random effects (b_batch), biological culture/channel random effects (b_culture), and temporal autocorrelation f(t). Prevents pseudoreplication by never treating pixels, parcels, or time frames as independent biological replicates.",
+          "sources": [
+            "Lee, Green & Ryan (2017) Generalized linear mixed models for clustered/longitudinal biological assay data (arXiv:1709.06288)"
+          ],
+          "endpoint_models": [
+            {"endpoint": "Identified-parcel displacement delta_r_i / biomass / modulus G', G''", "model_family": "Gaussian / continuous linear mixed model (LMM) with seed/culture random intercepts"},
+            {"endpoint": "Attachment / detachment event counts", "model_family": "Poisson or Negative-Binomial GLMM (log link) accounting for overdispersion"},
+            {"endpoint": "Parcel survival proportion (Null H0-B hazard commitments)", "model_family": "Binomial GLMM (logit/complementary log-log link) on surviving vs. initial counts"},
+            {"endpoint": "Repeated rheology & live-imaging trajectories", "model_family": "Longitudinal mixed model with AR(1) / Matérn temporal covariance f(t)"},
+            {"endpoint": "Multispecies biofilm composition (7 species)", "model_family": "Count / compositional mixed model paired with absolute abundance ledger"}
+          ]
+        }
+      ]
+    },
+    "decision_gates_0_to_4": [
+      {
+        "gate_id": "GATE_0",
+        "title": "Gate 0: Verify the Synthetic Model & Conservation Ledgers",
+        "scope": "Confirm parcel identity tracking across time, initial-state placement balance across arms, explicit death/disappearance event logging (5,511 / 10,752 commitments), nutrient/biomass budget closure (< 1e-6), and restart-exact seed reproducibility (272 / 272 seeds).",
+        "verdict_states": {
+          "PASS": "Verified in cpm-sp-v1 and cpm-sp-growth-v1 (source 841d052): 272/272 seeds paired-exact & restart-exact; budgets close to 7.2e-9.",
+          "FAIL": "Any identity swap, unlogged parcel disappearance, or budget residual > 1e-6 invalidates downstream inference."
+        }
+      },
+      {
+        "gate_id": "GATE_1",
+        "title": "Gate 1: Displacement vs. Selection (Null H0-A & Null H0-B)",
+        "scope": "Compare tracked per-parcel trajectories delta_r_i = r_i(t_1) - r_i(t_0) against a selection-only counterfactual (initial radius of survivors + fixed_survival controls). Never infer active movement from surviving parcel locations alone.",
+        "verdict_states": {
+          "PASS_NULL_RETAINED": "In cpm-sp-v1 (256 seeds), survivor radius shifts up to +0.0493 r/R, but initial radius of those survivors shifts +0.0538 r/R and all 7 displacement intervals delta_r_i span zero -> H0-A and H0-B retained (selection imitates movement).",
+          "REJECT_NULL": "Requires tracked delta_r_i to exceed +/-MEOI and diverge significantly from the selection-only counterfactual."
+        }
+      },
+      {
+        "gate_id": "GATE_2",
+        "title": "Gate 2: Magnetic-Field Null (Orientation, Reversal & Suppression)",
+        "scope": "Test B-field orientation (+90 deg), reversal (180 deg), and suppression (<0.1 uT) under fixed radiation geometry, active antiparallel sham coils, and 3-axis sample-plane magnetometry.",
+        "verdict_states": {
+          "PASS": "Tracked directional vector shifts with B-field rotation/reversal or vanishes under B-suppression relative to sham-energized coils.",
+          "NULL_OR_INCONCLUSIVE": "No difference across B-field states within equivalence bounds (magnetic null retained), or thermal/vibration sham controls fail."
+        }
+      },
+      {
+        "gate_id": "GATE_3",
+        "title": "Gate 3: Melanin Dependence vs. Alternative Flavin/Cryptochrome Routes",
+        "scope": "Use WT, melanin-deficient (albino), and complemented rescue strains across the 5-row factorial matrix to test whether a verified Gate 1/2 response requires melanin (Route A) or persists via cryptochrome/flavin-superoxide spin chemistry (Route B).",
+        "verdict_states": {
+          "ROUTE_A_SUPPORTED": "Effect abolished in Albino mutant and restored in Complemented Rescue.",
+          "ROUTE_B_SUPPORTED": "Magnetic effect persists in Albino mutant and is sensitive to flavin/cryptochrome knockout or wavelength controls."
+        }
+      },
+      {
+        "gate_id": "GATE_4",
+        "title": "Gate 4: Biochemical Transduction & Temporal Precedence",
+        "scope": "Measure ROS/redox indicators and mitochondrial state alongside tracked displacement/tip curvature (t_mito < t_tip) and test whether controlled pathway intervention blocks the directional response without arresting normal growth.",
+        "verdict_states": {
+          "PASS": "Biochemical shift precedes directional curvature (t_mito < t_tip) AND non-toxic pathway clamp abolishes directional bias while preserving basal extension.",
+          "FAIL_BYPRODUCT": "ROS/mitochondrial shift occurs only after growth deflection (t_mito >= t_tip) or intervention blocks all growth nonspecifically."
+        }
+      }
+    ]
   },
   "main_causal_gap_propositions": [
     {
@@ -43,27 +284,28 @@
     },
     {
       "prop_id": "P4",
-      "proposition": "Mitochondrial / redox signaling drives reproducible directional fungal hyphal growth.",
+      "proposition": "Mitochondrial / redox signaling drives reproducible directional fungal hyphal growth (beyond selection H0-B).",
       "evidence_tag": "CONTEXT-DEPENDENT / UNRESOLVED",
-      "audit_scope": "Early Chernobyl isolate reports suggested directional growth toward radiation sources, whereas a 2024 Sandia National Laboratories Cs-137 study found no statistically significant growth difference, and the aurascoper/Biofilms 256-seed 4-arm model is a formal TOST equivalence null within +/-0.05 r/R.",
+      "audit_scope": "Early Chernobyl isolate reports suggested directional growth toward radiation sources, whereas a 2024 Sandia National Laboratories Cs-137 study found no statistically significant growth difference, the aurascoper/Biofilms 256-seed 4-arm movement model is a TOST equivalence null within +/-0.05 r/R, and cpm-sp-v1 demonstrates that dose-gradient mortality shifts survivor radius (+0.0493 r/R) with zero parcel displacement.",
       "sources": [
         "Zhdanova et al. (2004) Mycol. Res. 108:1089-1096",
         "Sandia National Laboratories (2024) Cs-137 Fungal Irradiation Report (null result)",
-        "aurascoper/Biofilms radial_n40_p6_seeds42-297.csv (256-seed 4-arm model null)"
+        "aurascoper/Biofilms radial_n40_p6_seeds42-297.csv & diagnostics/fitness_phase/PREDICTION.md"
       ]
     }
   ],
   "default_model_exclusions": [
     "Whole-organism magnetic control (not physically or biologically established)",
     "Endogenous ferritin mechanical or thermal channel gating (fails k_B*T and Fourier heat conduction bounds by >4 orders of magnitude; Meister 2016)",
-    "Presenting fungal radiotropism as an already demonstrated outcome of the uncalibrated aurascoper/Biofilms model (256-seed 4-arm ensemble is a formal model null within +/-0.05 r/R; Sandia 2024 Cs-137 experimental study reported no statistically significant difference)",
+    "Inferring active radiotropism from surviving parcel radius shifts without subtracting position-dependent mortality (Null H0-B; cpm-sp-v1)",
+    "Interpreting 15/16 phase locking in cpm-sp-growth-v1 (K = 0.5 synthetic coupling) as evidence of biological synchronization",
     "71 THz (4.22 um mid-IR) mitochondrial light-matter coupling preprint (quarantined as an unvalidated optical/vibrational hypothesis; not geomagnetic sensing)"
   ],
   "systems": [
     {
       "system_id": "system_1_radiation_melanin_mito",
-      "title": "System 1: Biological Response to Radiation (Melanin -> Redox/ROS -> Mitochondria -> Growth)",
-      "summary": "Evaluates how ionizing radiation interacts with fungal melanin and whether radiation-induced redox chemistry couples to mitochondrial bioenergetics and polarized hyphal growth.",
+      "title": "System 1: Biological Response to Radiation (Melanin -> Redox/ROS -> Mitochondria -> Growth vs. Selection)",
+      "summary": "Evaluates how ionizing radiation interacts with fungal melanin and separates position-dependent survival/selection (Null H0-B) from active directional growth (Null H0-A).",
       "nodes": [
         {
           "node_id": "s1_melanin_esr_nadh",
@@ -98,13 +340,13 @@
         },
         {
           "node_id": "s1_hyphal_tropism",
-          "label": "Mitochondrial / Redox Shift -> Directional Hyphal Growth Bias (Radiotropism)",
+          "label": "Survivor Radius Shift (+0.0493 r/R via Selection H0-B) vs. Active Displacement (delta_r_i ~ 0, H0-A)",
           "tag": "CONTEXT-DEPENDENT",
-          "detail": "Early Chernobyl isolate studies reported directional hyphal growth toward radiation sources, whereas a 2024 Sandia National Laboratories Cs-137 study found no statistically significant growth difference between irradiated and control fungi, and the aurascoper/Biofilms 256-seed 4-arm model is a formal TOST equivalence null within +/-0.05 r/R.",
+          "detail": "In cpm-sp-v1 (256 seeds), axial dose mortality removes 5,511 of 10,752 parcels and shifts survivor radius outward by up to +0.0493 r/R while every identified-parcel displacement interval delta_r_i spans zero. Experimentally, Sandia (2024) found no statistically significant Cs-137 directional growth effect.",
           "sources": [
-            "Zhdanova et al. (2004) Mycol. Res. 108:1089-1096",
+            "aurascoper/Biofilms diagnostics/fitness_phase/PREDICTION.md (source 841d052)",
             "Sandia National Laboratories (2024) Cs-137 Fungal Irradiation Report (null result)",
-            "aurascoper/Biofilms radial_n40_p6_seeds42-297.csv (256-seed 4-arm model null)"
+            "Zhdanova et al. (2004) Mycol. Res. 108:1089-1096"
           ]
         }
       ]
@@ -219,11 +461,11 @@
         "Dadachova et al. (2007) PLoS ONE 2(5):e457 (doi:10.1371/journal.pone.0000457)",
         "Robertson et al. (2012) PLoS ONE 7(11):e48674 (W. dermatitidis transcriptomics)",
         "Sandia National Laboratories (2024) Cs-137 Fungal Irradiation Report (experimental null caution)",
-        "aurascoper/Biofilms radial_n40_p6_seeds42-297.csv (256-seed 4-arm TOST equivalence null within +/-0.05 r/R)"
+        "aurascoper/Biofilms radial_n40_p6_seeds42-297.csv & diagnostics/fitness_phase/PREDICTION.md"
       ],
       "unresolved_questions": [
         "Whether radiation-excited melanin transfers electrons to mitochondrial ETC in intact cells",
-        "Whether magnetic field vector B alters melanin semiquinone radical-pair recombination yields (tested by Gate C)"
+        "Whether magnetic field vector B alters melanin semiquinone radical-pair recombination yields (tested by Gate 3)"
       ]
     },
     {
@@ -329,64 +571,64 @@
     }
   ],
   "preregistration_protocol": {
-    "primary_outcome": "Mean radial displacement (delta r/R) or circular mean hyphal tip orientation angle (theta_tip, Rayleigh/V-test) at pre-specified timepoint.",
-    "meoi_and_equivalence_bound": "Minimum biologically meaningful effect MEOI = 0.05 r/R (or angular deflection >= 15 deg); two one-sided TOST equivalence tests at alpha = 0.05 (90% CI strictly inside [-MEOI, +MEOI]).",
-    "dosimetry_and_sham_controls": "3-axis fluxgate magnetometer verification at sample plane; double-wrapped antiparallel Helmholtz sham coils matching thermal dissipation within +/-0.05 C; TLD/ion-chamber radiation dose verification.",
-    "replicate_and_multiplicity_rules": "Blinded plate/chamber randomization, biological replicate blocking across independent inocula, and Holm-Bonferroni familywise error control across primary contrasts."
+    "primary_outcome": "Identified-parcel radial displacement delta_r_i = r_i(t_1) - r_i(t_0) (Null H0-A) contrasted against initial survivor radius r_surv(t_0) (Null H0-B), or circular mean hyphal tip angle theta_tip, with parcel disappearances logged separately.",
+    "meoi_and_equivalence_bound": "Minimum biologically meaningful effect MEOI = 0.05 r/R (or angular deflection >= 15 deg); two one-sided TOST equivalence tests at alpha = 0.05 (90% CI strictly inside [-MEOI, +MEOI]) and 95% seed-bootstrap intervals (5,000 samples).",
+    "dosimetry_and_sham_controls": "3-axis fluxgate magnetometer verification at sample plane; double-wrapped antiparallel Helmholtz sham coils matching thermal dissipation within +/-0.05 C; mechanical vibration isolation; TLD/ion-chamber radiation dose verification.",
+    "replicate_and_multiplicity_rules": "Blinded plate/chamber randomization, biological replicate blocking across independent inocula, and Holm-Bonferroni familywise error control across separated Movement, Selection, Growth, and Mechanism endpoints."
   },
   "factorial_experiments": [
     {
       "exp_id": "EXP_A",
-      "gate_order": "Gate 1 (Entry Gate)",
-      "prerequisite_gate": "Preregistered protocol, blinded sham irradiation control, and verified dose rate / temperature stability.",
-      "title": "Gate A: Radiation x Melanin Genetics (WT vs. Albino vs. Complemented Rescue)",
+      "gate_order": "Gate 1 & Gate 3 (Radiation x Melanin Genetics)",
+      "prerequisite_gate": "Gate 0 passed (parcel ID tracking, disappearance logging, and sham/temperature controls verified).",
+      "title": "Gate A: Radiation x Melanin Genetics (Separating Selection H0-B from Movement H0-A)",
       "factors_varied": "Ionizing Radiation (+I_gamma vs. Sham) x Melanin Genotype (WT Melanized vs. Albino Mutant pks1Delta/lac1Delta vs. Complemented Rescue) at fixed, measured ambient geomagnetic field (50 uT)",
-      "primary_readouts": "ESR semiquinone signal, NADH reduction rate, basal/irradiated ATP & NAD(P)H, and radial hyphal tip trajectory distribution (r/R)",
-      "discriminating_outcome": "Tests Proposition P1 & System 1: Establishes whether the radiation response depends on melanin (present in WT and Complemented Rescue, absent in Albino Mutant) rather than simply whether irradiated cultures grow differently. Proceeding to melanin-coupled radiation claims requires a replicated WT + Rescue vs. Albino contrast exceeding MEOI."
+      "primary_readouts": "Separated endpoints: (1) Movement delta_r_i = r_i(t_1) - r_i(t_0) of surviving identified parcels, (2) Selection (parcel survival/death counts & initial survivor radius r_surv(t_0)), (3) Growth (biomass/division), (4) Melanin ESR & NADH reduction",
+      "discriminating_outcome": "Tests Null H0-A & H0-B + Proposition P1: Distinguishes melanin-dependent radioprotection (higher survival near the source) from active radiotropism (non-zero delta_r_i beyond the selection-only counterfactual)."
     },
     {
       "exp_id": "EXP_B",
-      "gate_order": "Gate 2 (Channel Separation Gate)",
+      "gate_order": "Gate 2 (Magnetic-Field Null: Rotation, Reversal & Suppression)",
       "prerequisite_gate": "Fixed radiation geometry, dose, spectrum, culture media, and temperature controlled (+/-0.05 C), with active double-wrapped sham coils and 3-axis magnetometer verification at the sample.",
-      "title": "Gate B: Magnetic-Field Rotation & Suppression at Fixed Radiation Geometry",
-      "factors_varied": "Magnetic Field Vector B (Ambient 50 uT vs. Mu-Metal/Helmholtz Suppressed <0.1 uT vs. +90 deg Rotated B Vector vs. Antiparallel Sham Coil) while keeping the radiation source position (grad I_gamma) fixed",
-      "primary_readouts": "Mean hyphal tip growth vector angle (theta_tip), circular variance, and superoxide / flavin radical-pair yield",
-      "discriminating_outcome": "Separates Energy Delivery (grad I_gamma) from Directional Information (vector B): If tip orientation rotates with the +90 deg B-field or vanishes under <0.1 uT suppression despite unchanged radiation geometry, the directional cue is magnetic (System 2). Proceeding to Gate C requires a statistically significant B-rotation or B-suppression effect relative to sham-energized coils."
+      "title": "Gate B: Magnetic-Field Rotation (+90 deg), Reversal (180 deg) & Suppression (<0.1 uT)",
+      "factors_varied": "Magnetic Field Vector B (Ambient 50 uT vs. Suppressed <0.1 uT vs. +90 deg Rotated vs. 180 deg Reversed vs. Antiparallel Sham Coil) across both Sham (0 Gy) and Fixed Radiation (+grad I_gamma)",
+      "primary_readouts": "Identified-parcel displacement vector delta_r_i / tip angle theta_tip, separate from parcel survival and biomass growth",
+      "discriminating_outcome": "Separates Energy/Mortality Gradient (grad I_gamma) from Directional Information (vector B): Rotation (+90 deg) tests directional cueing orthogonal to the dose gradient; reversal (180 deg) discriminates polarity vs. inclination compasses; suppression (<0.1 uT) tests magnetic necessity."
     },
     {
       "exp_id": "EXP_C",
-      "gate_order": "Gate 3 (Receptor Identity Gate: Route A vs. Route B)",
-      "prerequisite_gate": "Positive magnetic-field dependence established in Gate B under controlled sham-coil conditions.",
-      "title": "Gate C: Melanin x Magnetic-Field Factorial (Melanin Route A vs. Flavin/Cry Route B)",
-      "factors_varied": "Melanin Genotype (WT Melanized vs. Albino Mutant vs. Complemented Rescue) x Magnetic Field (Suppressed <0.1 uT vs. 50 uT vs. +90 deg Rotated) x Radiation (+/- I_gamma)",
-      "primary_readouts": "Field-dependent shift in ROS / superoxide (MitoSOX / roGFP2) and directional growth across WT, Albino, and Rescue genotypes",
-      "discriminating_outcome": "Tests Proposition P2 (Route A vs. Route B): If magnetic-field sensitivity disappears in Albino mutants and is restored in Complemented Rescue, a melanin-dependent route (Route A) is supported. If magnetic sensitivity persists without melanin, alternative mechanisms such as cryptochrome or flavin-superoxide chemistry (Route B) operate independently of melanin."
+      "gate_order": "Gate 3 (Receptor Identity Gate: Melanin Route A vs. Flavin/Cry Route B)",
+      "prerequisite_gate": "Statistically significant magnetic-field effect on tracked movement/growth established in Gate B relative to sham-energized coils.",
+      "title": "Gate C: Melanin x Magnetic-Field Factorial (Route A vs. Route B)",
+      "factors_varied": "Melanin Genotype (WT Melanized vs. Albino Mutant vs. Complemented Rescue) x Magnetic Field (Baseline, Rotated/Reversed, Suppressed) x Radiation (+/- I_gamma)",
+      "primary_readouts": "Field-dependent shift in tracked delta_r_i / theta_tip and ROS / superoxide (MitoSOX / roGFP2) across WT, Albino, and Rescue genotypes",
+      "discriminating_outcome": "Tests Proposition P2 (Route A vs. Route B): If magnetic-field sensitivity disappears in Albino mutants and is restored in Complemented Rescue, a melanin-dependent route (Route A) is supported. If magnetic sensitivity persists without melanin, flavin/cryptochrome radical-pair chemistry (Route B) operates independently of melanin."
     },
     {
       "exp_id": "EXP_D",
-      "gate_order": "Gate 4 (Causal Transduction Gate: Temporal Ordering & Intervention)",
-      "prerequisite_gate": "Reproducible receptor-linked response established in Gate A or Gate C.",
-      "title": "Gate D: Temporal Ordering & Pathway Intervention (ROS / Mitochondrial Transduction)",
-      "factors_varied": "Time-resolved live imaging (t = 0 to 120 min post-stimulus) + Controlled Pathway Intervention (MitoTEMPO / DPI / alternative oxidase perturbation at non-growth-inhibitory doses)",
-      "primary_readouts": "Lag time between stimulus onset, ROS/redox indicator shift (t_mito), and first detectable hyphal-tip curvature change (t_tip), plus basal extension rate control",
-      "discriminating_outcome": "Tests Propositions P3 & P4: Requires both (1) temporal precedence (biochemical ROS/mitochondrial shift at t_mito < t_tip prior to directional curvature) and (2) pathway necessity (clamping the pathway abolishes the directional response without independently preventing normal hyphal extension)."
+      "gate_order": "Gate 4 (Biochemical Transduction & Phase/Signaling Controls)",
+      "prerequisite_gate": "Reproducible receptor-linked response established in Gate A, B, or C.",
+      "title": "Gate D: Temporal Ordering (t_mito < t_tip), Pathway Intervention & Phase Null Controls",
+      "factors_varied": "Time-resolved live imaging (t = 0 to 120 min) + Controlled Pathway Intervention (MitoTEMPO / DPI) + Phase Coupling Controls (Uncoupled K = 0 Replay, Phase-Randomized Surrogate, Independent-Oscillator Benchmark)",
+      "primary_readouts": "Lag time between stimulus onset, ROS/redox shift (t_mito), and first detectable tip curvature (t_tip); Kuramoto order parameter R(t) vs. uncoupled K = 0 and phase-shuffled surrogates",
+      "discriminating_outcome": "Tests Propositions P3 & P4: Requires biochemical shift to precede directional growth (t_mito < t_tip) and pathway clamping to abolish the directional response without blocking basal growth. Any oscillatory phase concentration R(t) must exceed uncoupled (K=0), inheritance, and shared-forcing surrogates."
     }
   ],
   "milestones": [
     {
       "id": "M1",
-      "title": "Milestone 1: Physical Effect at the Transducer Above Thermal & Sham Noise",
-      "criterion": "Demonstrate that the applied stimulus (vector B with sham-coil controls, radical-pair hyperfine splitting, or synthetic MNP torque tau > k_B*T) produces a measurable primary physical/chemical state change."
+      "title": "Milestone 1 (Gate 0 & Gate 1): Synthetic Ledger Closure & Selection-vs-Movement Separation",
+      "criterion": "Track every parcel ID across time, log disappearances explicitly, close nutrient/biomass budgets (<1e-6), and separate survivor-radius shifts (Null H0-B) from individual parcel displacement delta_r_i (Null H0-A)."
     },
     {
       "id": "M2",
-      "title": "Milestone 2: Specific Intracellular Pathway Activation (Genetic Rescue & Temporal Precedence)",
-      "criterion": "Prove with knockout/rescue controls (Albino + Complemented Rescue, CryDelta, or Piezo1/TRPV1 knockouts) and Gate D temporal ordering (t_mito < t_tip) that the transducer gates a specific pathway without nonspecific heating or growth arrest."
+      "title": "Milestone 2 (Gate 2 & Gate 3): Sham-Controlled Magnetic & Genetic Discrimination",
+      "criterion": "Demonstrate a B-rotation/reversal/suppression response under sham-coil and sample-plane magnetometer controls, and discriminate melanin dependence (WT/Albino/Rescue) from cryptochrome/flavin chemistry."
     },
     {
       "id": "M3",
-      "title": "Milestone 3: Preregistered, Blinded Colony or Tissue Phenotype Outside Equivalence Bounds",
-      "criterion": "Establish a preregistered, blinded colony trajectory or tissue metabolic response that survives paired null-arm TOST equivalence gates (+/-0.05 r/R in aurascoper/Biofilms) and independent replication (Sandia 2024 standards)."
+      "title": "Milestone 3 (Gate 4): Temporal Precedence, Causal Intervention & Phase Surrogate Benchmark",
+      "criterion": "Prove that redox/mitochondrial signaling precedes and causally mediates directional growth (t_mito < t_tip), and benchmark any phase synchronization R(t) against uncoupled (K=0) and phase-randomized surrogates."
     }
   ]
 }
