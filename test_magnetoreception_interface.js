@@ -16,7 +16,11 @@ const path = require('path');
 const { spawn } = require('child_process');
 
 const ROOT = __dirname;
-const CHROME_BIN = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+const CHROME_BIN = process.env.CHROME_BIN || (
+  fs.existsSync('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome')
+    ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+    : (fs.existsSync('/usr/bin/google-chrome') ? '/usr/bin/google-chrome' : '/usr/bin/chromium-browser')
+);
 
 function verifyFilesAndManifest() {
   for (const rel of ['evidence_manifest.json', 'index.html', 'README.md']) {
@@ -26,11 +30,13 @@ function verifyFilesAndManifest() {
   }
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'evidence_manifest.json'), 'utf8'));
   assert.strictEqual(manifest.systems.length, 3, 'Expected 3 distinct systems in evidence_manifest.json');
+  assert.strictEqual(manifest.main_causal_gap_propositions.length, 4, 'Expected 4 causal gap propositions (P1-P4)');
   assert.strictEqual(manifest.factorial_experiments.length, 4, 'Expected 4 factorial experiments (A-D)');
+  assert.ok(manifest.preregistration_protocol && manifest.preregistration_protocol.primary_outcome, 'Missing preregistration protocol');
   assert.ok(manifest.mechanisms.some(m => m.id === 'sensing_melanin_redox'), 'Missing melanin redox mechanism');
   assert.ok(manifest.mechanisms.some(m => m.id === 'sensing_cryptochrome'), 'Missing cryptochrome/flavin-superoxide mechanism');
   assert.ok(manifest.mechanisms.some(m => m.id === 'quarantined_71thz_mitochondria'), 'Missing quarantined 71 THz entry');
-  console.log('PASS [1/4]: Manifest schema, 3-system causal map, 4 factorial experiments, and zero-dash checks passed.');
+  console.log('PASS [1/4]: Manifest schema, 3-system causal map, P1-P4 causal gap, and preregistered Gates A-D verified.');
 }
 
 function startStaticServer(port) {
@@ -55,6 +61,8 @@ async function withChromeSession(chromeFlags, port, debugPort, fn) {
   const userDataDir = `/tmp/magneto-test-chrome-${debugPort}-${Date.now()}`;
   const chrome = spawn(CHROME_BIN, [
     '--headless=new',
+    '--no-sandbox',
+    '--disable-dev-shm-usage',
     `--user-data-dir=${userDataDir}`,
     `--remote-debugging-port=${debugPort}`,
     '--no-first-run',
@@ -126,6 +134,7 @@ async function run() {
           const c2d = document.getElementById('canvas2d');
           const sysCols = document.querySelectorAll('#threeSystemsGrid .sys-col').length;
           const sysNodes = document.querySelectorAll('#threeSystemsGrid .sys-node').length;
+          const propCards = document.querySelectorAll('#causalGapGrid .prop-card').length;
           return JSON.stringify({
             glWidth: gl.width,
             glHeight: gl.height,
@@ -133,6 +142,7 @@ async function run() {
             c2dHidden: c2d.hidden,
             sysCols,
             sysNodes,
+            propCards,
             ferritinVal: document.getElementById('kpiFerritin').textContent,
             larmorVal: document.getElementById('kpiCryFreq').textContent
           });
@@ -142,6 +152,7 @@ async function run() {
         assert.strictEqual(state3d.c2dHidden, true);
         assert.strictEqual(state3d.sysCols, 3, 'Expected 3 system columns rendered');
         assert.strictEqual(state3d.sysNodes, 10, 'Expected 10 causal nodes across the 3 systems');
+        assert.strictEqual(state3d.propCards, 4, 'Expected 4 Main Causal Gap proposition cards (P1-P4)');
         assert.strictEqual(state3d.ferritinVal, '3.3e-5 k_B T');
         assert.strictEqual(state3d.larmorVal, '1.40 MHz');
         console.log(`PASS [2/4]: 3-D WebGL scene (${state3d.glWidth}x${state3d.glHeight}) and 3-System 10-node causal map verified.`);

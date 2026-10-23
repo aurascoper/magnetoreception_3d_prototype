@@ -1,0 +1,44 @@
+{
+  "schema": "ci_verification_receipt_v1",
+  "repository": "aurascoper/magnetoreception_3d_prototype",
+  "branch": "feat/magnetoreception-3d-interface",
+  "node_version": "v26.11.1",
+  "chrome_version": "Google Chrome 155.0.8059.86",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "causal_gap_propositions_verified": [
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+  ],
+  "sequential_experiment_gates_verified": [
+    "EXP_A",
+    "EXP_B",
+    "EXP_C",
+    "EXP_D"
+  ],
+  "artifact_hashes": {
+    "index.html": {
+      "bytes": 82419,
+      "sha256": "2a16eb11a6b4c3f2b18b792cd62739248e6f096bff5d4630fdaa9086d3372f26"
+    },
+    "evidence_manifest.json": {
+      "bytes": 29015,
+      "sha256": "7167feb2539ffa2512ead47f5383c57ca9ef956d13d8815e0801a598b1a1dfdd"
+    },
+    "README.md": {
+      "bytes": 5428,
+      "sha256": "7d3f857ef5fdfc5b4d24d1e43512ab00007a197872865f79fa48dd5517da2f19"
+    },
+    "test_magnetoreception_interface.js": {
+      "bytes": 9419,
+      "sha256": "f70a4e57df627833180a771c6c59c11241938cb3efd437e9a417aa598340c9bc"
+    }
+  },
+  "test_output": [
+    "PASS [1/4]: Manifest schema, 3-system causal map, P1-P4 causal gap, and preregistered Gates A-D verified.",
+    "PASS [2/4]: 3-D WebGL scene (745x448) and 3-System 10-node causal map verified.",
+    "PASS [3/4]: Interactive Factorial Experiment Decision Sequence (Experiments A -> B -> C -> D) verified.",
+    "PASS [4/4]: Disabled-WebGL 2-D fallback verified (745x448)."
+  ]
+}
