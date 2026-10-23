@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Magnetoreception, Melanin-Redox-Mitochondrial &amp; Magnetogenetics Research Interface</title>
+  <style>
+    :root {
+      --bg: #070c12;
+      --panel: #0e1722;
+      --panel-alt: #132030;
+      --screen: #061018;
+      --border: #23384e;
+      --text: #e6f0f8;
+      --muted: #8ca5bc;
+      --accent: #38bdf8;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --purple: #a855f7;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .wrap {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 16px 20px 36px;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 19.5px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    header p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      max-width: 105ch;
+    }
+    .badges { display: flex; flex-wrap: wrap; gap: 6px; }
+    .badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel-alt);
+    }
+    .badge.green { color: #86efac; border-color: #166534; background: #052e16; }
+    .badge.amber { color: #fcd34d; border-color: #92400e; background: #451a03; }
+    .badge.blue { color: #7dd3fc; border-color: #0369a1; background: #082f49; }
+    .badge.red { color: #fca5a5; border-color: #991b1b; background: #450a0a; }
+    .badge.purple { color: #d8b4fe; border-color: #6b21a8; background: #3b0764; }
+
+    .epistemic-banner {
+      margin-top: 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 12.5px;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.28fr) minmax(0, 1fr);
+      gap: 16px;
+      margin-top: 14px;
+      align-items: start;
+    }
+    @media (max-width: 1080px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .btn-group {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      background: var(--bg);
+      padding: 3px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    button {
+      font-family: var(--sans);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 5px 9px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    button:hover:not(:disabled) { color: var(--text); background: var(--panel-alt); }
+    button.on {
+      background: var(--accent);
+      color: #041019;
+      border-color: var(--accent);
+    }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    .stage {
+      position: relative;
+      width: 100%;
+      height: 450px;
+      background: var(--screen);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .stage canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+    }
+    [hidden] { display: none !important; }
+    .hud-tl {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      pointer-events: none;
+      max-width: 68%;
+    }
+    .hud-tl span {
+      font-family: var(--mono);
+      font-size: 11px;
+      background: rgba(6, 16, 24, 0.85);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: var(--text);
+    }
+    .hud-br {
+      position: absolute;
+      right: 10px;
+      bottom: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(6, 16, 24, 0.84);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .ctrl-box {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .ctrl-box label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .ctrl-box input[type="range"] { width: 100%; accent-color: var(--accent); }
+    .mono { font-family: var(--mono); font-size: 11.5px; color: #bae6fd; }
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .kpi {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .kpi .k-lbl { font-size: 10.5px; color: var(--muted); text-transform: uppercase; }
+    .kpi .k-val { font-family: var(--mono); font-size: 14px; font-weight: 700; margin-top: 2px; }
+    .kpi .k-sub { font-size: 10.5px; color: var(--muted); margin-top: 2px; }
+    .layer-section {
+      margin-bottom: 10px;
+      padding: 10px 12px;
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .layer-section h3 {
+      margin: 0 0 6px;
+      font-size: 12.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .mech-card {
+      border: 1px solid var(--border);
+      background: var(--bg);
+      border-radius: 7px;
+      padding: 7px 10px;
+      margin-top: 6px;
+      cursor: pointer;
+    }
+    .mech-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent) inset;
+    }
+    .mech-card.quarantined {
+      border-left: 4px solid var(--red);
+      opacity: 0.92;
+    }
+    .node-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+    @media (max-width: 1080px) {
+      .node-grid { grid-template-columns: 1fr; }
+    }
+    .sys-col {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .sys-node {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 8px 10px;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+    .factorial-card {
+      margin-top: 16px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .fact-controls {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 1080px) {
+      .fact-controls { grid-template-columns: repeat(2, 1fr); }
+    }
+    .milestone-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .ms-item {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 11.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>3D Magnetoreception, Melanin-Redox-Mitochondrial &amp; Magnetogenetics Research Interface</h1>
+        <p>Hypothesis-first research instrument organized around three distinct systems: (1) Biological Response to Radiation (Melanin-Redox-Mitochondria), (2) Candidate Magnetic Sensing Mechanisms (Melanin Spin Route A vs. Cryptochrome/Flavin-Superoxide Route B vs. Magnetite Route C), and (3) Engineered Magnetic Nanoparticle Actuation, paired with an interactive Factorial Experiment Decision Sequence (Experiments A to D).</p>
+      </div>
+      <div class="badges">
+        <span class="badge green">OBSERVED: Melanin ESR &amp; 4x NADH (Dadachova 2007)</span>
+        <span class="badge blue">MODELED: Flavin-Superoxide Spin Pair (Nat. Commun. 2024)</span>
+        <span class="badge amber">HYPOTHESIZED: Melanin-Mito-Magnetic Coupling</span>
+        <span class="badge purple">ENGINEERED: Synthetic MNP Actuation</span>
+        <span class="badge red">NULL CAUTION: Biofilms 256-Seed &amp; Sandia 2024</span>
+      </div>
+    </header>
+
+    <div class="epistemic-banner">
+      <strong>Physical Channel Separation &amp; Null-Result Caution:</strong> Ionizing radiation creates a spatial dose/redox gradient (<code>grad I_gamma</code>, energy input channel), whereas Earth's magnetic field (<code>B = 25 to 65 uT</code>) provides a directional vector (spin-chemistry/torque information channel). Neither the uncalibrated <code>aurascoper/Biofilms</code> 256-seed 4-arm model (formal null within <code>+/-0.05 r/R</code>) nor the Sandia National Laboratories (2024) Cs-137 experiment demonstrates fungal radiotropism. Accordingly, radiotropism and melanin-mediated magnetoreception are visualized here as <strong>explicit research hypotheses</strong> resolved via Factorial Experiments A, B, C, and D.
+    </div>
+
+    <div class="layout">
+      <div class="card">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;">
+          <div class="btn-group" role="group" aria-label="Render mode">
+            <button id="btnRender3d" class="on" type="button">3-D Field, Radiation &amp; Transducer Scene</button>
+            <button id="btnRender2d" type="button">2-D Channel &amp; Thermal Gate Diagram</button>
+          </div>
+          <div class="btn-group" role="group" aria-label="Field presets">
+            <button id="btnPresetGeo" class="on" type="button">Geomagnetic (50 uT DC)</button>
+            <button id="btnPresetZero" type="button">Zeroed B-Field (&lt;0.1 uT)</button>
+            <button id="btnPresetTorque" type="button">MNP Torque (20 mT, 15 Hz)</button>
+            <button id="btnPresetRf" type="button">RF Hysteresis (25 mT, 250 kHz)</button>
+            <button id="btnPresetGrad" type="button">SPION Gradient (200 mT, 45 T/m)</button>
+          </div>
+        </div>
+
+        <div id="stage" class="stage">
+          <canvas id="glField"></canvas>
+          <canvas id="canvas2d" hidden></canvas>
+          <div class="hud-tl">
+            <span id="chipLayer">Active Focus: System 2 (Route B): Cryptochrome / Flavin-Superoxide Spin Chemistry</span>
+            <span id="chipField">Field: B = 0.050 mT (50 uT) | Inc = 62 deg | |grad B| = 0.0 T/m</span>
+            <span id="chipGate">Thermal Gate (Fe3O4 chain tau / k_B T): 3.84 | Larmor f_L = 1.40 MHz</span>
+          </div>
+          <div class="hud-br" id="hudStatus">T = 310 K (k_B T = 4.28 pN*nm) | Blue arrows: B-field | Amber rays: grad I_gamma</div>
+        </div>
+
+        <div class="controls-grid">
+          <div class="ctrl-box">
+            <label>
+              <span>Flux Density <code>|B|</code></span>
+              <strong id="lblB" class="mono">0.050 mT (50 uT)</strong>
+            </label>
+            <input id="sliderB" type="range" min="-4.0" max="2.4" step="0.02" value="-1.30">
+          </div>
+          <div class="ctrl-box">
+            <label>
+              <span>Magnetic Vector Orientation / Inclination <code>theta_inc</code></span>
+              <strong id="lblInc" class="mono">62 deg</strong>
+            </label>
+            <input id="sliderInc" type="range" min="-90" max="90" step="1" value="62">
+          </div>
+          <div class="ctrl-box">
+            <label>
+              <span>Spatial Magnetic Gradient <code>|grad B|</code></span>
+              <strong id="lblGrad" class="mono">0.0 T/m</strong>
+            </label>
+            <input id="sliderGrad" type="range" min="0" max="100" step="0.5" value="0">
+          </div>
+          <div class="ctrl-box">
+            <label>
+              <span>Driving Frequency <code>f</code></span>
+              <strong id="lblFreq" class="mono">0 Hz (DC)</strong>
+            </label>
+            <input id="sliderFreq" type="range" min="0" max="500" step="5" value="0">
+          </div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="k-lbl">Biogenic Fe3O4 Chain (15x 25nm)</div>
+            <div id="kpiChainTau" class="k-val">3.84 k_B T</div>
+            <div id="kpiChainSub" class="k-sub">Torque = 16.4 pN*nm (MODELED)</div>
+          </div>
+          <div class="kpi">
+            <div class="k-lbl">Synthetic MNP (35nm Fe3O4)</div>
+            <div id="kpiSynthTau" class="k-val">0.48 k_B T</div>
+            <div id="kpiSynthSub" class="k-sub">Needs &gt;= 5 mT for pN gating (ENGINEERED)</div>
+          </div>
+          <div class="kpi">
+            <div class="k-lbl">Endogenous Ferritin (6nm core)</div>
+            <div id="kpiFerritin" class="k-val" style="color:var(--red);">3.3e-5 k_B T</div>
+            <div id="kpiFerritinSub" class="k-sub">Fails k_B T by &gt;4 orders (Meister 2016)</div>
+          </div>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi">
+            <div class="k-lbl">Radical-Pair Zeeman Larmor f_L</div>
+            <div id="kpiCryFreq" class="k-val">1.40 MHz</div>
+            <div id="kpiCrySub" class="k-sub">[FAD*- ... O2*-] / Cry4a (T_coh &gt;= 0.71 us)</div>
+          </div>
+          <div class="kpi">
+            <div class="k-lbl">SPION Gradient Force (r=50nm)</div>
+            <div id="kpiGradForce" class="k-val">0.000 fN</div>
+            <div id="kpiGradSub" class="k-sub">Vs. Stokes drag in microvessels</div>
+          </div>
+          <div class="kpi">
+            <div class="k-lbl">Downstream Mitochondrial Gate</div>
+            <div id="kpiMitoGate" class="k-val">Basal State</div>
+            <div id="kpiMitoSub" class="k-sub">Requires M2 channel or ROS coupling</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Mechanism Selector &amp; Epistemic Evidence Audit (Click to Inspect in 3D)</h2>
+
+        <div class="layer-section">
+          <h3>
+            <span>System 1 &amp; System 2: Biological Radiation-Redox &amp; Natural Magnetic Sensing</span>
+            <span class="badge blue">OBSERVED / MODELED / HYPOTHESIZED</span>
+          </h3>
+          <div id="listNatural"></div>
+        </div>
+
+        <div class="layer-section">
+          <h3>
+            <span>System 3: Engineered Nanoparticle Actuation &amp; Mitochondrial Ca2+ Signaling</span>
+            <span class="badge purple">ENGINEERED (mT Regime)</span>
+          </h3>
+          <div id="listEngineered"></div>
+        </div>
+
+        <div class="layer-section">
+          <h3>
+            <span>Quarantined Hypothesis (Excluded from Default Mechanism Model)</span>
+            <span class="badge red">QUARANTINED PREPRINT</span>
+          </h3>
+          <div id="listQuarantined"></div>
+        </div>
+
+        <div class="layer-section">
+          <h3>
+            <span>Selected Mechanism Primary Literature &amp; Progressive Milestones (M1 to M3)</span>
+            <span id="selStatusBadge" class="badge blue">EVIDENCE LEDGER</span>
+          </h3>
+          <div id="mechDetailBox" style="font-size:12px; color:var(--text);"></div>
+          <div class="milestone-list" id="milestoneBox"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Factorial Experiment Decision Sequence (Experiments A -> B -> C -> D) -->
+    <div class="factorial-card">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;">
+        <div>
+          <h2 style="margin:0;">Interactive Factorial Experiment Decision Sequence (Experiments A -&gt; B -&gt; C -&gt; D)</h2>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">
+            Manipulate Radiation (<code>grad I_gamma</code>), Magnetic Field Vector (<code>B</code>), Melanin Genotype, and Mitochondrial/ROS Mediator Perturbation to see how each factorial experiment isolates a specific causal link.
+          </div>
+        </div>
+        <div class="btn-group" role="group" aria-label="Factorial Experiment Stage">
+          <button id="btnExpA" class="on" type="button">Exp A: Radiation x Melanin</button>
+          <button id="btnExpB" type="button">Exp B: Rotate/Zero B at Fixed Radiation</button>
+          <button id="btnExpC" type="button">Exp C: Melanin x B-Field (Route A vs B)</button>
+          <button id="btnExpD" type="button">Exp D: Mitochondrial/ROS Temporal Gate</button>
+        </div>
+      </div>
+
+      <div class="fact-controls">
+        <div class="ctrl-box">
+          <label><span>1. Ionizing Radiation (<code>grad I_gamma</code>)</span></label>
+          <div class="btn-group" style="width:100%;display:flex;">
+            <button id="btnRadOn" class="on" style="flex:1;" type="button">+I_gamma Source ON</button>
+            <button id="btnRadOff" style="flex:1;" type="button">Sham (0 Gy)</button>
+          </div>
+        </div>
+        <div class="ctrl-box">
+          <label><span>2. Magnetic Field Vector (<code>B</code>)</span></label>
+          <div class="btn-group" style="width:100%;display:flex;">
+            <button id="btnMagGeo" class="on" style="flex:1;" type="button">50 uT (0 deg)</button>
+            <button id="btnMagZero" style="flex:1;" type="button">&lt;0.1 uT Zero</button>
+            <button id="btnMagRot" style="flex:1;" type="button">50 uT (+90 deg)</button>
+          </div>
+        </div>
+        <div class="ctrl-box">
+          <label><span>3. Fungal Melanin Genotype</span></label>
+          <div class="btn-group" style="width:100%;display:flex;">
+            <button id="btnMelWT" class="on" style="flex:1;" type="button">WT Melanized</button>
+            <button id="btnMelAlb" style="flex:1;" type="button">Albino (pks1Delta)</button>
+            <button id="btnMelRes" style="flex:1;" type="button">Rescue</button>
+          </div>
+        </div>
+        <div class="ctrl-box">
+          <label><span>4. Mitochondrial / ROS Mediator Gate</span></label>
+          <div class="btn-group" style="width:100%;display:flex;">
+            <button id="btnMitoIntact" class="on" style="flex:1;" type="button">Unperturbed</button>
+            <button id="btnMitoClamp" style="flex:1;" type="button">+MitoTEMPO Clamp</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-row" style="grid-template-columns: repeat(4, 1fr); margin-top: 10px;">
+        <div class="kpi">
+          <div class="k-lbl">Melanin ESR &amp; NADH Reduction</div>
+          <div id="factReadoutMel" class="k-val" style="color:var(--green);">4.0x NADH / ESR Active</div>
+          <div id="factSubMel" class="k-sub">OBSERVED in vitro (Dadachova 2007)</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Radical-Pair Spin Mixing (Route A / B)</div>
+          <div id="factReadoutSpin" class="k-val" style="color:var(--accent);">Singlet-Triplet Active (0 deg)</div>
+          <div id="factSubSpin" class="k-sub">Zeeman f_L = 1.40 MHz at 50 uT</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Mitochondrial ROS / NAD(P)H Pre-Growth Shift</div>
+          <div id="factReadoutMito" class="k-val" style="color:var(--amber);">Candidate Mediator Active</div>
+          <div id="factSubMito" class="k-sub">Requires t_mito &lt; t_tip (Exp D)</div>
+        </div>
+        <div class="kpi">
+          <div class="k-lbl">Predicted Hyphal Tip Bias vs. Null</div>
+          <div id="factReadoutTip" class="k-val">Tests Route A vs. Route B</div>
+          <div id="factSubTip" class="k-sub">Biofilms 256-seed &amp; Sandia 2024 = Null</div>
+        </div>
+      </div>
+
+      <div id="factExpDetailBox" style="margin-top:10px;padding:10px 12px;background:var(--panel-alt);border:1px solid var(--border);border-radius:8px;font-size:12px;"></div>
+    </div>
+
+    <!-- Three-System Explicit Epistemic Causal Map -->
+    <div class="node-grid" id="threeSystemsGrid"></div>
+  </div>
+
+  <script id="evidence-manifest" type="application/json">{"schema_version":"2.0.0","project":"magnetoreception_3d_prototype","branch":"feat/magnetoreception-3d-interface","architectural_separation":"Independent hypothesis-first research prototype repository separate from aurascoper/oklo_shareable_portal and aurascoper/Biofilms. Organizes the material around three distinct systems (1. Biological Response to Radiation, 2. Candidate Magnetic Sensing Mechanism, 3. Engineered Magnetic Nanoparticle Interface) with explicit evidence tags (OBSERVED, MODELED, HYPOTHESIZED, ENGINEERED, CONTEXT-DEPENDENT, QUARANTINED) and a 4-stage Factorial Experiment Decision Sequence (Experiments A -> B -> C -> D).","channel_separation_principle":{"radiation_channel":"Spatial radiation dose gradient (grad I_gamma, keV-MeV ionizing photons/particles) acts as an energy and radiolytic/redox input channel.","magnetic_channel":"Magnetic flux density vector B (25 to 65 uT geomagnetic or mT engineered) acts as a directional spin-chemistry or mechanical torque information channel.","inference_gate":"A colony plate image or metabolic shift alone cannot establish radiotropism or magnetoreception; separating grad I_gamma from vector B requires factorial rotation/zeroing of B at fixed radiation geometry plus genetic melanin knockouts and pre-growth mitochondrial/ROS time-series."},"default_model_exclusions":["Whole-organism magnetic control (not physically or biologically established)","Endogenous ferritin mechanical or thermal channel gating (fails k_B*T and Fourier heat conduction bounds by >4 orders of magnitude; Meister 2016)","Presenting fungal radiotropism as an already demonstrated outcome of the uncalibrated aurascoper/Biofilms model (256-seed 4-arm ensemble is a formal model null within +/-0.05 r/R; Sandia 2024 Cs-137 experimental study reported no statistically significant difference)","71 THz (4.22 um mid-IR) mitochondrial light-matter coupling preprint (quarantined as an unvalidated optical/vibrational hypothesis; not geomagnetic sensing)"],"systems":[{"system_id":"system_1_radiation_melanin_mito","title":"System 1: Biological Response to Radiation (Melanin -> Redox/ROS -> Mitochondria -> Growth)","summary":"Evaluates how ionizing radiation interacts with fungal melanin and whether radiation-induced redox chemistry couples to mitochondrial bioenergetics and polarized hyphal growth.","nodes":[{"node_id":"s1_melanin_esr_nadh","label":"Ionizing Radiation -> Melanin ESR Signal & 4x NADH Reduction","tag":"OBSERVED","detail":"Continuous ionizing radiation alters melanin electron spin resonance (ESR) paramagnetism and increases melanin-mediated NADH ferricyanide reduction ~4-fold in vitro; melanized fungi show metabolic/transcriptomic shifts under irradiation.","sources":["Dadachova et al. (2007) PLoS ONE 2(5):e457 (doi:10.1371/journal.pone.0000457)","Turick et al. (2002) Appl. Environ. Microbiol. 68:2436-2444","Robertson et al. (2012) PLoS ONE 7(11):e48674 (W. dermatitidis transcriptomics)"]},{"node_id":"s1_redox_intermediary","label":"Melanin Electron Transfer -> Intracellular Redox / ROS Pool","tag":"HYPOTHESIZED","detail":"Proposed shuttling of radiation-mobilized electrons or radical intermediates from cell-wall/melanosome melanin into cytosolic electron acceptors, superoxide (O2*-), or hydrogen peroxide (H2O2) signaling pools.","sources":["Casadevall, Cordero & Bryan (2017) Microbiol. Spectr. 5(2)","Dadachova & Casadevall (2008) Curr. Opin. Microbiol. 11:525-531"]},{"node_id":"s1_mitochondrial_etc","label":"Redox / ROS Pool -> Mitochondrial ETC, NAD(P)H & ATP Modulation","tag":"HYPOTHESIZED","detail":"Mitochondria integrate cytosolic redox, calcium, and ROS signals across Complexes I-IV, altering ATP synthesis and stress signaling; direct energy transfer from melanin to mitochondrial ETC in intact hyphae remains unproven.","sources":["Nature Reviews Molecular Cell Biology (mitochondrial signaling and metabolic integration)","Robertson et al. (2012) PLoS ONE 7(11):e48674"]},{"node_id":"s1_hyphal_tropism","label":"Mitochondrial / Redox Shift -> Directional Hyphal Growth Bias (Radiotropism)","tag":"CONTEXT-DEPENDENT","detail":"Early Chernobyl isolate studies reported directional hyphal growth toward radiation sources, whereas a 2024 Sandia National Laboratories Cs-137 study found no statistically significant growth difference between irradiated and control fungi, and the aurascoper/Biofilms 256-seed 4-arm model is a formal null within +/-0.05 r/R.","sources":["Zhdanova et al. (2004) Mycol. Res. 108:1089-1096","Sandia National Laboratories (2024) Cs-137 Fungal Irradiation Report (null result)","aurascoper/Biofilms radial_n40_p6_seeds42-297.csv (256-seed 4-arm model null)"]}]},{"system_id":"system_2_magnetic_sensing","title":"System 2: Candidate Magnetic Sensing Mechanism (Spin-Chemistry vs. Magnetite Torque)","summary":"Evaluates candidate physical transducers capable of sensing weak geomagnetic fields (25 to 65 uT) and how spin-dependent radical pairs could intersect with melanin radicals or mitochondrial superoxide (O2*-).","nodes":[{"node_id":"s2_route_a_melanin_spin","label":"Route A: Melanin Paramagnetic Centers & Radical-Pair Spin Coupling","tag":"HYPOTHESIZED","detail":"Melanin contains stable semiquinone free radicals (detectable by ESR). Route A asks whether weak magnetic fields (B) modulate spin-dependent recombination or electron transfer between melanin radicals and diffusible redox partners.","sources":["Dadachova et al. (2007) PLoS ONE 2(5):e457 (melanin ESR paramagnetic signal)","Lam & Malkemper (2026) Physiol. Rev. (doi:10.1152/physrev.00032.2025)"]},{"node_id":"s2_route_b_flavin_superoxide","label":"Route B: Cryptochrome Flavin-Tryptophan & Tightly Bound Flavin-Superoxide [FAD*- ... O2*-] Spin Chemistry","tag":"MODELED","detail":"Geomagnetic fields shift singlet-triplet interconversion yields in flavin-tryptophan [FAD*- ... TrpH*+] (observed in vitro in Cry4a) and modeled in tightly bound flavin-superoxide [FAD*- ... O2*-] radical pairs (2024 Nature Communications), linking magnetic spin chemistry directly to ROS / superoxide signaling.","sources":["Xu et al. (2021) Nature 594:535-540 (Cry4a in vitro magnetic sensitivity)","Nature Communications (2024) Earth-strength magnetic sensitivity in tightly bound flavin-superoxide radical pairs","arXiv:2312.06597 (Weak magnetic field effects on planarian regeneration via superoxide ROS)","Lam & Malkemper (2026) Physiol. Rev. (doi:10.1152/physrev.00032.2025)"]},{"node_id":"s2_route_c_magnetite","label":"Route C: Biogenic Single-Domain Magnetite (Fe3O4) Chain Torque","tag":"MODELED","detail":"Chains of 10 to 20 single-domain Fe3O4 crystals (r ~ 25 nm) achieve mechanical torque tau = N*M_s*V*B*sin(theta) > k_B*T at 50 uT (established in magnetotactic bacteria; eukaryotic mechanoreceptor coupling remains unresolved).","sources":["Kirschvink & Gould (1981) Biosystems 13:181-201","Johnsen & Lohmann (2005) Nat. Rev. Neurosci. 6:703-712"]}]},{"system_id":"system_3_engineered_mnp","title":"System 3: Engineered Magnetic Nanoparticle Interface (Synthetic Actuation vs. Ferritin Bound)","summary":"Evaluates synthetic magnetic nanoparticles (MNPs/SPIONs) engineered to stimulate ion channels or target vasculature at millitesla fields, kept strictly separate from natural uT sensing.","nodes":[{"node_id":"s3_synth_magnetomechanical","label":"Synthetic Fe3O4 Nanodisc / m-Torquer Mechanotransduction (Piezo1 / TRPV4)","tag":"ENGINEERED","detail":"Exogenous synthetic Fe3O4 nanodiscs or torque arrays (35 to 100 nm) under 5 to 50 mT low-frequency fields generate piconewton forces/torques (>10 k_B*T) to gate Piezo1/TRPV4 channels and trigger Ca2+ influx.","sources":["Gregurec et al. (2020) ACS Nano 14:8036-8045","Lee et al. (2021) Nat. Mater. 20:1029-1036"]},{"node_id":"s3_synth_magnetothermal","label":"RF Magnetothermal Hysteresis Heating (TRPV1 -> Ca2+ -> Mitochondrial MCU)","tag":"ENGINEERED","detail":"Dense synthetic MNP clusters under 100 to 500 kHz RF fields (10 to 30 mT) heat local membranes above 42 C to gate TRPV1, driving Ca2+ uptake into mitochondria via MCU.","sources":["Chen et al. (2015) Science 347:1477-1480","Rabin (2002) Int. J. Hyperthermia 18:194-202"]},{"node_id":"s3_ferritin_exclusion","label":"Endogenous Ferritin Thermal & Mechanical Failure Bound","tag":"MODELED","detail":"A 6 nm ferrihydrite ferritin core (~300 mu_B) yields tau / (k_B*T) ~ 3.2e-5 at 50 uT and < 1e-2 even at 20 mT, failing thermal noise bounds by >4 orders of magnitude.","sources":["Meister (2016) eLife 5:e17210"]}]}],"mechanisms":[{"id":"sensing_cryptochrome","layer":"natural_sensing","evidence_tag":"MODELED / OBSERVED IN VITRO","title":"System 2 (Route B): Cryptochrome / Flavin-Superoxide [FAD*- ... O2*-] Spin Chemistry","status":"OBSERVED_IN_VITRO_AND_MODELED (flavin-superoxide tight-binding model 2024 Nat. Commun.; fungal coupling HYPOTHESIZED)","equation":"H_spin = g * mu_B * B . (S_1 + S_2) + sum_i S_1 . A_1i . I_1i; f_L = 1.40 MHz at 50 uT","typical_regime":"B = 25 to 65 uT (geomagnetic inclination compass); links spin singlet-triplet yield to ROS / O2*- pool","sources":["Xu et al. (2021) Nature 594:535-540 (European robin Cry4a in vitro magnetic sensitivity)","Nature Communications (2024) Tightly bound flavin-superoxide radical-pair geomagnetic sensitivity model","arXiv:2312.06597 (Planarian regeneration weak magnetic field superoxide ROS study)","Lam & Malkemper (2026) Physiol. Rev. (doi:10.1152/physrev.00032.2025)"],"unresolved_questions":["Maintaining spin relaxation time T_1, T_2 >= 1 us against fast rotational tumbling of free superoxide","Whether fungal cryptochrome/flavin photo-redox cycles couple to hyphal polarity machinery"]},{"id":"sensing_melanin_redox","layer":"natural_sensing","evidence_tag":"OBSERVED (ESR/NADH) / HYPOTHESIZED (B-FIELD)","title":"System 1 + 2 (Route A): Melanin ESR Paramagnetism & Radiation-Redox-Mitochondrial Coupling","status":"MELANIN_REDOX_OBSERVED_IN_VITRO (magnetic spin modulation and intact hyphal radiotropism HYPOTHESIZED / CONTEXT-DEPENDENT)","equation":"I_gamma -> Melanin [Q / QH* / QH2] (4x NADH reduction) -> ? -> ROS / Mitochondrial ETC -> ? -> Tip Bias","typical_regime":"Ionizing dose gradient grad I_gamma + paramagnetic semiquinone centers (g ~ 2.004 ESR signal)","sources":["Dadachova et al. (2007) PLoS ONE 2(5):e457 (melanin ESR and 4x NADH oxidation-reduction)","Robertson et al. (2012) PLoS ONE 7(11):e48674 (W. dermatitidis transcriptomics)","Sandia National Laboratories (2024) Cs-137 Fungal Irradiation Report (experimental null caution)","aurascoper/Biofilms radial_n40_p6_seeds42-297.csv (256-seed 4-arm model null within +/-0.05 r/R)"],"unresolved_questions":["Whether radiation-excited melanin transfers electrons to mitochondrial ETC in intact cells","Whether magnetic field vector B alters melanin semiquinone radical-pair recombination yields (tested by Experiment C)"]},{"id":"sensing_magnetite","layer":"natural_sensing","evidence_tag":"MODELED / OBSERVED IN BACTERIA","title":"System 2 (Route C): Biogenic Magnetite (Fe3O4) Chain Torque Transduction","status":"ESTABLISHED_IN_MAGNETOTACTIC_BACTERIA (eukaryotic mechanoreceptor tether unresolved)","equation":"tau = N_crystals * M_s * V_crystal * B * sin(theta); thermal_gate = tau / (k_B * T) > 1","typical_regime":"B = 25 to 65 uT (DC geomagnetic), single-domain Fe3O4 crystals (r ~ 25 nm, chain N = 10 to 20)","sources":["Kirschvink & Gould (1981) Biosystems 13:181-201","Johnsen & Lohmann (2005) Nat. Rev. Neurosci. 6:703-712","Eder et al. (2012) PNAS 109:12022-12027 (contamination controls required)"],"unresolved_questions":["Anatomical identity of primary magnetoreceptor cells and ion-channel tethers in eukaryotes","Distinguishing biogenic intracellular magnetite from exogenous iron oxide contamination"]},{"id":"sensing_induction","layer":"natural_sensing","evidence_tag":"OBSERVED (ELASMOBRANCHS)","title":"System 2 (Marine Reference): Electromagnetic Induction (Ampullae of Lorenzini)","status":"ESTABLISHED_IN_ELASMOBRANCHS (requires conductive seawater medium; not intracellular fungal/terrestrial)","equation":"EMF = integral (v x B) . dl; E_induced = v * B * sin(theta)","typical_regime":"v = 0.2 to 1.0 m/s in seawater (sigma ~ 4 S/m), canal length L = 5 to 20 cm, threshold ~ 5 nV/cm","sources":["Kalmijn (1971) J. Exp. Biol. 55:371-383","Newton, Gill & Kajiura (2019) J. R. Soc. Interface 16:20190262"],"unresolved_questions":["Central neural decoding of motional vs. ocean-current induced electric fields"]},{"id":"actuation_magnetomechanical","layer":"engineered_actuation","evidence_tag":"ENGINEERED (SYNTHETIC MNP)","title":"System 3: Exogenous MNP Magnetomechanical Torque & Force Gating (Piezo1 / TRPV4)","status":"DEMONSTRATED_WITH_SYNTHETIC_MNPS (refuted for endogenous ferritin by Meister 2016)","equation":"tau = m x B; F_grad = (m . grad) B; requires F >= 1 to 10 pN or tau >= 40 pN*nm for channel gating","typical_regime":"B = 5 to 50 mT (low-frequency rotating/alternating, 1 to 50 Hz) + synthetic Fe3O4 nanodiscs/clusters (r >= 25 to 100 nm)","sources":["Meister (2016) eLife 5:e17210 (physical critique of ferritin magnetogenetics)","Gregurec et al. (2020) ACS Nano 14:8036-8045 (vortex nanodisc mechanotransduction)","Lee et al. (2021) Nat. Mater. 20:1029-1036 (m-Torquer nanoscale torque gating)"],"unresolved_questions":["Targeted deep-tissue delivery and stable membrane tethering without immune clearance","Separating pure mechanical gating from local viscous or coil-heating artifacts"]},{"id":"actuation_magnetothermal","layer":"engineered_actuation","evidence_tag":"ENGINEERED (RF CLUSTER)","title":"System 3: RF Magnetothermal Hysteresis Actuation (TRPV1 -> Ca2+ -> Mitochondrial MCU)","status":"DEMONSTRATED_AT_HIGH_MNP_CLUSTER_DENSITY (single-nanoparticle equilibrium delta_T is negligible)","equation":"P_vol = mu_0 * pi * chi_pp * f * H_0^2; gating TRPV1 (~42 C) triggers Ca2+ -> MCU -> TCA/OXPHOS modulation","typical_regime":"f = 100 to 500 kHz, B_RF = 10 to 30 mT; dense MNP clusters required to overcome Fourier heat diffusion","sources":["Rabin (2002) Int. J. Hyperthermia 18:194-202 (nano-scale heat transfer bounds)","Chen et al. (2015) Science 347:1477-1480 (magnetothermal deep brain stimulation)"],"unresolved_questions":["Nanoscale surface thermometry vs. macroscopic Fourier heat conduction limits","Preventing mitochondrial Ca2+ overload while modulating metabolic signaling"]},{"id":"actuation_spion_targeting","layer":"engineered_actuation","evidence_tag":"ENGINEERED (HIGH GRADIENT)","title":"System 3: High-Gradient Vascular SPION Capture & Drug Delivery","status":"PRECLINICAL_AND_SUPERFICIAL_TRANSLATION (depth-limited by Earnshaw theorem and gradient decay)","equation":"F_mag = V_np * delta_chi * grad(B^2) / (2 * mu_0) vs. F_drag = 6 * pi * eta * r_np * v_blood","typical_regime":"B = 0.2 to 1.5 T, |grad B| = 10 to 100 T/m (effective mainly within 1 to 5 cm of magnet pole face)","sources":["Pankhurst et al. (2003) J. Phys. D: Appl. Phys. 36:R167","Shapiro et al. (2015) Magn. Reson. Imaging 33:250-256"],"unresolved_questions":["Overcoming Earnshaw's theorem for deep-tissue static magnetic trapping"]},{"id":"quarantined_71thz_mitochondria","layer":"quarantined_hypothesis","evidence_tag":"QUARANTINED PREPRINT","title":"QUARANTINED: 71 THz (4.22 um Mid-IR) Mitochondrial Light-Matter Coupling Preprint","status":"UNVALIDATED_PREPRINT_HYPOTHESIS (excluded from default magnetoreception model)","equation":"f = 71 THz -> lambda = c / f = 4.22 um (photon energy h*nu = 0.294 eV ~ 11.4 k_B*T)","typical_regime":"Mid-infrared vibrational / photonic spectroscopy; NOT geomagnetic DC/ELF sensing","sources":["bioRxiv preprint (Sept 2026) on 71 THz cellular/mitochondrial spectral feature (unvalidated)"],"unresolved_questions":["Independent replication with rigorous water/CO2 infrared absorption controls (4.26 um CO2 asymmetric stretch)","No established physical coupling to geomagnetic microtesla fields"]}],"factorial_experiments":[{"exp_id":"EXP_A","title":"Experiment A: Radiation x Melanin Genetics (WT vs. Albino vs. Complemented Rescue)","factors_varied":"Ionizing Radiation (+I_gamma vs. Sham) x Melanin Genotype (WT Melanized vs. Albino Mutant pks1Delta/lac1Delta vs. Complemented Rescue) at fixed ambient geomagnetic field (50 uT)","primary_readouts":"ESR semiquinone signal, NADH reduction rate, basal/irradiated ATP & NAD(P)H, and radial hyphal tip trajectory distribution (r/R)","discriminating_outcome":"Tests System 1: If radiation increases NADH reduction / ATP or biases tip trajectories in WT and Complemented Rescue but NOT in Albino Mutant, melanin is required for the radiation response. If neither WT nor Albino shows directional bias (matching Sandia 2024 and the Biofilms 256-seed null), radiation alone does not drive radiotropism under these conditions."},{"exp_id":"EXP_B","title":"Experiment B: Magnetic Field Vector Rotation & Zeroing at Fixed Radiation Geometry","factors_varied":"Magnetic Field Vector B (Ambient 50 uT vs. Mu-Metal/Helmholtz Zeroed <0.1 uT vs. +90 deg Rotated B Vector) while keeping the radiation source position (grad I_gamma) fixed","primary_readouts":"Mean hyphal tip growth vector angle (theta_tip), circular variance, and superoxide / flavin radical-pair yield","discriminating_outcome":"Separates Energy Channel (grad I_gamma) from Information Channel (vector B): If tip orientation rotates with the +90 deg B-field or vanishes in <0.1 uT despite an unchanged radiation source position, the directional cue is magnetic (System 2), not a pure radiation dose gradient."},{"exp_id":"EXP_C","title":"Experiment C: Melanin x Magnetic Field Factorial Test (Route A vs. Route B)","factors_varied":"Melanin Genotype (WT Melanized vs. Albino Mutant) x Magnetic Field (Zeroed <0.1 uT vs. 50 uT vs. +90 deg Rotated) x Radiation (+/- I_gamma)","primary_readouts":"Magnetic-field-dependent shift in ROS / superoxide (MitoSOX / roGFP2) and directional growth in WT vs. Albino cells","discriminating_outcome":"Discriminates Route A (Melanin Spin Radical) from Route B (Cryptochrome / Flavin-Superoxide [FAD*- ... O2*-]): If magnetic field sensitivity requires melanin (present in WT, absent in Albino), Route A is supported. If magnetic sensitivity persists in Albino mutants via blue-light/flavin superoxide modulation, Route B operates independently of melanin."},{"exp_id":"EXP_D","title":"Experiment D: Mitochondrial & ROS Temporal Ordering Gate (Causal Mediator vs. Late Byproduct)","factors_varied":"Time-resolved live imaging (t = 0 to 120 min post-stimulus) + Radical Scavenger / ETC Inhibitor Perturbation (TEMPO / MitoTEMPO / Rotenone)","primary_readouts":"Lag time delta_t between stimulus onset, mitochondrial superoxide / NAD(P)H shift (t_mito), and first detectable hyphal tip curvature change (t_tip)","discriminating_outcome":"Establishes causal ordering: For mitochondrial/redox signaling to be the transducer between sensing and growth, \u0394MitoSOX / \u0394NAD(P)H must occur at t_mito < t_tip, and clamping mitochondrial ROS with MitoTEMPO must abolish the downstream directional or metabolic phenotype without killing basal extension."}],"milestones":[{"id":"M1","title":"Milestone 1: Physical Effect at the Transducer Above Thermal Noise","criterion":"Demonstrate that the applied stimulus (vector B, spin radical hyperfine coupling, or synthetic MNP torque tau > k_B*T) produces a measurable primary physical state change above thermal and radiolytic noise floors."},{"id":"M2","title":"Milestone 2: Specific Intracellular Pathway Activation (Genetic & Inhibitor Controls)","criterion":"Prove with knockout/rescue controls (Albino pks1Delta, CryDelta, or Piezo1/TRPV1 knockouts) and temporal ordering (Experiment D) that the transducer gates a specific redox/mitochondrial or ion-channel pathway rather than nonspecific heating or artifacts."},{"id":"M3","title":"Milestone 3: Reproducible Colony or Tissue-Level Phenotype Under Blinded Replication","criterion":"Establish a preregistered, blinded colony trajectory or tissue metabolic response that survives paired null-arm controls (such as the +/-0.05 r/R equivalence gate in aurascoper/Biofilms and Sandia 2024 replication standards)."}]}</script>
+  <script>
+  (function() {
+    const MANIFEST = JSON.parse(document.getElementById('evidence-manifest').textContent);
+    const KB_T_PN_NM = 4.28; // k_B * T at 310 K in pN * nm
+    const MS_FE3O4 = 4.8e5;  // A/m (J / (T * m^3))
+
+    let renderMode = '3d';
+    let selectedMechId = 'sensing_cryptochrome';
+    let fieldB_mT = 0.050; // 50 uT default
+    let incDeg = 62;
+    let gradB_Tm = 0.0;
+    let freq_kHz = 0.0;
+
+    // Factorial simulator state
+    let activeExpId = 'EXP_A';
+    let factRadOn = true;
+    let factMagMode = 'geo'; // 'geo' | 'zero' | 'rot90'
+    let factMelMode = 'wt';  // 'wt' | 'albino' | 'rescue'
+    let factMitoClamp = false;
+
+    let yaw = 0.55;
+    let pitch = 0.38;
+    let zoom = 1.0;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    const stage = document.getElementById('stage');
+    const glCanvas = document.getElementById('glField');
+    const canvas2d = document.getElementById('canvas2d');
+
+    function badgeClassForTag(tag) {
+      const t = (tag || '').toUpperCase();
+      if (t.includes('QUARANTINED')) return 'red';
+      if (t.includes('ENGINEERED')) return 'purple';
+      if (t.includes('OBSERVED') && !t.includes('HYPOTHESIZED')) return 'green';
+      if (t.includes('MODELED')) return 'blue';
+      return 'amber';
+    }
+
+    function buildThreeSystemsGrid() {
+      const grid = document.getElementById('threeSystemsGrid');
+      grid.innerHTML = '';
+      for (const sys of MANIFEST.systems) {
+        const col = document.createElement('div');
+        col.className = 'sys-col';
+        let nodesHtml = '';
+        for (const n of sys.nodes) {
+          const bCls = badgeClassForTag(n.tag);
+          nodesHtml += `
+            <div class="sys-node">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+                <strong>${n.label}</strong>
+                <span class="badge ${bCls}">${n.tag}</span>
+              </div>
+              <div style="color:var(--muted);margin-top:4px;">${n.detail}</div>
+              <div class="mono" style="margin-top:4px;font-size:10.5px;">Sources: ${n.sources.join(' | ')}</div>
+            </div>
+          `;
+        }
+        col.innerHTML = `
+          <h2 style="font-size:14px;margin:0 0 4px;">${sys.title}</h2>
+          <div style="font-size:11.5px;color:var(--muted);">${sys.summary}</div>
+          ${nodesHtml}
+        `;
+        grid.appendChild(col);
+      }
+    }
+    buildThreeSystemsGrid();
+
+    function buildMechanismCards() {
+      const natEl = document.getElementById('listNatural');
+      const engEl = document.getElementById('listEngineered');
+      const quarEl = document.getElementById('listQuarantined');
+      natEl.innerHTML = '';
+      engEl.innerHTML = '';
+      quarEl.innerHTML = '';
+
+      for (const m of MANIFEST.mechanisms) {
+        const div = document.createElement('div');
+        div.className = 'mech-card' +
+          (m.id === selectedMechId ? ' active' : '') +
+          (m.layer === 'quarantined_hypothesis' ? ' quarantined' : '');
+        div.dataset.mechId = m.id;
+        const bCls = badgeClassForTag(m.evidence_tag || m.status);
+        div.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+            <strong>${m.title}</strong>
+            <span class="badge ${bCls}">${m.evidence_tag || m.layer}</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;"><code>${m.equation}</code></div>
+        `;
+        div.onclick = () => {
+          selectedMechId = m.id;
+          document.querySelectorAll('.mech-card').forEach(el => {
+            el.classList.toggle('active', el.dataset.mechId === selectedMechId);
+          });
+          updateInterface();
+        };
+        if (m.layer === 'natural_sensing') natEl.appendChild(div);
+        else if (m.layer === 'engineered_actuation') engEl.appendChild(div);
+        else quarEl.appendChild(div);
+      }
+
+      const msBox = document.getElementById('milestoneBox');
+      msBox.innerHTML = '';
+      for (const ms of MANIFEST.milestones) {
+        const item = document.createElement('div');
+        item.className = 'ms-item';
+        item.innerHTML = `<strong>${ms.title}:</strong> <span style="color:var(--muted);">${ms.criterion}</span>`;
+        msBox.appendChild(item);
+      }
+    }
+    buildMechanismCards();
+
+    function computeBiophysics() {
+      const B_T = fieldB_mT * 1e-3;
+      const vCrystal = (4 / 3) * Math.PI * Math.pow(25e-9, 3);
+      const mChain = 15 * MS_FE3O4 * vCrystal;
+      const tauChain_pNnm = (mChain * B_T) * 1e21;
+      const ratioChain = tauChain_pNnm / KB_T_PN_NM;
+
+      const vSynth = Math.pow(35e-9, 3);
+      const mSynth = MS_FE3O4 * vSynth;
+      const tauSynth_pNnm = (mSynth * B_T) * 1e21;
+      const ratioSynth = tauSynth_pNnm / KB_T_PN_NM;
+
+      const mFerritin = 300 * 9.274e-24;
+      const tauFerritin_pNnm = (mFerritin * B_T) * 1e21;
+      const ratioFerritin = tauFerritin_pNnm / KB_T_PN_NM;
+
+      const fLarmor_MHz = 28.025 * fieldB_mT;
+      const reqCoh_us = fLarmor_MHz > 0.001 ? (1.0 / fLarmor_MHz) : 9999;
+
+      const vSpion = (4 / 3) * Math.PI * Math.pow(50e-9, 3);
+      const mSpion = MS_FE3O4 * vSpion;
+      const fGrad_fN = (mSpion * gradB_Tm) * 1e15;
+
+      let mitoState = 'Basal OXPHOS (No MNP Gating)';
+      let mitoDetail = 'Field below synthetic MNP mechano/thermal channel gating threshold';
+      if (selectedMechId === 'quarantined_71thz_mitochondria') {
+        mitoState = 'QUARANTINED (71 THz Mid-IR)';
+        mitoDetail = '4.22 um photonic hypothesis; not driven by magnetic field B';
+      } else if (selectedMechId === 'sensing_melanin_redox') {
+        mitoState = 'HYPOTHESIZED Redox -> ETC Link';
+        mitoDetail = 'Melanin 4x NADH reduction observed in vitro; intact mitochondrial ETC transfer tested via Exp A & D';
+      } else if (selectedMechId === 'sensing_cryptochrome') {
+        mitoState = 'MODELED [FAD*- ... O2*-] ROS Bridge';
+        mitoDetail = '2024 Nat. Commun. flavin-superoxide spin model; mitochondrial/ROS ordering tested via Exp C & D';
+      } else if (ratioSynth >= 10.0 && freq_kHz < 1.0) {
+        mitoState = 'ENGINEERED Piezo1 Ca2+ -> MCU';
+        mitoDetail = 'Synthetic MNP torque >= 10 k_B T gates Piezo1/TRPV4 -> mitochondrial TCA upregulation';
+      } else if (fieldB_mT >= 10.0 && freq_kHz >= 100.0) {
+        mitoState = 'ENGINEERED RF TRPV1 -> Ca2+ -> OXPHOS';
+        mitoDetail = 'High-density MNP cluster RF hysteresis gates TRPV1 -> mitochondrial Ca2+/redox shift';
+      }
+
+      return {
+        B_T,
+        tauChain_pNnm,
+        ratioChain,
+        tauSynth_pNnm,
+        ratioSynth,
+        ratioFerritin,
+        fLarmor_MHz,
+        reqCoh_us,
+        fGrad_fN,
+        mitoState,
+        mitoDetail
+      };
+    }
+
+    function updateFactorialSimulator() {
+      const hasMelanin = (factMelMode === 'wt' || factMelMode === 'rescue');
+      const melEl = document.getElementById('factReadoutMel');
+      const melSub = document.getElementById('factSubMel');
+      if (factRadOn && hasMelanin) {
+        melEl.textContent = '4.0x NADH / ESR Active';
+        melEl.style.color = 'var(--green)';
+        melSub.textContent = 'OBSERVED in WT & Rescue under +I_gamma (Dadachova 2007)';
+      } else if (!hasMelanin) {
+        melEl.textContent = '1.0x Baseline (No Melanin)';
+        melEl.style.color = 'var(--red)';
+        melSub.textContent = 'Albino mutant (pks1Delta) lacks melanin ESR center';
+      } else {
+        melEl.textContent = 'Basal Melanin ESR (Sham 0 Gy)';
+        melEl.style.color = 'var(--muted)';
+        melSub.textContent = 'Melanin present; no ionizing radiation excitation';
+      }
+
+      const spinEl = document.getElementById('factReadoutSpin');
+      const spinSub = document.getElementById('factSubSpin');
+      if (factMagMode === 'zero') {
+        spinEl.textContent = 'Zeeman Splitting Collapsed (<0.1 uT)';
+        spinEl.style.color = 'var(--amber)';
+        spinSub.textContent = 'Mu-metal/Helmholtz zeroing removes directional B cue';
+      } else if (factMagMode === 'rot90') {
+        spinEl.textContent = 'B-Vector Rotated +90 deg (50 uT)';
+        spinEl.style.color = 'var(--accent)';
+        spinSub.textContent = 'Orthogonal to fixed radiation gradient grad I_gamma';
+      } else {
+        spinEl.textContent = 'Ambient Geomagnetic (50 uT, 0 deg)';
+        spinEl.style.color = 'var(--green)';
+        spinSub.textContent = 'f_L = 1.40 MHz ([FAD*- ... O2*-] & melanin radicals)';
+      }
+
+      const mitoEl = document.getElementById('factReadoutMito');
+      const mitoSub = document.getElementById('factSubMito');
+      if (factMitoClamp) {
+        mitoEl.textContent = 'CLAMPED (+MitoTEMPO Scavenger)';
+        mitoEl.style.color = 'var(--red)';
+        mitoSub.textContent = 'Superoxide / ROS mediator quenched prior to tip growth';
+      } else if (factRadOn && hasMelanin) {
+        mitoEl.textContent = 'Redox + Spin Mediator Permissive';
+        mitoEl.style.color = 'var(--green)';
+        mitoSub.textContent = 'Tests t_mito < t_tip ordering (Experiment D)';
+      } else if (factMagMode !== 'zero') {
+        mitoEl.textContent = 'Flavin-Superoxide Route B Permissive';
+        mitoEl.style.color = 'var(--accent)';
+        mitoSub.textContent = 'Tests melanin-independent ROS shift in Albino (Exp C)';
+      } else {
+        mitoEl.textContent = 'Basal Mitochondrial Redox';
+        mitoEl.style.color = 'var(--muted)';
+        mitoSub.textContent = 'No radiation excitation and B-field zeroed';
+      }
+
+      const tipEl = document.getElementById('factReadoutTip');
+      const tipSub = document.getElementById('factSubTip');
+      if (factMitoClamp) {
+        tipEl.textContent = 'Null / Abolished (If Mito-Mediated)';
+        tipEl.style.color = 'var(--amber)';
+        tipSub.textContent = 'Exp D: Clamping ROS blocks mediator-driven tip bias';
+      } else if (!hasMelanin && factMagMode !== 'zero') {
+        tipEl.textContent = 'Null (If Route A) vs. Active (If Route B Cry/FAD)';
+        tipEl.style.color = 'var(--purple)';
+        tipSub.textContent = 'Exp C: Albino mutant discriminates Melanin vs. Cryptochrome';
+      } else if (factMagMode === 'rot90') {
+        tipEl.textContent = '+90 deg Shift (If B-Guided) vs. 0 deg (If grad I_gamma)';
+        tipEl.style.color = 'var(--accent)';
+        tipSub.textContent = 'Exp B: Cleanly separates magnetic vector B from radiation source';
+      } else {
+        tipEl.textContent = 'Empirical Gate (Null in Biofilms 256-Seed & Sandia 2024)';
+        tipEl.style.color = 'var(--text)';
+        tipSub.textContent = 'Requires blinded replication outside +/-0.05 r/R bound';
+      }
+
+      const expObj = MANIFEST.factorial_experiments.find(e => e.exp_id === activeExpId) || MANIFEST.factorial_experiments[0];
+      document.getElementById('factExpDetailBox').innerHTML = `
+        <div><strong>${expObj.title}</strong></div>
+        <div style="margin-top:4px;color:var(--muted);"><strong>Factors Varied:</strong> ${expObj.factors_varied}</div>
+        <div style="margin-top:2px;color:var(--muted);"><strong>Primary Readouts:</strong> ${expObj.primary_readouts}</div>
+        <div style="margin-top:4px;color:var(--text);"><strong>Discriminating Inference Gate:</strong> ${expObj.discriminating_outcome}</div>
+      `;
+    }
+
+    // WebGL 3D Scene Renderer
+    let gl = null;
+    let glProg = null;
+    let glBuf = null;
+
+    function initWebGL() {
+      gl = glCanvas.getContext('webgl', { antialias: true }) || glCanvas.getContext('experimental-webgl');
+      if (!gl) throw new Error('WebGL context unavailable');
+      const vsSrc = `
+        attribute vec3 aPos;
+        attribute vec3 aColor;
+        uniform mat4 uMVP;
+        varying vec3 vColor;
+        void main() {
+          gl_Position = uMVP * vec4(aPos, 1.0);
+          vColor = aColor;
+        }
+      `;
+      const fsSrc = `
+        precision mediump float;
+        varying vec3 vColor;
+        void main() {
+          gl_FragColor = vec4(vColor, 1.0);
+        }
+      `;
+      const compile = (t, s) => {
+        const sh = gl.createShader(t);
+        gl.shaderSource(sh, s);
+        gl.compileShader(sh);
+        if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh));
+        return sh;
+      };
+      glProg = gl.createProgram();
+      gl.attachShader(glProg, compile(gl.VERTEX_SHADER, vsSrc));
+      gl.attachShader(glProg, compile(gl.FRAGMENT_SHADER, fsSrc));
+      gl.linkProgram(glProg);
+      glBuf = gl.createBuffer();
+    }
+
+    function makeMVP(aspect) {
+      const fov = 40 * Math.PI / 180;
+      const f = 1.0 / Math.tan(fov / 2);
+      const near = 0.5, far = 100.0;
+      const proj = [
+        f / aspect, 0, 0, 0,
+        0, f, 0, 0,
+        0, 0, (far + near) / (near - far), -1,
+        0, 0, (2 * far * near) / (near - far), 0
+      ];
+      const d = 14.0 / zoom;
+      const ex = d * Math.cos(pitch) * Math.sin(yaw);
+      const ey = d * Math.sin(pitch);
+      const ez = d * Math.cos(pitch) * Math.cos(yaw);
+      const zl = Math.hypot(ex, ey, ez) || 1;
+      const zx = ex / zl, zy = ey / zl, zz = ez / zl;
+      let ux = 0, uy = 1, uz = 0;
+      let xx = uy * zz - uz * zy, xy = uz * zx - ux * zz, xz = ux * zy - uy * zx;
+      const xl = Math.hypot(xx, xy, xz) || 1;
+      xx /= xl; xy /= xl; xz /= xl;
+      ux = zy * xz - zz * xy; uy = zz * xx - zx * xz; uz = zx * xy - zy * xx;
+      const view = [
+        xx, ux, zx, 0,
+        xy, uy, zy, 0,
+        xz, uz, zz, 0,
+        -(xx * ex + xy * ey + xz * ez),
+        -(ux * ex + uy * ey + uz * ez),
+        -(zx * ex + zy * ey + zz * ez),
+        1
+      ];
+      const out = new Float32Array(16);
+      for (let r = 0; r < 4; r++) {
+        for (let c = 0; c < 4; c++) {
+          out[c * 4 + r] =
+            proj[0 * 4 + r] * view[c * 4 + 0] +
+            proj[1 * 4 + r] * view[c * 4 + 1] +
+            proj[2 * 4 + r] * view[c * 4 + 2] +
+            proj[3 * 4 + r] * view[c * 4 + 3];
+        }
+      }
+      return out;
+    }
+
+    function pushBox(tris, cx, cy, cz, sx, sy, sz, r, g, b) {
+      const dirs = [
+        { s: 0.95, v: [[1,-1,-1],[1,1,-1],[1,1,1], [1,-1,-1],[1,1,1],[1,-1,1]] },
+        { s: 0.65, v: [[-1,-1,1],[-1,1,1],[-1,1,-1], [-1,-1,1],[-1,1,-1],[-1,-1,-1]] },
+        { s: 1.00, v: [[-1,1,-1],[-1,1,1],[1,1,1], [-1,1,-1],[1,1,1],[1,1,-1]] },
+        { s: 0.55, v: [[-1,-1,-1],[1,-1,-1],[1,-1,1], [-1,-1,-1],[1,-1,1],[-1,-1,1]] },
+        { s: 0.85, v: [[-1,-1,1],[1,-1,1],[1,1,1], [-1,-1,1],[1,1,1],[-1,1,1]] },
+        { s: 0.60, v: [[-1,1,-1],[1,1,-1],[1,-1,-1], [-1,1,-1],[1,-1,-1],[-1,-1,-1]] }
+      ];
+      for (const d of dirs) {
+        for (const p of d.v) {
+          tris.push(
+            cx + p[0] * sx * 0.5,
+            cy + p[1] * sy * 0.5,
+            cz + p[2] * sz * 0.5,
+            r * d.s, g * d.s, b * d.s
+          );
+        }
+      }
+    }
+
+    function render3DScene(bio) {
+      if (!gl) return;
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      if (w <= 0 || h <= 0) return;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const cw = Math.round(w * dpr);
+      const ch = Math.round(h * dpr);
+      if (glCanvas.width !== cw || glCanvas.height !== ch) {
+        glCanvas.width = cw;
+        glCanvas.height = ch;
+      }
+
+      gl.viewport(0, 0, cw, ch);
+      gl.enable(gl.DEPTH_TEST);
+      gl.clearColor(0.024, 0.063, 0.094, 1.0);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+      const lines = [];
+      const tris = [];
+
+      // 1. Cell membrane bilayer plane at y = -1.2
+      for (let i = -4; i <= 4; i++) {
+        lines.push(-4, -1.2, i, 0.16, 0.30, 0.44, 4, -1.2, i, 0.16, 0.30, 0.44);
+        lines.push(i, -1.2, -4, 0.16, 0.30, 0.44, i, -1.2, 4, 0.16, 0.30, 0.44);
+      }
+
+      // 2. 3D Magnetic Field Vector Arrows (Blue: information channel B)
+      const rad = (incDeg * Math.PI) / 180;
+      const bx = Math.cos(rad);
+      const by = -Math.sin(rad);
+      const bScale = fieldB_mT < 0.001 ? 0.35 : (1.5 + Math.min(1.6, Math.log10(Math.max(0.01, fieldB_mT) * 100) * 0.45));
+
+      for (let gx = -3; gx <= 3; gx += 3) {
+        for (let gz = -3; gz <= 3; gz += 3) {
+          const x0 = gx - bx * bScale * 0.5;
+          const y0 = 1.8 - by * bScale * 0.5;
+          const z0 = gz;
+          const x1 = gx + bx * bScale * 0.5;
+          const y1 = 1.8 + by * bScale * 0.5;
+          const z1 = gz;
+          lines.push(x0, y0, z0, 0.22, 0.74, 0.97, x1, y1, z1, 0.22, 0.74, 0.97);
+          lines.push(x1, y1, z1, 0.22, 0.74, 0.97, x1 - bx * 0.35 - by * 0.18, y1 - by * 0.35 + bx * 0.18, z1, 0.22, 0.74, 0.97);
+          lines.push(x1, y1, z1, 0.22, 0.74, 0.97, x1 - bx * 0.35 + by * 0.18, y1 - by * 0.35 - bx * 0.18, z1, 0.22, 0.74, 0.97);
+        }
+      }
+
+      // 3. Ionizing Radiation Dose Gradient Rays (Amber: energy channel grad I_gamma along +x -> -x)
+      if (factRadOn) {
+        for (let rz = -2; rz <= 2; rz += 2) {
+          lines.push(-4.2, 0.6, rz, 0.96, 0.62, 0.04, -1.4, 0.2, rz, 0.96, 0.62, 0.04);
+        }
+      }
+
+      // 4. Render Transducer / Receptor Geometry based on active mechanism
+      if (selectedMechId === 'sensing_magnetite') {
+        for (let k = -4; k <= 4; k++) {
+          const cx = k * 0.52 * bx;
+          const cy = 0.2 + k * 0.52 * by;
+          pushBox(tris, cx, cy, 0, 0.36, 0.36, 0.36, 0.13, 0.77, 0.37);
+        }
+        pushBox(tris, 0, -1.2, 0, 0.9, 0.65, 0.9, 0.66, 0.33, 0.97);
+      } else if (selectedMechId === 'sensing_cryptochrome') {
+        // Flavin [FAD*-] (blue) + Superoxide/Trp [O2*- / TrpH*+] (amber) + downstream mitochondrion
+        pushBox(tris, -0.85, 0.35, 0, 1.05, 1.05, 1.05, 0.22, 0.74, 0.97);
+        pushBox(tris,  0.85, 0.35, 0, 0.85, 0.85, 0.85, 0.96, 0.62, 0.04);
+        lines.push(-0.85, 0.35, 0, 1.0, 0.9, 0.2, 0.85, 0.35, 0, 1.0, 0.9, 0.2);
+        pushBox(tris, 0, -2.6, 0, 2.8, 0.9, 1.5, 0.22, 0.55, 0.88);
+      } else if (selectedMechId === 'sensing_melanin_redox') {
+        // Melanin granules (amber/brown shell) -> redox bridge -> mitochondrion
+        for (let k = -2; k <= 2; k++) {
+          pushBox(tris, k * 0.9, -0.5, 0, 0.62, 0.42, 0.62, 0.85, 0.55, 0.18);
+        }
+        pushBox(tris, 0, -2.6, 0, 2.9, 0.95, 1.6, 0.13, 0.77, 0.37);
+      } else if (selectedMechId === 'sensing_induction') {
+        for (let k = -4; k <= 4; k++) {
+          pushBox(tris, k * 0.7, -0.2, 0, 0.55, 0.45, 0.55, 0.26, 0.83, 0.95);
+        }
+      } else if (selectedMechId === 'quarantined_71thz_mitochondria') {
+        pushBox(tris, 0, -2.4, 0, 3.2, 1.1, 1.8, 0.93, 0.27, 0.27);
+      } else {
+        const gateColor = bio.ratioSynth >= 1.0 ? [0.13, 0.77, 0.37] : [0.96, 0.62, 0.04];
+        pushBox(tris, 0, -0.35, 0, 1.05, 1.05, 1.05, gateColor[0], gateColor[1], gateColor[2]);
+        pushBox(tris, 0, -1.2, 0, 1.25, 0.65, 1.25, 0.66, 0.33, 0.97);
+        pushBox(tris, 0, -2.8, 0, 3.0, 0.95, 1.6, 0.22, 0.55, 0.88);
+      }
+
+      gl.useProgram(glProg);
+      const uMVP = gl.getUniformLocation(glProg, 'uMVP');
+      const aPos = gl.getAttribLocation(glProg, 'aPos');
+      const aColor = gl.getAttribLocation(glProg, 'aColor');
+      gl.uniformMatrix4fv(uMVP, false, makeMVP(cw / ch));
+
+      if (lines.length > 0) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, glBuf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(lines), gl.DYNAMIC_DRAW);
+        gl.enableVertexAttribArray(aPos);
+        gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 24, 0);
+        gl.enableVertexAttribArray(aColor);
+        gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 24, 12);
+        gl.drawArrays(gl.LINES, 0, lines.length / 6);
+      }
+      if (tris.length > 0) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, glBuf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tris), gl.DYNAMIC_DRAW);
+        gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 24, 0);
+        gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 24, 12);
+        gl.drawArrays(gl.TRIANGLES, 0, tris.length / 6);
+      }
+    }
+
+    function render2DFallback(bio) {
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      if (w <= 0 || h <= 0) return;
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      canvas2d.width = Math.round(w * dpr);
+      canvas2d.height = Math.round(h * dpr);
+      const ctx = canvas2d.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = '#061018';
+      ctx.fillRect(0, 0, w, h);
+
+      const rad = (incDeg * Math.PI) / 180;
+      const bx = Math.cos(rad);
+      const by = Math.sin(rad);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.8;
+      for (let x = 50; x < w * 0.48; x += 52) {
+        for (let y = 70; y < h - 50; y += 52) {
+          ctx.beginPath();
+          ctx.moveTo(x - bx * 16, y - by * 16);
+          ctx.lineTo(x + bx * 16, y + by * 16);
+          ctx.stroke();
+        }
+      }
+
+      const ox = w * 0.54;
+      const bw = w * 0.40;
+      ctx.fillStyle = '#e6f0f8';
+      ctx.font = '600 13px sans-serif';
+      ctx.fillText('Thermal Feasibility Ratio: log10(tau / k_B T)', ox, 65);
+
+      const items = [
+        { label: 'Biogenic Fe3O4 Chain (15x 25nm)', ratio: bio.ratioChain, color: '#22c55e' },
+        { label: 'Synthetic MNP Cube (35nm Fe3O4)', ratio: bio.ratioSynth, color: '#a855f7' },
+        { label: 'Endogenous Ferritin (6nm core)', ratio: bio.ratioFerritin, color: '#ef4444' }
+      ];
+
+      const zeroX = ox + bw * 0.55;
+      ctx.strokeStyle = '#475569';
+      ctx.beginPath();
+      ctx.moveTo(zeroX, 85);
+      ctx.lineTo(zeroX, 280);
+      ctx.stroke();
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px monospace';
+      ctx.fillText('tau = k_B T (0 dB)', zeroX - 45, 300);
+
+      items.forEach((it, idx) => {
+        const y = 105 + idx * 60;
+        ctx.fillStyle = '#cbd5e1';
+        ctx.font = '12px sans-serif';
+        ctx.fillText(it.label, ox, y - 8);
+        const logVal = Math.max(-5, Math.min(3, Math.log10(Math.max(1e-6, it.ratio))));
+        const px = (logVal / 5) * (bw * 0.45);
+        ctx.fillStyle = it.color;
+        if (px >= 0) {
+          ctx.fillRect(zeroX, y, Math.max(3, px), 18);
+        } else {
+          ctx.fillRect(zeroX + px, y, Math.max(3, -px), 18);
+        }
+      });
+    }
+
+    function updateInterface() {
+      const bio = computeBiophysics();
+      const mech = MANIFEST.mechanisms.find(m => m.id === selectedMechId) || MANIFEST.mechanisms[0];
+
+      const bStr = fieldB_mT < 0.001
+        ? `${(fieldB_mT * 1000).toFixed(2)} uT (<0.1 uT Zeroed)`
+        : fieldB_mT < 1.0
+          ? `${fieldB_mT.toFixed(3)} mT (${(fieldB_mT * 1000).toFixed(0)} uT)`
+          : `${fieldB_mT.toFixed(1)} mT`;
+      document.getElementById('lblB').textContent = bStr;
+      document.getElementById('lblInc').textContent = `${incDeg} deg`;
+      document.getElementById('lblGrad').textContent = `${gradB_Tm.toFixed(1)} T/m`;
+      document.getElementById('lblFreq').textContent = freq_kHz === 0 ? '0 Hz (DC)' : `${freq_kHz.toFixed(0)} kHz`;
+
+      document.getElementById('chipLayer').textContent = `Active Focus: ${mech.title}`;
+      document.getElementById('chipField').textContent = `Field: B = ${bStr} | Inc = ${incDeg} deg | |grad B| = ${gradB_Tm.toFixed(1)} T/m`;
+      document.getElementById('chipGate').textContent =
+        `Thermal Gate (Fe3O4 chain tau / k_B T): ${bio.ratioChain.toFixed(2)} | Larmor f_L = ${bio.fLarmor_MHz.toFixed(2)} MHz`;
+
+      document.getElementById('kpiChainTau').textContent = `${bio.ratioChain.toFixed(2)} k_B T`;
+      document.getElementById('kpiChainSub').textContent = `Torque = ${bio.tauChain_pNnm.toFixed(1)} pN*nm (MODELED)`;
+      document.getElementById('kpiSynthTau').textContent = `${bio.ratioSynth.toFixed(2)} k_B T`;
+      document.getElementById('kpiSynthSub').textContent = `Torque = ${bio.tauSynth_pNnm.toFixed(1)} pN*nm (ENGINEERED)`;
+      document.getElementById('kpiFerritin').textContent = `${bio.ratioFerritin.toExponential(1)} k_B T`;
+      document.getElementById('kpiCryFreq').textContent = `${bio.fLarmor_MHz.toFixed(2)} MHz`;
+      document.getElementById('kpiCrySub').textContent = `Requires T_coh >= ${bio.reqCoh_us.toFixed(2)} us`;
+      document.getElementById('kpiGradForce').textContent = `${bio.fGrad_fN.toFixed(3)} fN`;
+      document.getElementById('kpiMitoGate').textContent = bio.mitoState;
+      document.getElementById('kpiMitoSub').textContent = bio.mitoDetail;
+
+      const badgeEl = document.getElementById('selStatusBadge');
+      badgeEl.textContent = mech.evidence_tag || mech.status.split(' ')[0];
+      badgeEl.className = 'badge ' + badgeClassForTag(mech.evidence_tag || mech.status);
+
+      const detailEl = document.getElementById('mechDetailBox');
+      detailEl.innerHTML = `
+        <div style="margin-bottom:4px;"><strong>Status:</strong> <code>${mech.status}</code></div>
+        <div style="margin-bottom:4px;"><strong>Regime:</strong> ${mech.typical_regime}</div>
+        <div style="margin-bottom:4px;"><strong>Primary Literature:</strong> ${mech.sources.join(' | ')}</div>
+        <div><strong>Open Questions:</strong> ${mech.unresolved_questions.join(' ; ')}</div>
+      `;
+
+      updateFactorialSimulator();
+
+      if (renderMode === '3d' && gl) {
+        glCanvas.hidden = false;
+        canvas2d.hidden = true;
+        render3DScene(bio);
+      } else {
+        glCanvas.hidden = true;
+        canvas2d.hidden = false;
+        render2DFallback(bio);
+      }
+    }
+
+    // Wire sliders and presets
+    document.getElementById('sliderB').addEventListener('input', e => {
+      fieldB_mT = Math.pow(10, parseFloat(e.target.value));
+      updateInterface();
+    });
+    document.getElementById('sliderInc').addEventListener('input', e => {
+      incDeg = parseInt(e.target.value, 10);
+      updateInterface();
+    });
+    document.getElementById('sliderGrad').addEventListener('input', e => {
+      gradB_Tm = parseFloat(e.target.value);
+      updateInterface();
+    });
+    document.getElementById('sliderFreq').addEventListener('input', e => {
+      freq_kHz = parseFloat(e.target.value);
+      updateInterface();
+    });
+
+    function setPreset(b_mT, inc, grad, freq, btnId) {
+      fieldB_mT = b_mT;
+      incDeg = inc;
+      gradB_Tm = grad;
+      freq_kHz = freq;
+      document.getElementById('sliderB').value = Math.log10(Math.max(1e-4, b_mT)).toFixed(2);
+      document.getElementById('sliderInc').value = String(inc);
+      document.getElementById('sliderGrad').value = String(grad);
+      document.getElementById('sliderFreq').value = String(freq);
+      ['btnPresetGeo', 'btnPresetZero', 'btnPresetTorque', 'btnPresetRf', 'btnPresetGrad'].forEach(id => {
+        document.getElementById(id).classList.toggle('on', id === btnId);
+      });
+      updateInterface();
+    }
+
+    document.getElementById('btnPresetGeo').onclick = () => setPreset(0.050, 62, 0.0, 0, 'btnPresetGeo');
+    document.getElementById('btnPresetZero').onclick = () => setPreset(0.0001, 0, 0.0, 0, 'btnPresetZero');
+    document.getElementById('btnPresetTorque').onclick = () => setPreset(20.0, 35, 2.0, 0, 'btnPresetTorque');
+    document.getElementById('btnPresetRf').onclick = () => setPreset(25.0, 45, 0.0, 250, 'btnPresetRf');
+    document.getElementById('btnPresetGrad').onclick = () => setPreset(200.0, 15, 45.0, 0, 'btnPresetGrad');
+
+    // Wire Factorial Experiment Simulator controls
+    ['EXP_A', 'EXP_B', 'EXP_C', 'EXP_D'].forEach((expId, idx) => {
+      const btnIds = ['btnExpA', 'btnExpB', 'btnExpC', 'btnExpD'];
+      document.getElementById(btnIds[idx]).onclick = () => {
+        activeExpId = expId;
+        btnIds.forEach((b, i) => document.getElementById(b).classList.toggle('on', i === idx));
+        if (expId === 'EXP_B') {
+          factMagMode = 'rot90';
+          incDeg = -28;
+          document.getElementById('btnMagGeo').classList.remove('on');
+          document.getElementById('btnMagZero').classList.remove('on');
+          document.getElementById('btnMagRot').classList.add('on');
+        } else if (expId === 'EXP_C') {
+          factMelMode = 'albino';
+          document.getElementById('btnMelWT').classList.remove('on');
+          document.getElementById('btnMelAlb').classList.add('on');
+          document.getElementById('btnMelRes').classList.remove('on');
+        } else if (expId === 'EXP_D') {
+          factMitoClamp = true;
+          document.getElementById('btnMitoIntact').classList.remove('on');
+          document.getElementById('btnMitoClamp').classList.add('on');
+        }
+        updateInterface();
+      };
+    });
+
+    document.getElementById('btnRadOn').onclick = () => {
+      factRadOn = true;
+      document.getElementById('btnRadOn').classList.add('on');
+      document.getElementById('btnRadOff').classList.remove('on');
+      updateInterface();
+    };
+    document.getElementById('btnRadOff').onclick = () => {
+      factRadOn = false;
+      document.getElementById('btnRadOff').classList.add('on');
+      document.getElementById('btnRadOn').classList.remove('on');
+      updateInterface();
+    };
+
+    document.getElementById('btnMagGeo').onclick = () => {
+      factMagMode = 'geo';
+      fieldB_mT = 0.050;
+      incDeg = 62;
+      document.getElementById('btnMagGeo').classList.add('on');
+      document.getElementById('btnMagZero').classList.remove('on');
+      document.getElementById('btnMagRot').classList.remove('on');
+      updateInterface();
+    };
+    document.getElementById('btnMagZero').onclick = () => {
+      factMagMode = 'zero';
+      fieldB_mT = 0.0001;
+      document.getElementById('btnMagZero').classList.add('on');
+      document.getElementById('btnMagGeo').classList.remove('on');
+      document.getElementById('btnMagRot').classList.remove('on');
+      updateInterface();
+    };
+    document.getElementById('btnMagRot').onclick = () => {
+      factMagMode = 'rot90';
+      fieldB_mT = 0.050;
+      incDeg = -28;
+      document.getElementById('btnMagRot').classList.add('on');
+      document.getElementById('btnMagGeo').classList.remove('on');
+      document.getElementById('btnMagZero').classList.remove('on');
+      updateInterface();
+    };
+
+    document.getElementById('btnMelWT').onclick = () => {
+      factMelMode = 'wt';
+      document.getElementById('btnMelWT').classList.add('on');
+      document.getElementById('btnMelAlb').classList.remove('on');
+      document.getElementById('btnMelRes').classList.remove('on');
+      updateInterface();
+    };
+    document.getElementById('btnMelAlb').onclick = () => {
+      factMelMode = 'albino';
+      document.getElementById('btnMelAlb').classList.add('on');
+      document.getElementById('btnMelWT').classList.remove('on');
+      document.getElementById('btnMelRes').classList.remove('on');
+      updateInterface();
+    };
+    document.getElementById('btnMelRes').onclick = () => {
+      factMelMode = 'rescue';
+      document.getElementById('btnMelRes').classList.add('on');
+      document.getElementById('btnMelWT').classList.remove('on');
+      document.getElementById('btnMelAlb').classList.remove('on');
+      updateInterface();
+    };
+
+    document.getElementById('btnMitoIntact').onclick = () => {
+      factMitoClamp = false;
+      document.getElementById('btnMitoIntact').classList.add('on');
+      document.getElementById('btnMitoClamp').classList.remove('on');
+      updateInterface();
+    };
+    document.getElementById('btnMitoClamp').onclick = () => {
+      factMitoClamp = true;
+      document.getElementById('btnMitoClamp').classList.add('on');
+      document.getElementById('btnMitoIntact').classList.remove('on');
+      updateInterface();
+    };
+
+    document.getElementById('btnRender3d').onclick = () => {
+      if (!gl) return;
+      renderMode = '3d';
+      document.getElementById('btnRender3d').classList.add('on');
+      document.getElementById('btnRender2d').classList.remove('on');
+      updateInterface();
+    };
+    document.getElementById('btnRender2d').onclick = () => {
+      renderMode = '2d';
+      document.getElementById('btnRender2d').classList.add('on');
+      document.getElementById('btnRender3d').classList.remove('on');
+      updateInterface();
+    };
+
+    glCanvas.addEventListener('pointerdown', e => {
+      dragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      glCanvas.setPointerCapture(e.pointerId);
+    });
+    glCanvas.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      yaw -= (e.clientX - lastX) * 0.008;
+      pitch = Math.max(-1.3, Math.min(1.3, pitch + (e.clientY - lastY) * 0.008));
+      lastX = e.clientX;
+      lastY = e.clientY;
+      updateInterface();
+    });
+    glCanvas.addEventListener('pointerup', () => { dragging = false; });
+
+    try {
+      initWebGL();
+    } catch (_) {
+      gl = null;
+      renderMode = '2d';
+      document.getElementById('btnRender3d').disabled = true;
+      document.getElementById('btnRender3d').classList.remove('on');
+      document.getElementById('btnRender2d').classList.add('on');
+    }
+
+    window.addEventListener('resize', updateInterface);
+    updateInterface();
+  })();
+  </script>
+</body>
+</html>

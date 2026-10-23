@@ -1,0 +1,331 @@
+{
+  "schema_version": "2.0.0",
+  "project": "magnetoreception_3d_prototype",
+  "branch": "feat/magnetoreception-3d-interface",
+  "architectural_separation": "Independent hypothesis-first research prototype repository separate from aurascoper/oklo_shareable_portal and aurascoper/Biofilms. Organizes the material around three distinct systems (1. Biological Response to Radiation, 2. Candidate Magnetic Sensing Mechanism, 3. Engineered Magnetic Nanoparticle Interface) with explicit evidence tags (OBSERVED, MODELED, HYPOTHESIZED, ENGINEERED, CONTEXT-DEPENDENT, QUARANTINED) and a 4-stage Factorial Experiment Decision Sequence (Experiments A -> B -> C -> D).",
+  "channel_separation_principle": {
+    "radiation_channel": "Spatial radiation dose gradient (grad I_gamma, keV-MeV ionizing photons/particles) acts as an energy and radiolytic/redox input channel.",
+    "magnetic_channel": "Magnetic flux density vector B (25 to 65 uT geomagnetic or mT engineered) acts as a directional spin-chemistry or mechanical torque information channel.",
+    "inference_gate": "A colony plate image or metabolic shift alone cannot establish radiotropism or magnetoreception; separating grad I_gamma from vector B requires factorial rotation/zeroing of B at fixed radiation geometry plus genetic melanin knockouts and pre-growth mitochondrial/ROS time-series."
+  },
+  "default_model_exclusions": [
+    "Whole-organism magnetic control (not physically or biologically established)",
+    "Endogenous ferritin mechanical or thermal channel gating (fails k_B*T and Fourier heat conduction bounds by >4 orders of magnitude; Meister 2016)",
+    "Presenting fungal radiotropism as an already demonstrated outcome of the uncalibrated aurascoper/Biofilms model (256-seed 4-arm ensemble is a formal model null within +/-0.05 r/R; Sandia 2024 Cs-137 experimental study reported no statistically significant difference)",
+    "71 THz (4.22 um mid-IR) mitochondrial light-matter coupling preprint (quarantined as an unvalidated optical/vibrational hypothesis; not geomagnetic sensing)"
+  ],
+  "systems": [
+    {
+      "system_id": "system_1_radiation_melanin_mito",
+      "title": "System 1: Biological Response to Radiation (Melanin -> Redox/ROS -> Mitochondria -> Growth)",
+      "summary": "Evaluates how ionizing radiation interacts with fungal melanin and whether radiation-induced redox chemistry couples to mitochondrial bioenergetics and polarized hyphal growth.",
+      "nodes": [
+        {
+          "node_id": "s1_melanin_esr_nadh",
+          "label": "Ionizing Radiation -> Melanin ESR Signal & 4x NADH Reduction",
+          "tag": "OBSERVED",
+          "detail": "Continuous ionizing radiation alters melanin electron spin resonance (ESR) paramagnetism and increases melanin-mediated NADH ferricyanide reduction ~4-fold in vitro; melanized fungi show metabolic/transcriptomic shifts under irradiation.",
+          "sources": [
+            "Dadachova et al. (2007) PLoS ONE 2(5):e457 (doi:10.1371/journal.pone.0000457)",
+            "Turick et al. (2002) Appl. Environ. Microbiol. 68:2436-2444",
+            "Robertson et al. (2012) PLoS ONE 7(11):e48674 (W. dermatitidis transcriptomics)"
+          ]
+        },
+        {
+          "node_id": "s1_redox_intermediary",
+          "label": "Melanin Electron Transfer -> Intracellular Redox / ROS Pool",
+          "tag": "HYPOTHESIZED",
+          "detail": "Proposed shuttling of radiation-mobilized electrons or radical intermediates from cell-wall/melanosome melanin into cytosolic electron acceptors, superoxide (O2*-), or hydrogen peroxide (H2O2) signaling pools.",
+          "sources": [
+            "Casadevall, Cordero & Bryan (2017) Microbiol. Spectr. 5(2)",
+            "Dadachova & Casadevall (2008) Curr. Opin. Microbiol. 11:525-531"
+          ]
+        },
+        {
+          "node_id": "s1_mitochondrial_etc",
+          "label": "Redox / ROS Pool -> Mitochondrial ETC, NAD(P)H & ATP Modulation",
+          "tag": "HYPOTHESIZED",
+          "detail": "Mitochondria integrate cytosolic redox, calcium, and ROS signals across Complexes I-IV, altering ATP synthesis and stress signaling; direct energy transfer from melanin to mitochondrial ETC in intact hyphae remains unproven.",
+          "sources": [
+            "Nature Reviews Molecular Cell Biology (mitochondrial signaling and metabolic integration)",
+            "Robertson et al. (2012) PLoS ONE 7(11):e48674"
+          ]
+        },
+        {
+          "node_id": "s1_hyphal_tropism",
+          "label": "Mitochondrial / Redox Shift -> Directional Hyphal Growth Bias (Radiotropism)",
+          "tag": "CONTEXT-DEPENDENT",
+          "detail": "Early Chernobyl isolate studies reported directional hyphal growth toward radiation sources, whereas a 2024 Sandia National Laboratories Cs-137 study found no statistically significant growth difference between irradiated and control fungi, and the aurascoper/Biofilms 256-seed 4-arm model is a formal null within +/-0.05 r/R.",
+          "sources": [
+            "Zhdanova et al. (2004) Mycol. Res. 108:1089-1096",
+            "Sandia National Laboratories (2024) Cs-137 Fungal Irradiation Report (null result)",
+            "aurascoper/Biofilms radial_n40_p6_seeds42-297.csv (256-seed 4-arm model null)"
+          ]
+        }
+      ]
+    },
+    {
+      "system_id": "system_2_magnetic_sensing",
+      "title": "System 2: Candidate Magnetic Sensing Mechanism (Spin-Chemistry vs. Magnetite Torque)",
+      "summary": "Evaluates candidate physical transducers capable of sensing weak geomagnetic fields (25 to 65 uT) and how spin-dependent radical pairs could intersect with melanin radicals or mitochondrial superoxide (O2*-).",
+      "nodes": [
+        {
+          "node_id": "s2_route_a_melanin_spin",
+          "label": "Route A: Melanin Paramagnetic Centers & Radical-Pair Spin Coupling",
+          "tag": "HYPOTHESIZED",
+          "detail": "Melanin contains stable semiquinone free radicals (detectable by ESR). Route A asks whether weak magnetic fields (B) modulate spin-dependent recombination or electron transfer between melanin radicals and diffusible redox partners.",
+          "sources": [
+            "Dadachova et al. (2007) PLoS ONE 2(5):e457 (melanin ESR paramagnetic signal)",
+            "Lam & Malkemper (2026) Physiol. Rev. (doi:10.1152/physrev.00032.2025)"
+          ]
+        },
+        {
+          "node_id": "s2_route_b_flavin_superoxide",
+          "label": "Route B: Cryptochrome Flavin-Tryptophan & Tightly Bound Flavin-Superoxide [FAD*- ... O2*-] Spin Chemistry",
+          "tag": "MODELED",
+          "detail": "Geomagnetic fields shift singlet-triplet interconversion yields in flavin-tryptophan [FAD*- ... TrpH*+] (observed in vitro in Cry4a) and modeled in tightly bound flavin-superoxide [FAD*- ... O2*-] radical pairs (2024 Nature Communications), linking magnetic spin chemistry directly to ROS / superoxide signaling.",
+          "sources": [
+            "Xu et al. (2021) Nature 594:535-540 (Cry4a in vitro magnetic sensitivity)",
+            "Nature Communications (2024) Earth-strength magnetic sensitivity in tightly bound flavin-superoxide radical pairs",
+            "arXiv:2312.06597 (Weak magnetic field effects on planarian regeneration via superoxide ROS)",
+            "Lam & Malkemper (2026) Physiol. Rev. (doi:10.1152/physrev.00032.2025)"
+          ]
+        },
+        {
+          "node_id": "s2_route_c_magnetite",
+          "label": "Route C: Biogenic Single-Domain Magnetite (Fe3O4) Chain Torque",
+          "tag": "MODELED",
+          "detail": "Chains of 10 to 20 single-domain Fe3O4 crystals (r ~ 25 nm) achieve mechanical torque tau = N*M_s*V*B*sin(theta) > k_B*T at 50 uT (established in magnetotactic bacteria; eukaryotic mechanoreceptor coupling remains unresolved).",
+          "sources": [
+            "Kirschvink & Gould (1981) Biosystems 13:181-201",
+            "Johnsen & Lohmann (2005) Nat. Rev. Neurosci. 6:703-712"
+          ]
+        }
+      ]
+    },
+    {
+      "system_id": "system_3_engineered_mnp",
+      "title": "System 3: Engineered Magnetic Nanoparticle Interface (Synthetic Actuation vs. Ferritin Bound)",
+      "summary": "Evaluates synthetic magnetic nanoparticles (MNPs/SPIONs) engineered to stimulate ion channels or target vasculature at millitesla fields, kept strictly separate from natural uT sensing.",
+      "nodes": [
+        {
+          "node_id": "s3_synth_magnetomechanical",
+          "label": "Synthetic Fe3O4 Nanodisc / m-Torquer Mechanotransduction (Piezo1 / TRPV4)",
+          "tag": "ENGINEERED",
+          "detail": "Exogenous synthetic Fe3O4 nanodiscs or torque arrays (35 to 100 nm) under 5 to 50 mT low-frequency fields generate piconewton forces/torques (>10 k_B*T) to gate Piezo1/TRPV4 channels and trigger Ca2+ influx.",
+          "sources": [
+            "Gregurec et al. (2020) ACS Nano 14:8036-8045",
+            "Lee et al. (2021) Nat. Mater. 20:1029-1036"
+          ]
+        },
+        {
+          "node_id": "s3_synth_magnetothermal",
+          "label": "RF Magnetothermal Hysteresis Heating (TRPV1 -> Ca2+ -> Mitochondrial MCU)",
+          "tag": "ENGINEERED",
+          "detail": "Dense synthetic MNP clusters under 100 to 500 kHz RF fields (10 to 30 mT) heat local membranes above 42 C to gate TRPV1, driving Ca2+ uptake into mitochondria via MCU.",
+          "sources": [
+            "Chen et al. (2015) Science 347:1477-1480",
+            "Rabin (2002) Int. J. Hyperthermia 18:194-202"
+          ]
+        },
+        {
+          "node_id": "s3_ferritin_exclusion",
+          "label": "Endogenous Ferritin Thermal & Mechanical Failure Bound",
+          "tag": "MODELED",
+          "detail": "A 6 nm ferrihydrite ferritin core (~300 mu_B) yields tau / (k_B*T) ~ 3.2e-5 at 50 uT and < 1e-2 even at 20 mT, failing thermal noise bounds by >4 orders of magnitude.",
+          "sources": [
+            "Meister (2016) eLife 5:e17210"
+          ]
+        }
+      ]
+    }
+  ],
+  "mechanisms": [
+    {
+      "id": "sensing_cryptochrome",
+      "layer": "natural_sensing",
+      "evidence_tag": "MODELED / OBSERVED IN VITRO",
+      "title": "System 2 (Route B): Cryptochrome / Flavin-Superoxide [FAD*- ... O2*-] Spin Chemistry",
+      "status": "OBSERVED_IN_VITRO_AND_MODELED (flavin-superoxide tight-binding model 2024 Nat. Commun.; fungal coupling HYPOTHESIZED)",
+      "equation": "H_spin = g * mu_B * B . (S_1 + S_2) + sum_i S_1 . A_1i . I_1i; f_L = 1.40 MHz at 50 uT",
+      "typical_regime": "B = 25 to 65 uT (geomagnetic inclination compass); links spin singlet-triplet yield to ROS / O2*- pool",
+      "sources": [
+        "Xu et al. (2021) Nature 594:535-540 (European robin Cry4a in vitro magnetic sensitivity)",
+        "Nature Communications (2024) Tightly bound flavin-superoxide radical-pair geomagnetic sensitivity model",
+        "arXiv:2312.06597 (Planarian regeneration weak magnetic field superoxide ROS study)",
+        "Lam & Malkemper (2026) Physiol. Rev. (doi:10.1152/physrev.00032.2025)"
+      ],
+      "unresolved_questions": [
+        "Maintaining spin relaxation time T_1, T_2 >= 1 us against fast rotational tumbling of free superoxide",
+        "Whether fungal cryptochrome/flavin photo-redox cycles couple to hyphal polarity machinery"
+      ]
+    },
+    {
+      "id": "sensing_melanin_redox",
+      "layer": "natural_sensing",
+      "evidence_tag": "OBSERVED (ESR/NADH) / HYPOTHESIZED (B-FIELD)",
+      "title": "System 1 + 2 (Route A): Melanin ESR Paramagnetism & Radiation-Redox-Mitochondrial Coupling",
+      "status": "MELANIN_REDOX_OBSERVED_IN_VITRO (magnetic spin modulation and intact hyphal radiotropism HYPOTHESIZED / CONTEXT-DEPENDENT)",
+      "equation": "I_gamma -> Melanin [Q / QH* / QH2] (4x NADH reduction) -> ? -> ROS / Mitochondrial ETC -> ? -> Tip Bias",
+      "typical_regime": "Ionizing dose gradient grad I_gamma + paramagnetic semiquinone centers (g ~ 2.004 ESR signal)",
+      "sources": [
+        "Dadachova et al. (2007) PLoS ONE 2(5):e457 (melanin ESR and 4x NADH oxidation-reduction)",
+        "Robertson et al. (2012) PLoS ONE 7(11):e48674 (W. dermatitidis transcriptomics)",
+        "Sandia National Laboratories (2024) Cs-137 Fungal Irradiation Report (experimental null caution)",
+        "aurascoper/Biofilms radial_n40_p6_seeds42-297.csv (256-seed 4-arm model null within +/-0.05 r/R)"
+      ],
+      "unresolved_questions": [
+        "Whether radiation-excited melanin transfers electrons to mitochondrial ETC in intact cells",
+        "Whether magnetic field vector B alters melanin semiquinone radical-pair recombination yields (tested by Experiment C)"
+      ]
+    },
+    {
+      "id": "sensing_magnetite",
+      "layer": "natural_sensing",
+      "evidence_tag": "MODELED / OBSERVED IN BACTERIA",
+      "title": "System 2 (Route C): Biogenic Magnetite (Fe3O4) Chain Torque Transduction",
+      "status": "ESTABLISHED_IN_MAGNETOTACTIC_BACTERIA (eukaryotic mechanoreceptor tether unresolved)",
+      "equation": "tau = N_crystals * M_s * V_crystal * B * sin(theta); thermal_gate = tau / (k_B * T) > 1",
+      "typical_regime": "B = 25 to 65 uT (DC geomagnetic), single-domain Fe3O4 crystals (r ~ 25 nm, chain N = 10 to 20)",
+      "sources": [
+        "Kirschvink & Gould (1981) Biosystems 13:181-201",
+        "Johnsen & Lohmann (2005) Nat. Rev. Neurosci. 6:703-712",
+        "Eder et al. (2012) PNAS 109:12022-12027 (contamination controls required)"
+      ],
+      "unresolved_questions": [
+        "Anatomical identity of primary magnetoreceptor cells and ion-channel tethers in eukaryotes",
+        "Distinguishing biogenic intracellular magnetite from exogenous iron oxide contamination"
+      ]
+    },
+    {
+      "id": "sensing_induction",
+      "layer": "natural_sensing",
+      "evidence_tag": "OBSERVED (ELASMOBRANCHS)",
+      "title": "System 2 (Marine Reference): Electromagnetic Induction (Ampullae of Lorenzini)",
+      "status": "ESTABLISHED_IN_ELASMOBRANCHS (requires conductive seawater medium; not intracellular fungal/terrestrial)",
+      "equation": "EMF = integral (v x B) . dl; E_induced = v * B * sin(theta)",
+      "typical_regime": "v = 0.2 to 1.0 m/s in seawater (sigma ~ 4 S/m), canal length L = 5 to 20 cm, threshold ~ 5 nV/cm",
+      "sources": [
+        "Kalmijn (1971) J. Exp. Biol. 55:371-383",
+        "Newton, Gill & Kajiura (2019) J. R. Soc. Interface 16:20190262"
+      ],
+      "unresolved_questions": [
+        "Central neural decoding of motional vs. ocean-current induced electric fields"
+      ]
+    },
+    {
+      "id": "actuation_magnetomechanical",
+      "layer": "engineered_actuation",
+      "evidence_tag": "ENGINEERED (SYNTHETIC MNP)",
+      "title": "System 3: Exogenous MNP Magnetomechanical Torque & Force Gating (Piezo1 / TRPV4)",
+      "status": "DEMONSTRATED_WITH_SYNTHETIC_MNPS (refuted for endogenous ferritin by Meister 2016)",
+      "equation": "tau = m x B; F_grad = (m . grad) B; requires F >= 1 to 10 pN or tau >= 40 pN*nm for channel gating",
+      "typical_regime": "B = 5 to 50 mT (low-frequency rotating/alternating, 1 to 50 Hz) + synthetic Fe3O4 nanodiscs/clusters (r >= 25 to 100 nm)",
+      "sources": [
+        "Meister (2016) eLife 5:e17210 (physical critique of ferritin magnetogenetics)",
+        "Gregurec et al. (2020) ACS Nano 14:8036-8045 (vortex nanodisc mechanotransduction)",
+        "Lee et al. (2021) Nat. Mater. 20:1029-1036 (m-Torquer nanoscale torque gating)"
+      ],
+      "unresolved_questions": [
+        "Targeted deep-tissue delivery and stable membrane tethering without immune clearance",
+        "Separating pure mechanical gating from local viscous or coil-heating artifacts"
+      ]
+    },
+    {
+      "id": "actuation_magnetothermal",
+      "layer": "engineered_actuation",
+      "evidence_tag": "ENGINEERED (RF CLUSTER)",
+      "title": "System 3: RF Magnetothermal Hysteresis Actuation (TRPV1 -> Ca2+ -> Mitochondrial MCU)",
+      "status": "DEMONSTRATED_AT_HIGH_MNP_CLUSTER_DENSITY (single-nanoparticle equilibrium delta_T is negligible)",
+      "equation": "P_vol = mu_0 * pi * chi_pp * f * H_0^2; gating TRPV1 (~42 C) triggers Ca2+ -> MCU -> TCA/OXPHOS modulation",
+      "typical_regime": "f = 100 to 500 kHz, B_RF = 10 to 30 mT; dense MNP clusters required to overcome Fourier heat diffusion",
+      "sources": [
+        "Rabin (2002) Int. J. Hyperthermia 18:194-202 (nano-scale heat transfer bounds)",
+        "Chen et al. (2015) Science 347:1477-1480 (magnetothermal deep brain stimulation)"
+      ],
+      "unresolved_questions": [
+        "Nanoscale surface thermometry vs. macroscopic Fourier heat conduction limits",
+        "Preventing mitochondrial Ca2+ overload while modulating metabolic signaling"
+      ]
+    },
+    {
+      "id": "actuation_spion_targeting",
+      "layer": "engineered_actuation",
+      "evidence_tag": "ENGINEERED (HIGH GRADIENT)",
+      "title": "System 3: High-Gradient Vascular SPION Capture & Drug Delivery",
+      "status": "PRECLINICAL_AND_SUPERFICIAL_TRANSLATION (depth-limited by Earnshaw theorem and gradient decay)",
+      "equation": "F_mag = V_np * delta_chi * grad(B^2) / (2 * mu_0) vs. F_drag = 6 * pi * eta * r_np * v_blood",
+      "typical_regime": "B = 0.2 to 1.5 T, |grad B| = 10 to 100 T/m (effective mainly within 1 to 5 cm of magnet pole face)",
+      "sources": [
+        "Pankhurst et al. (2003) J. Phys. D: Appl. Phys. 36:R167",
+        "Shapiro et al. (2015) Magn. Reson. Imaging 33:250-256"
+      ],
+      "unresolved_questions": [
+        "Overcoming Earnshaw's theorem for deep-tissue static magnetic trapping"
+      ]
+    },
+    {
+      "id": "quarantined_71thz_mitochondria",
+      "layer": "quarantined_hypothesis",
+      "evidence_tag": "QUARANTINED PREPRINT",
+      "title": "QUARANTINED: 71 THz (4.22 um Mid-IR) Mitochondrial Light-Matter Coupling Preprint",
+      "status": "UNVALIDATED_PREPRINT_HYPOTHESIS (excluded from default magnetoreception model)",
+      "equation": "f = 71 THz -> lambda = c / f = 4.22 um (photon energy h*nu = 0.294 eV ~ 11.4 k_B*T)",
+      "typical_regime": "Mid-infrared vibrational / photonic spectroscopy; NOT geomagnetic DC/ELF sensing",
+      "sources": [
+        "bioRxiv preprint (Sept 2026) on 71 THz cellular/mitochondrial spectral feature (unvalidated)"
+      ],
+      "unresolved_questions": [
+        "Independent replication with rigorous water/CO2 infrared absorption controls (4.26 um CO2 asymmetric stretch)",
+        "No established physical coupling to geomagnetic microtesla fields"
+      ]
+    }
+  ],
+  "factorial_experiments": [
+    {
+      "exp_id": "EXP_A",
+      "title": "Experiment A: Radiation x Melanin Genetics (WT vs. Albino vs. Complemented Rescue)",
+      "factors_varied": "Ionizing Radiation (+I_gamma vs. Sham) x Melanin Genotype (WT Melanized vs. Albino Mutant pks1Delta/lac1Delta vs. Complemented Rescue) at fixed ambient geomagnetic field (50 uT)",
+      "primary_readouts": "ESR semiquinone signal, NADH reduction rate, basal/irradiated ATP & NAD(P)H, and radial hyphal tip trajectory distribution (r/R)",
+      "discriminating_outcome": "Tests System 1: If radiation increases NADH reduction / ATP or biases tip trajectories in WT and Complemented Rescue but NOT in Albino Mutant, melanin is required for the radiation response. If neither WT nor Albino shows directional bias (matching Sandia 2024 and the Biofilms 256-seed null), radiation alone does not drive radiotropism under these conditions."
+    },
+    {
+      "exp_id": "EXP_B",
+      "title": "Experiment B: Magnetic Field Vector Rotation & Zeroing at Fixed Radiation Geometry",
+      "factors_varied": "Magnetic Field Vector B (Ambient 50 uT vs. Mu-Metal/Helmholtz Zeroed <0.1 uT vs. +90 deg Rotated B Vector) while keeping the radiation source position (grad I_gamma) fixed",
+      "primary_readouts": "Mean hyphal tip growth vector angle (theta_tip), circular variance, and superoxide / flavin radical-pair yield",
+      "discriminating_outcome": "Separates Energy Channel (grad I_gamma) from Information Channel (vector B): If tip orientation rotates with the +90 deg B-field or vanishes in <0.1 uT despite an unchanged radiation source position, the directional cue is magnetic (System 2), not a pure radiation dose gradient."
+    },
+    {
+      "exp_id": "EXP_C",
+      "title": "Experiment C: Melanin x Magnetic Field Factorial Test (Route A vs. Route B)",
+      "factors_varied": "Melanin Genotype (WT Melanized vs. Albino Mutant) x Magnetic Field (Zeroed <0.1 uT vs. 50 uT vs. +90 deg Rotated) x Radiation (+/- I_gamma)",
+      "primary_readouts": "Magnetic-field-dependent shift in ROS / superoxide (MitoSOX / roGFP2) and directional growth in WT vs. Albino cells",
+      "discriminating_outcome": "Discriminates Route A (Melanin Spin Radical) from Route B (Cryptochrome / Flavin-Superoxide [FAD*- ... O2*-]): If magnetic field sensitivity requires melanin (present in WT, absent in Albino), Route A is supported. If magnetic sensitivity persists in Albino mutants via blue-light/flavin superoxide modulation, Route B operates independently of melanin."
+    },
+    {
+      "exp_id": "EXP_D",
+      "title": "Experiment D: Mitochondrial & ROS Temporal Ordering Gate (Causal Mediator vs. Late Byproduct)",
+      "factors_varied": "Time-resolved live imaging (t = 0 to 120 min post-stimulus) + Radical Scavenger / ETC Inhibitor Perturbation (TEMPO / MitoTEMPO / Rotenone)",
+      "primary_readouts": "Lag time delta_t between stimulus onset, mitochondrial superoxide / NAD(P)H shift (t_mito), and first detectable hyphal tip curvature change (t_tip)",
+      "discriminating_outcome": "Establishes causal ordering: For mitochondrial/redox signaling to be the transducer between sensing and growth, ΔMitoSOX / ΔNAD(P)H must occur at t_mito < t_tip, and clamping mitochondrial ROS with MitoTEMPO must abolish the downstream directional or metabolic phenotype without killing basal extension."
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M1",
+      "title": "Milestone 1: Physical Effect at the Transducer Above Thermal Noise",
+      "criterion": "Demonstrate that the applied stimulus (vector B, spin radical hyperfine coupling, or synthetic MNP torque tau > k_B*T) produces a measurable primary physical state change above thermal and radiolytic noise floors."
+    },
+    {
+      "id": "M2",
+      "title": "Milestone 2: Specific Intracellular Pathway Activation (Genetic & Inhibitor Controls)",
+      "criterion": "Prove with knockout/rescue controls (Albino pks1Delta, CryDelta, or Piezo1/TRPV1 knockouts) and temporal ordering (Experiment D) that the transducer gates a specific redox/mitochondrial or ion-channel pathway rather than nonspecific heating or artifacts."
+    },
+    {
+      "id": "M3",
+      "title": "Milestone 3: Reproducible Colony or Tissue-Level Phenotype Under Blinded Replication",
+      "criterion": "Establish a preregistered, blinded colony trajectory or tissue metabolic response that survives paired null-arm controls (such as the +/-0.05 r/R equivalence gate in aurascoper/Biofilms and Sandia 2024 replication standards)."
+    }
+  ]
+}
